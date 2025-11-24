@@ -1,0 +1,98 @@
+<div class="date-picker-wrapper">
+  <div class="date-picker-container">
+    <!-- Date Picker -->
+    <ng-container *ngIf="pickerType === 'lastPeriodDate' || pickerType === 'expectedDate'">
+      <div class="column" #dayScroll (scroll)="onScroll('day', dayScroll, days, 'selectedDay')">
+        <div class="spacer"></div>
+        <div *ngFor="let d of days" class="item" [class.selected]="isSelected('day', d)">
+          {{ d }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div
+        class="column"
+        #monthScroll
+        (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')"
+      >
+        <div class="spacer"></div>
+        <div *ngFor="let m of months" class="item" [class.selected]="isSelected('month', m)">
+          {{ m }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div
+        class="column"
+        #yearScroll
+        (scroll)="onScroll('year', yearScroll, years, 'selectedYear')"
+      >
+        <div class="spacer"></div>
+        <div *ngFor="let y of years" class="item" [class.selected]="isSelected('year', y)">
+          {{ y }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </ng-container>
+
+    <!-- Pregnancy Picker -->
+    <ng-container *ngIf="pickerType === 'pregnancy'">
+      <div
+        class="column"
+        #weekScroll
+        (scroll)="onScroll('week', weekScroll, weeks, 'selectedWeek')"
+      >
+        <div class="spacer"></div>
+        <div *ngFor="let w of weeks" class="item" [class.selected]="isSelected('week', w)">
+          {{ w }} <span *ngIf="showLabel">{{ labelWeek }}</span>
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="column" #dayScroll (scroll)="onScroll('day', dayScroll, days, 'selectedDay')">
+        <div class="spacer"></div>
+        <div *ngFor="let d of days" class="item" [class.selected]="isSelected('day', d)">
+          {{ d }} <span *ngIf="showLabel">{{ labelDay }}</span>
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </ng-container>
+
+    <!-- Age Picker -->
+    <ng-container *ngIf="pickerType === 'age'">
+      <div class="column" #dayScroll (scroll)="onScroll('day', dayScroll, days, 'selectedDay')">
+        <div class="spacer"></div>
+        <div *ngFor="let d of days" class="item" [class.selected]="isSelected('day', d)">
+          {{ d }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div
+        class="column"
+        #monthScroll
+        (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')"
+      >
+        <div class="spacer"></div>
+        <div *ngFor="let m of months" class="item" [class.selected]="isSelected('month', m)">
+          {{ m }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div
+        class="column"
+        #yearScroll
+        (scroll)="onScroll('year', yearScroll, years, 'selectedYear')"
+      >
+        <div class="spacer"></div>
+        <div *ngFor="let y of years" class="item" [class.selected]="isSelected('year', y)">
+          {{ y }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </ng-container>
+
+    <div class="highlight-bar"></div>
+  </div>
+</div>
