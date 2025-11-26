@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DatePickerComponent } from '../../shared/components/date-picker/date-picker.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-questions-flow',
@@ -9,10 +10,10 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './questions-flow.component.scss',
 })
 export class QuestionsFlowComponent {
- // -------------------------
-  //        STEP FLOW
-  // -------------------------
+
   private _currentStep: number = 1;
+
+  constructor(private router: Router) {}
 
   get currentStep(): number {
     return this._currentStep;
@@ -20,7 +21,7 @@ export class QuestionsFlowComponent {
 
   set currentStep(step: number) {
     this._currentStep = step;
-    localStorage.setItem('currentStep', step.toString()); // حفظ تلقائي
+    localStorage.setItem('currentStep', step.toString()); 
   }
 
   ngOnInit() {
@@ -36,11 +37,15 @@ export class QuestionsFlowComponent {
     if (this.currentStep === 6 || this.currentStep === 7 || this.currentStep === 8) {
       this.currentStep = 5;
     }
-    // لا تحتاج حفظ هنا لأنه setter بالفعل بيحفظ
   }
 
   goNext() {
-    this.currentStep = 9;
+  
+    if (this.currentStep === 9) {
+      this.router.navigate(['/signup']);
+    }else{
+        this.currentStep = 9;
+    }
   }
 
   chooseRole(role: 'mother' | 'father') {
@@ -70,17 +75,11 @@ export class QuestionsFlowComponent {
     if (type === 'dueDate') this.currentStep = 8;
   }
 
-  // -------------------------
-  //        DATE PICKERS
-  // -------------------------
   onLastPeriodSelect(date: any) { this.formData.lastPeriodDate = date; }
   onGestationalAgeSelect(age: any) { this.formData.gestationalAge = age; }
   onExpectedDueDateSelect(date: any) { this.formData.expectedDueDate = date; }
   onBirthDateSelect(date: any) { this.formData.birthDate = date; }
 
-  // -------------------------
-  //        FORM DATA
-  // -------------------------
   formData: any = {
     role: null,
     pregnant: null,
@@ -97,6 +96,5 @@ export class QuestionsFlowComponent {
     height: new FormControl(''),
     weight: new FormControl(''),
   });
-
 
 }

@@ -1,13 +1,11 @@
 .pro-badge {
   position: absolute;
-  top: 0.75rem;   // top-3
-  right: 0.75rem; // right-3
-  padding: 0.25rem 0.5rem; // py-1 px-2
-  font-size: 0.875rem;     // text-sm
-  font-weight: 600;        // font-semibold
-  color: #B34962;
-  border: 2px solid #bf949c; // لازم transparent عشان الـ border-image يشتغل
-  border-radius: 9999px;   // rounded-full
-
- 
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #b34962;
+  border: 2px solid #bf949c;
+  border-radius: 9999px;
 }
