@@ -1,0 +1,177 @@
+<div
+  class="min-h-screen grid grid-cols-1 md:grid-cols-5 bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)]"
+>
+  <div
+    class="md:col-span-2 hidden md:flex items-center justify-center bg-[#FFEBEF] border border-[#B34962] rounded-r-lg"
+  >
+    <img src="assets/big-logo.png" alt="logo" />
+  </div>
+
+  <div
+    class="relative md:col-span-3 flex text-dark-pink font-bold items-center justify-center px-20 lg:px-0 pt-30"
+  >
+    <button
+      class="absolute top-30 left-10 text-[#B34962] text-xl h-8 w-8 flex justify-center items-center font-semibold border rounded-full hover:bg-[#B34962] hover:text-white duration-200"
+      (click)="goBack()"
+    >
+      <i class="fa-solid fa-angle-left"></i>
+    </button>
+
+    @if (currentStep===1) {
+    <div class="text-center">
+      <h2 class="text-3xl pb-5 text-[#B34962]">Are You?</h2>
+      <button class="btn-dark-pink md:text-xl px-40 py-6 mb-3" (click)="chooseRole('mother')">
+        Mother
+      </button>
+      <span class="text-base text-[#B34962]">Or</span>
+      <button class="btn-dark-pink md:text-xl px-41 py-6 mt-3" (click)="chooseRole('father')">
+        Father
+      </button>
+    </div>
+    } @if (currentStep===2) {
+    <div class="text-center">
+      <h2 class="text-3xl pb-5 text-[#B34962]">Are You Pregnant?</h2>
+      <button class="btn-dark-pink md:text-xl px-40 py-6 mb-3" (click)="choosePregnant(true)">
+        Yes
+      </button>
+      <span class="text-base text-[#B34962]">Or</span>
+      <button class="btn-dark-pink md:text-xl px-41 py-6 mt-3" (click)="choosePregnant(false)">
+        No
+      </button>
+    </div>
+    } @if (currentStep===3) {
+    <div>
+      <h2 class="text-3xl pb-14 max-w-xl text-center text-[#B34962]">
+        Please enter your pre-pregnancy weight and height
+      </h2>
+
+      <form [formGroup]="detailsForm" class="text-xl flex flex-col gap-6">
+        <div>
+          <label class="text-[#B34962]">Height</label>
+          <div class="relative mt-1">
+            <input
+              formControlName="height"
+              placeholder="Enter your height"
+              type="number"
+              class="px-2 py-3 border border-[#B34962] rounded-md w-full"
+            />
+            <span
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#00000066] text-sm"
+              >cm</span
+            >
+          </div>
+        </div>
+        <div>
+          <label class="text-[#B34962]">Weight</label>
+          <div class="relative mt-1">
+            <input
+              formControlName="weight"
+              placeholder="Enter your weight"
+              type="number"
+              class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
+            />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm"
+              >kg</span
+            >
+          </div>
+        </div>
+        <div class="flex justify-center mt-14">
+          <button class="btn-dark-pink md:text-xl px-40 py-6" (click)="saveDetails()">Save</button>
+        </div>
+      </form>
+    </div>
+    } @if (currentStep===4) {
+    <div class="text-center">
+      <h2 class="text-3xl pb-5 text-[#B34962]">Is this your first child?</h2>
+      <button
+        class="btn-dark-pink md:text-xl px-40 py-6 mb-3"
+        (click)="selectFirstChildStatus(true)"
+      >
+        Yes
+      </button>
+      <span class="text-base text-[#B34962]">Or</span>
+      <button
+        class="btn-dark-pink md:text-xl px-40 py-6 mt-3"
+        (click)="selectFirstChildStatus(false)"
+      >
+        No
+      </button>
+    </div>
+    } @if (currentStep===5) {
+    <div class="flex flex-col justify-center items-center">
+      <h2 class="text-3xl pb-5 mb-10 max-w-sm text-center text-[#B34962]">Which of these do you know?</h2>
+      <button
+        class="btn-dark-pink md:text-xl text-center w-[130%] py-6 mb-5"
+        (click)="selectKnownInfo('lastPeriod')"
+      >
+        <div class="flex justify-center items-center">
+          Date of Last menstruation
+          <img src="assets/blood-drop.svg" class="pl-2 w-10 md:w-12" />
+        </div>
+      </button>
+      <button
+        class="btn-dark-pink md:text-xl w-[130%] py-6 mb-5"
+        (click)="selectKnownInfo('pregnant')"
+      >
+        <div class="flex justify-center items-center">
+          Number of weeks of pregnant
+          <img src="assets/pregnant-woman-icon.svg" class="pl-2 w-10 md:w-12" />
+        </div>
+      </button>
+      <button class="btn-dark-pink md:text-xl w-[130%] py-6" (click)="selectKnownInfo('dueDate')">
+        <div class="flex justify-center items-center">
+          Estimated due date
+          <img src="assets/mdi-mother-nurse.svg" class="pl-2 w-10 md:w-12" />
+        </div>
+      </button>
+    </div>
+    } @if (currentStep===6) {
+    <div class="text-center">
+      <h2 class="text-3xl mb-5 max-w-md text-center text-[#B34962]">
+        Select the date of your last menstrual period.
+      </h2>
+      <app-date-picker pickerType="lastPeriodDate" (dateSelected)="onLastPeriodSelect($event)">
+      </app-date-picker>
+      <div class="flex justify-center mt-5">
+        <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10" (click)="goNext()">
+          Continue
+        </button>
+      </div>
+    </div>
+    } @if (currentStep===7) {
+    <div class="text-center">
+      <h2 class="text-3xl mb-5 text-[#B34962]">Select your gestational age.</h2>
+
+      <app-date-picker pickerType="pregnancy" (dateSelected)="onGestationalAgeSelect($event)">
+      </app-date-picker>
+
+      <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10" (click)="goNext()">
+        Containue
+      </button>
+    </div>
+    } @if (currentStep===8) {
+    <div class="flex flex-col justify-center items-center text-center">
+      <h2 class="text-3xl mb-5 max-w-xl text-[#B34962]">Select your estimated date of conception.</h2>
+      <app-date-picker pickerType="expectedDate" (dateSelected)="onExpectedDueDateSelect($event)">
+      </app-date-picker>
+
+      <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10" (click)="goNext()">
+        Containue
+      </button>
+    </div>
+    } @if (currentStep===9) {
+    <div class="flex flex-col justify-center items-center">
+      <div class="flex justify-center items-center mb-5">
+        <h2 class="text-3xl text-[#B34962]">Select your date of birth.</h2>
+        <img src="assets/birthday-cake.png" />
+      </div>
+      <app-date-picker pickerType="age" (dateSelected)="onBirthDateSelect($event)">
+      </app-date-picker>
+
+      <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10" (click)="goNext()">
+        Containue
+      </button>
+    </div>
+    }
+  </div>
+</div>

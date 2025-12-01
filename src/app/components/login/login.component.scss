@@ -1,0 +1,15 @@
+// Custom toggle switch styles
+label:has(input[type='checkbox']:checked) {
+  .toggle-switch {
+    background-color: var(--color-dark-pink);
+  }
+
+  .toggle-knob {
+    transform: translateX(1rem); // translate-x-4 equivalent
+  }
+
+  .toggle-text {
+    color: var(--color-dark-pink);
+    font-weight: 500;
+  }
+}
