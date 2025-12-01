@@ -9,6 +9,9 @@ import { HomeComponent } from './components/home/home.component';
 import { QuestionsFlowComponent } from './components/questions-flow/questions-flow.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { PregnancyTipsComponent } from './components/pregnancy-tips/pregnancy-tips.component';
+import { FirstTrimesterComponent } from './components/trimesters/first-trimester/first-trimester.component';
+import { SecondTrimesterComponent } from './components/trimesters/second-trimester/second-trimester.component';
+import { ThirdTrimesterComponent } from './components/trimesters/third-trimester/third-trimester.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +27,9 @@ export const routes: Routes = [
       { path: 'signup', component: SignUpComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'verify-otp', component: VerifyOtpComponent },
+      { path: 'trimester/first', component: FirstTrimesterComponent },
+      { path: 'trimester/second', component: SecondTrimesterComponent },
+      { path: 'trimester/third', component: ThirdTrimesterComponent },
     ],
   },
 
