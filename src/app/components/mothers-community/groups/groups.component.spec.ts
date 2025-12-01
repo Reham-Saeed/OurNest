@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PostAuthNavComponent } from './post-auth-nav.component';
+import { GroupsComponent } from './groups.component';
 
-describe('PostAuthNavComponent', () => {
-  let component: PostAuthNavComponent;
-  let fixture: ComponentFixture<PostAuthNavComponent>;
+describe('GroupsComponent', () => {
+  let component: GroupsComponent;
+  let fixture: ComponentFixture<GroupsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PostAuthNavComponent]
+      imports: [GroupsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PostAuthNavComponent);
+    fixture = TestBed.createComponent(GroupsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

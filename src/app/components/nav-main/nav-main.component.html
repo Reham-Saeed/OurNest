@@ -1,0 +1,88 @@
+<nav class="w-full border-b border-[#B34962] bg-white relative">
+  <div class="container px-[16px] lg:px-[100px] py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="flex items-center gap-4 lg:gap-6">
+      <a routerLink="/">
+        <img src="assets/small-logo.png" alt="Logo" class="h-12 md:h-full" />
+      </a>
+    </div>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden lg:flex justify-center gap-6 lg:gap-10 list-none m-0 p-0">
+      <li>
+        <a routerLink="/home" routerLinkActive="text-[#B34962]" 
+        
+          class="text-lg md:text-xl font-medium text-[#00000059] hover:text-[#B34962]">Home</a>
+      </li>
+      <li>
+        <a routerLink="/services" routerLinkActive="text-[#B34962]"
+          class="text-lg md:text-xl font-medium text-[#00000059] hover:text-[#B34962]">Services</a>
+      </li>
+      <li>
+        <a routerLink="/clinic" routerLinkActive="text-[#B34962]"
+          class="text-lg md:text-xl font-medium text-[#00000059] hover:text-[#B34962]">Clinic</a>
+      </li>
+      <li>
+        <a routerLink="/list" routerLinkActive="text-[#B34962]"
+          class="text-lg md:text-xl font-medium text-[#00000059] hover:text-[#B34962]">List</a>
+      </li>
+      <li>
+        <a routerLink="/community" routerLinkActive="text-[#B34962]"
+          class="text-lg md:text-xl font-medium text-[#00000059] hover:text-[#B34962]">Mothers’ community</a>
+      </li>
+    </ul>
+
+    <!-- Mobile Menu Button -->
+    <div class="lg:hidden flex items-center text-[#B34962] gap-4">
+      <button (click)="toggleMobileMenu()" class="text-gray-700 focus:outline-none">
+        <i class="fa-solid fa-bars text-[#B34962] text-2xl mt-2"></i>
+      </button>
+
+      <!-- Avatar Mobile -->
+      <img
+        src="assets/user.jpg"
+        alt="User avatar"
+        class="h-10 w-10 rounded-full object-cover object-top ring-2 ring-white shadow-sm border"
+      />
+    </div>
+
+    <!-- Avatar desktop  -->
+    <div class="hidden lg:flex justify-end items-center">
+      <img
+        src="assets/user.jpg"
+        alt="User avatar"
+        class="h-10 md:h-14 w-10 md:w-14 rounded-full object-cover object-top ring-2 ring-white shadow-sm border"
+      />
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    class="lg:hidden absolute top-full left-0 w-full bg-white border-t border-[#B34962] overflow-hidden transition-all duration-300 ease-in-out"
+    [ngStyle]="{ 'max-height': mobileMenuOpen ? '500px' : '0' }"
+  >
+    <ul class="flex flex-col gap-4 p-4">
+      <li>
+        <a routerLink="/" routerLinkActive="text-[#B34962]" 
+        
+          class="text-lg font-medium text-[#00000059] hover:text-[#B34962]">Home</a>
+      </li>
+      <li>
+        <a routerLink="/services" routerLinkActive="text-[#B34962]"
+          class="text-lg font-medium text-[#00000059] hover:text-[#B34962]">Services</a>
+      </li>
+      <li>
+        <a routerLink="/clinic" routerLinkActive="text-[#B34962]"
+          class="text-lg font-medium text-[#00000059] hover:text-[#B34962]">Clinic</a>
+      </li>
+      <li>
+        <a routerLink="/list" routerLinkActive="text-[#B34962]"
+          class="text-lg font-medium text-[#00000059] hover:text-[#B34962]">List</a>
+      </li>
+      <li>
+        <a routerLink="/community" routerLinkActive="text-[#B34962]"
+          class="text-lg font-medium text-[#00000059] hover:text-[#B34962]">Mothers’ community</a>
+      </li>
+    </ul>
+  </div>
+</nav>

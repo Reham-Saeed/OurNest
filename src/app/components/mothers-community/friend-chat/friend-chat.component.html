@@ -1,0 +1,75 @@
+<section
+  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] h-[calc(100vh-80px)] flex justify-center p-10"
+>
+  <div
+    class="w-full max-w-5xl bg-white border border-[#B34962] shadow-xl rounded-3xl overflow-hidden flex flex-col"
+  >
+    <div class="p-4 border-b border-[#B34962] flex items-center space-x-3 bg-[#FFF8FA]">
+      <div
+        class="w-12 h-12 bg-[#FFC5D0] rounded-full flex items-center justify-center text-white font-semibold shadow"
+      >
+        SJ
+      </div>
+      <div>
+        <p class="font-semibold text-gray-800">Salma Mohamed</p>
+        <p class="text-sm text-gray-500">online</p>
+      </div>
+    </div>
+
+    <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FFF8FA]">
+      @for (msg of messages; track $index) {
+      <div class="flex" [ngClass]="msg.from === 'me' ? 'justify-end' : 'justify-start'">
+        @if (msg.from !== 'me') {
+        <div class="flex items-start space-x-2">
+          <img
+            src="assets/user.jpg"
+            class="w-8 h-8 rounded-full border object-cover shadow-sm"
+            alt="user"
+          />
+          <p
+            class="px-3 py-2 text-lg rounded-2xl border border-[#1919194D] bg-[#B349620F] max-w-[500px] break-words shadow-sm"
+          >
+            {{ msg.text }}
+          </p>
+        </div>
+        } @if (msg.from === 'me') {
+        <div class="flex items-end space-x-2">
+          <p
+            class="px-3 py-2 text-lg rounded-2xl border border-[#1919194D] bg-white max-w-[400px] break-words shadow-sm"
+          >
+            {{ msg.text }}
+          </p>
+          <img
+            src="assets/user.jpg"
+            class="w-8 h-8 rounded-full border object-cover shadow-sm"
+            alt="me"
+          />
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="flex items-center gap-2 p-3 border-t border-gray-200 bg-white">
+      <div class="relative flex-1">
+        <i class="fa-solid fa-paperclip absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input
+          [(ngModel)]="newMessage"
+          type="text"
+          placeholder="Ask your questions..."
+          class="w-full pl-10 pr-10 py-2 text-lg border rounded-full focus:outline-none shadow-inner"
+        />
+        <i
+          class="fa-solid fa-microphone absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+        ></i>
+      </div>
+      <button
+        (click)="sendMessage()"
+        class="flex items-center px-4 py-2 bg-[#B34962] text-white rounded-full shadow hover:bg-[#a63d56] transition"
+      >
+        Send
+        <i class="fa-regular fa-paper-plane rotate-45 ml-1"></i>
+      </button>
+    </div>
+  </div>
+</section>
