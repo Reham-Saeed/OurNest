@@ -12,6 +12,10 @@ import { PregnancyTipsComponent } from './components/pregnancy-tips/pregnancy-ti
 import { FirstTrimesterComponent } from './components/trimesters/first-trimester/first-trimester.component';
 import { SecondTrimesterComponent } from './components/trimesters/second-trimester/second-trimester.component';
 import { ThirdTrimesterComponent } from './components/trimesters/third-trimester/third-trimester.component';
+import { FriendChatComponent } from './components/mothers-community/friend-chat/friend-chat.component';
+import { MothersCommunityComponent } from './components/mothers-community/mothers-community.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+
 
 export const routes: Routes = [
   {
@@ -30,6 +34,14 @@ export const routes: Routes = [
       { path: 'trimester/first', component: FirstTrimesterComponent },
       { path: 'trimester/second', component: SecondTrimesterComponent },
       { path: 'trimester/third', component: ThirdTrimesterComponent },
+    ],
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'community', component: MothersCommunityComponent },
+      { path: 'chat', component: FriendChatComponent },
     ],
   },
 

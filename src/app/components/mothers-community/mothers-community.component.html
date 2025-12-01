@@ -1,0 +1,47 @@
+<section class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] mx-auto py-16 px-4 sm:px-6 lg:px-20">
+  <div class="flex flex-col items-center">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#B34962] mb-4 text-center">
+      Mothers' Community
+    </h2>
+
+    <p class="font-medium text-base sm:text-lg md:text-xl text-center text-[#00000099] mb-12 max-w-full sm:max-w-[600px] md:max-w-[789px]">
+      Connect, share, and support each other on this beautiful journey
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 mb-10 justify-center w-full sm:w-auto">
+      <button
+        (click)="setActive('feed')"
+        [ngClass]="activeTab === 'feed' ? 'active-tab' : 'tab-btn'"
+        class="text-base sm:text-lg md:text-xl font-medium px-6 py-3 sm:px-8 rounded-3xl transition-all duration-200 w-full sm:w-auto text-center"
+      >
+        Feed
+      </button>
+
+      <button
+        (click)="setActive('groups')"
+        [ngClass]="activeTab === 'groups' ? 'active-tab' : 'tab-btn'"
+        class="text-base sm:text-lg md:text-xl font-medium px-6 py-3 sm:px-8 rounded-3xl transition-all duration-200 w-full sm:w-auto text-center"
+      >
+        Groups
+      </button>
+
+      <button
+        (click)="setActive('friends')"
+        [ngClass]="activeTab === 'friends' ? 'active-tab' : 'tab-btn'"
+        class="text-base sm:text-lg md:text-xl font-medium px-6 py-3 sm:px-8 rounded-3xl transition-all duration-200 w-full sm:w-auto text-center"
+      >
+        Friends
+      </button>
+    </div>
+
+    @if (activeTab === 'feed') {
+      <app-reviews></app-reviews>
+    } 
+    @if (activeTab === 'groups') {
+      <app-groups></app-groups>
+    } 
+    @if (activeTab === 'friends') {
+      <app-friends></app-friends>
+    }
+  </div>
+</section>
