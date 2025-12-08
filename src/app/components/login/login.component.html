@@ -78,7 +78,9 @@
           <a routerLink="/forgot-password" class="text-[var(--color-dark-pink)] hover:underline">Forget password ?</a>
         </div>
 
-        <button [disabled]="loginForm.invalid" class="w-full bg-[var(--color-dark-pink)] text-white text-xl py-3 rounded-xl hover:brightness-110 transition-all shadow-sm cursor-pointer 
+        <button 
+        (click)="login()"
+        class="w-full bg-[var(--color-dark-pink)] text-white text-xl py-3 rounded-xl hover:brightness-110 transition-all shadow-sm cursor-pointer 
            disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:shadow-none">
           Log In
         </button>

@@ -27,3 +27,7 @@ body {
   --color-white: #{$color-white};
   --font-primary: #{$font-primary};
 }
+
+button{
+  cursor: pointer;
+}
