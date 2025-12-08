@@ -1,0 +1,91 @@
+<section class="p-[30px] bg-[#FFEBEF] grid grid-cols-12 gap-10 h-[calc(100vh-86px)] overflow-auto">
+  <!-- Sidebar -->
+  <div class="rounded-[40px] px-[20px] py-[40px] bg-white col-span-4 flex flex-col">
+    <div class="flex gap-3 items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="23"
+        viewBox="0 0 24 23"
+        fill="none"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M2.25 4.5C2.25 3.90326 2.48705 3.33097 2.90901 2.90901C3.33097 2.48705 3.90326 2.25 4.5 2.25H19.5C20.0967 2.25 20.669 2.48705 21.091 2.90901C21.5129 3.33097 21.75 3.90326 21.75 4.5V9.375C21.75 9.67337 21.8685 9.95952 22.0795 10.1705C22.2905 10.3815 22.5766 10.5 22.875 10.5C23.1734 10.5 23.4595 10.3815 23.6705 10.1705C23.8815 9.95952 24 9.67337 24 9.375V4.5C24 3.30653 23.5259 2.16193 22.682 1.31802C21.8381 0.474106 20.6935 0 19.5 0H4.5C3.30653 0 2.16193 0.474106 1.31802 1.31802C0.474106 2.16193 0 3.30653 0 4.5L0 21.375C0.000195581 21.5974 0.0662816 21.8147 0.189912 21.9995C0.313541 22.1843 0.48917 22.3284 0.694615 22.4134C0.90006 22.4985 1.12611 22.5208 1.3442 22.4774C1.5623 22.4341 1.76267 22.3271 1.92 22.17L6.0945 18H12.375C12.6734 18 12.9595 17.8815 13.1705 17.6705C13.3815 17.4595 13.5 17.1734 13.5 16.875C13.5 16.5766 13.3815 16.2905 13.1705 16.0795C12.9595 15.8685 12.6734 15.75 12.375 15.75H5.1645L4.8345 16.08L2.25 18.66V4.5ZM19.5 19.5C19.2016 19.5 18.9155 19.3815 18.7045 19.1705C18.4935 18.9595 18.375 18.6734 18.375 18.375V16.125H16.125C15.8266 16.125 15.5405 16.0065 15.3295 15.7955C15.1185 15.5845 15 15.2984 15 15C15 14.7016 15.1185 14.4155 15.3295 14.2045C15.5405 13.9935 15.8266 13.875 16.125 13.875H18.375V11.625C18.375 11.3266 18.4935 11.0405 18.7045 10.8295C18.9155 10.6185 19.2016 10.5 19.5 10.5C19.7984 10.5 20.0845 10.6185 20.2955 10.8295C20.5065 11.0405 20.625 11.3266 20.625 11.625V13.875H22.875C23.1734 13.875 23.4595 13.9935 23.6705 14.2045C23.8815 14.4155 24 14.7016 24 15C24 15.2984 23.8815 15.5845 23.6705 15.7955C23.4595 16.0065 23.1734 16.125 22.875 16.125H20.625V18.375C20.625 18.6734 20.5065 18.9595 20.2955 19.1705C20.0845 19.3815 19.7984 19.5 19.5 19.5Z"
+          fill="#191919"
+        />
+      </svg>
+      <h4 class="text-2xl">New chat</h4>
+    </div>
+
+    <span class="text-xl text-[#00000070] pt-[49px]">History Chat:</span>
+    <div class="pt-[18px] overflow-y-auto flex-1 max-h-[500px]">
+      @for (q of questions; track $index) {
+      <div class="rounded-[8px] bg-[#FFC5D01F] mb-[8px]">
+        <div class="flex gap-1.5 items-center px-[8px] py-[14px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M5 18V21.766L6.515 20.857L11.277 18H16C17.103 18 18 17.103 18 16V8C18 6.897 17.103 6 16 6H4C2.897 6 2 6.897 2 8V16C2 17.103 2.897 18 4 18H5ZM4 8H16V16H10.723L7 18.234V16H4V8Z"
+              fill="#191919"
+              fill-opacity="0.3"
+            />
+            <path
+              d="M20 2H8C6.897 2 6 2.897 6 4H18C19.103 4 20 4.897 20 6V14C21.103 14 22 13.103 22 12V4C22 2.897 21.103 2 20 2Z"
+              fill="#191919"
+              fill-opacity="0.3"
+            />
+          </svg>
+          <p class="text-sm">{{ q }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Main Chat -->
+  <div
+    class="rounded-[40px] px-6 pt-7 pb-5 bg-white col-span-8 flex flex-col justify-between relative"
+  >
+    <div>
+      <div class="rounded-[30px] bg-[#F7F6F6] flex justify-between mx-auto w-full max-w-xl mb-6">
+        <button
+          (click)="setActive('clinic')"
+          [ngClass]="activeTab === 'clinic' ? 'active-tab' : 'tab-btn'"
+          class="rounded-[30px] font-semibold text-2xl py-3 px-[56px]"
+        >
+          Clinic
+        </button>
+
+        <button
+          (click)="setActive('feeding')"
+          [ngClass]="activeTab === 'feeding' ? 'active-tab' : 'tab-btn'"
+          class="rounded-[30px] font-semibold text-2xl py-3 px-[56px]"
+        >
+          Feeding
+        </button>
+
+        <button
+          (click)="setActive('skin')"
+          [ngClass]="activeTab === 'skin' ? 'active-tab' : 'tab-btn'"
+          class="rounded-[30px] font-semibold text-2xl py-3 px-[56px]"
+        >
+          Skin
+        </button>
+      </div>
+      @if (activeTab === 'clinic') {
+      <app-chatbot></app-chatbot>
+      } @if (activeTab === 'feeding') {
+      <app-feeding></app-feeding>
+      } @if (activeTab === 'skin') {
+      <app-skin></app-skin>
+      }
+    </div>
+  </div>
+</section>

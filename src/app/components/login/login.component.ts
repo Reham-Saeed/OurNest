@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +10,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  constructor(private router: Router) {}
+
   hidePassword = true;
 
   loginForm: FormGroup = new FormGroup({
@@ -27,5 +29,9 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
+  }
+
+  login() {
+    this.router.navigate(['/main-layout']);
   }
 }

@@ -1,64 +1,66 @@
-<section class="bg-[#FFEBEF] relative py-20">
+<section class="bg-[#FFEBEF] relative py-20 overflow-hidden">
   <div class="absolute inset-0 bg-[#D9D9D9]/10 backdrop-blur-[4px] z-1"></div>
 
   <div
-    class="bg-[url('/assets/background.jpg')] bg-cover h-[700px] bg-center flex justify-center items-center relative"
+    class="bg-[url('/assets/background.jpg')] bg-cover h-[640px] bg-center flex justify-center items-center relative"
   >
     <div
-      class="bg-[#D9D9D9]/30 h-[800px] w-[800px] rounded-full flex justify-center items-center relative z-10"
+      class="bg-[#D9D9D9]/30 h-[300px] w-[300px] sm:h-[400px] sm:w-[400px] md:h-[700px] md:w-[700px] lg:h-[800px] lg:w-[800px] rounded-full flex justify-center items-center relative z-10"
     >
       <div
-        class="relative bg-[#B34962]/20 text-white rounded-full flex flex-col justify-center items-center text-center h-[608px] w-[608px] gap-5 p-20"
+        class="relative bg-[#B34962]/20 text-white rounded-full flex flex-col justify-center items-center text-center h-[208px] w-[208px] sm:w-[308px] sm:h-[308px] md:w-[508px] md:h-[508px] lg:w-[608px] lg:h-[608px] gap-5 p-10 md:p-20"
       >
-        <h2 class="text-4xl font-bold">Pregnancy Tips</h2>
-        <p class="text-2xl font-medium">
+        <h2 class="text-sm md:text-3xl lg:text-4xl font-bold">Pregnancy Tips</h2>
+        <p class="text-xs md:text-xl lg:text-2xl font-medium">
           - Take Prenatal Vitamins: Start taking a comprehensive prenatal vitamin, especially one
           rich in Folic Acid (crucial for preventing neural tube defects) and Iron (to prevent
           anemia). Consult your doctor for the best recommendation
         </p>
-        <div class="bg-white rounded-full h-[80px] w-[80px] p-2 translate-y-10">
+        <div
+          class="bg-white rounded-full h-[50px] w-[50px] md:h-[70px] md:w-[70px] lg:h-[80px] lg:w-[80px] lg:translate-y-10"
+        >
           <img src="assets/black-foot.png" alt="" />
         </div>
       </div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-        <div class="relative w-[800px] h-[800px]">
-          <div
-            class="absolute top-14 -right-5 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img src="assets/family.jpg" class="w-full h-full object-cover rounded-full" />
-          </div>
-          <div
-            class="absolute top-78 -right-28 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img
-              src="assets/pregnancy-check-up.jpg"
-              class="w-full h-full object-cover rounded-full"
-            />
-          </div>
-          <div
-            class="absolute top-142 -right-5 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img
-              src="assets/pregnancy-exercises.jpg"
-              class="w-full h-full object-cover rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-            />
-          </div>
-          <div
-            class="absolute top-142 -left-5 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img src="assets/white-foot.jpg" class="w-full h-full object-cover rounded-full" />
-          </div>
-          <div
-            class="absolute top-78 -left-28 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img src="assets/baby.jpg" class="w-full h-full object-cover rounded-full" />
-          </div>
 
-          <div
-            class="absolute top-14 -left-5 w-[180px] h-[180px] border-2 border-[#B34962] rounded-full overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          >
-            <img src="assets/baby2.jpg" class="w-full h-full object-cover rounded-full" />
-          </div>
+      <div
+        class="absolute h-[350px] w-[350px] sm:h-[400px] sm:w-[400px] md:h-[750px] md:w-[750px] lg:h-[1000px] lg:w-[1000px] rounded-full mx-auto flex items-center justify-center"
+      >
+        <!-- 6 دواير -->
+        <div
+          class="absolute -right-[3%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/pregnancy-check-up.jpg" class="w-full h-full object-cover" />
+        </div>
+
+        <div
+          class="absolute top-[65%] left-[76%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/pregnancy-exercises.jpg" class="w-full h-full object-cover" />
+        </div>
+
+        <div
+          class="absolute top-[65%] right-[76%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/white-foot.jpg" class="w-full h-full object-cover" />
+        </div>
+
+        <div
+          class="absolute -left-[3%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/baby.jpg" class="w-full h-full object-cover" />
+        </div>
+
+        <div
+          class="absolute top-[16%] right-[76%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/baby2.jpg" class="w-full h-full object-cover" />
+        </div>
+
+        <div
+          class="absolute top-[16%] left-[76%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] md:w-[120px] md:h-[120px] lg:w-[180px] lg:h-[180px] rounded-full overflow-hidden shadow-md border-1 md:border-2 border-[#B34962]"
+        >
+          <img src="assets/family.jpg" class="w-full h-full object-cover" />
         </div>
       </div>
     </div>

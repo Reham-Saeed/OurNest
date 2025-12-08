@@ -15,6 +15,8 @@ import { ThirdTrimesterComponent } from './components/trimesters/third-trimester
 import { FriendChatComponent } from './components/mothers-community/friend-chat/friend-chat.component';
 import { MothersCommunityComponent } from './components/mothers-community/mothers-community.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { ClinicComponent } from './components/clinic/clinic.component';
+import { HeroComponent } from './components/hero/hero.component';
 
 
 export const routes: Routes = [
@@ -40,6 +42,10 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
+      { path: '', redirectTo: 'hero', pathMatch: 'full' },
+      { path: 'hero', component: HeroComponent },
+      { path: 'services', component: OurServicesComponent },
+      { path: 'clinic', component: ClinicComponent },
       { path: 'community', component: MothersCommunityComponent },
       { path: 'chat', component: FriendChatComponent },
     ],
