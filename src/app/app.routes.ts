@@ -12,6 +12,8 @@ import { PregnancyTipsComponent } from './components/pregnancy-tips/pregnancy-ti
 import { FirstTrimesterComponent } from './components/trimesters/first-trimester/first-trimester.component';
 import { SecondTrimesterComponent } from './components/trimesters/second-trimester/second-trimester.component';
 import { ThirdTrimesterComponent } from './components/trimesters/third-trimester/third-trimester.component';
+import { TodoListComponent } from './components/organizer/todo-list/todo-list.component';
+import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +34,8 @@ export const routes: Routes = [
       { path: 'trimester/third', component: ThirdTrimesterComponent },
     ],
   },
+  { path: 'organizer/todo', component: TodoListComponent },
+  { path: 'organizer/reminder', component: ReminderListComponent },
 
   { path: '**', component: NotFoundComponent },
 ];
