@@ -17,7 +17,8 @@ import { MothersCommunityComponent } from './components/mothers-community/mother
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { ClinicComponent } from './components/clinic/clinic.component';
 import { HeroComponent } from './components/hero/hero.component';
-
+import { TodoListComponent } from './components/organizer/todo-list/todo-list.component';
+import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
 
 export const routes: Routes = [
   {
@@ -45,11 +46,12 @@ export const routes: Routes = [
       { path: '', redirectTo: 'hero', pathMatch: 'full' },
       { path: 'hero', component: HeroComponent },
       { path: 'services', component: OurServicesComponent },
+      { path: 'organizer/todo', component: TodoListComponent },
+      { path: 'organizer/reminder', component: ReminderListComponent },
       { path: 'clinic', component: ClinicComponent },
       { path: 'community', component: MothersCommunityComponent },
       { path: 'chat', component: FriendChatComponent },
     ],
   },
-
   { path: '**', component: NotFoundComponent },
 ];

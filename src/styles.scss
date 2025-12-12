@@ -5,6 +5,7 @@
 // Colors
 $color-dark-pink: #b34962;
 $color-pink: #ffc5d0;
+$color-light-pink: #ffebef;
 $color-cyan: #56dada;
 $color-white: #ffffff;
 
@@ -23,11 +24,12 @@ body {
 :root {
   --color-dark-pink: #{$color-dark-pink};
   --color-pink: #{$color-pink};
+  --color-light-pink: #{$color-light-pink};
   --color-cyan: #{$color-cyan};
   --color-white: #{$color-white};
   --font-primary: #{$font-primary};
 }
 
-button{
+button {
   cursor: pointer;
 }

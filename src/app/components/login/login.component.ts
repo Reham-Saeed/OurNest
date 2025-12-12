@@ -32,6 +32,6 @@ export class LoginComponent {
   }
 
   login() {
-    this.router.navigate(['/main-layout']);
+    this.router.navigate(['/hero']);
   }
 }

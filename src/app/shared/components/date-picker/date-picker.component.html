@@ -10,11 +10,7 @@
         <div class="spacer"></div>
       </div>
 
-      <div
-        class="column"
-        #monthScroll
-        (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')"
-      >
+      <div class="column" #monthScroll (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')">
         <div class="spacer"></div>
         <div *ngFor="let m of months" class="item" [class.selected]="isSelected('month', m)">
           {{ m }}
@@ -22,11 +18,7 @@
         <div class="spacer"></div>
       </div>
 
-      <div
-        class="column"
-        #yearScroll
-        (scroll)="onScroll('year', yearScroll, years, 'selectedYear')"
-      >
+      <div class="column" #yearScroll (scroll)="onScroll('year', yearScroll, years, 'selectedYear')">
         <div class="spacer"></div>
         <div *ngFor="let y of years" class="item" [class.selected]="isSelected('year', y)">
           {{ y }}
@@ -37,11 +29,7 @@
 
     <!-- Pregnancy Picker -->
     <ng-container *ngIf="pickerType === 'pregnancy'">
-      <div
-        class="column"
-        #weekScroll
-        (scroll)="onScroll('week', weekScroll, weeks, 'selectedWeek')"
-      >
+      <div class="column" #weekScroll (scroll)="onScroll('week', weekScroll, weeks, 'selectedWeek')">
         <div class="spacer"></div>
         <div *ngFor="let w of weeks" class="item" [class.selected]="isSelected('week', w)">
           {{ w }} <span *ngIf="showLabel">{{ labelWeek }}</span>
@@ -68,11 +56,7 @@
         <div class="spacer"></div>
       </div>
 
-      <div
-        class="column"
-        #monthScroll
-        (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')"
-      >
+      <div class="column" #monthScroll (scroll)="onScroll('month', monthScroll, months, 'selectedMonth')">
         <div class="spacer"></div>
         <div *ngFor="let m of months" class="item" [class.selected]="isSelected('month', m)">
           {{ m }}
@@ -80,17 +64,43 @@
         <div class="spacer"></div>
       </div>
 
-      <div
-        class="column"
-        #yearScroll
-        (scroll)="onScroll('year', yearScroll, years, 'selectedYear')"
-      >
+      <div class="column" #yearScroll (scroll)="onScroll('year', yearScroll, years, 'selectedYear')">
         <div class="spacer"></div>
         <div *ngFor="let y of years" class="item" [class.selected]="isSelected('year', y)">
           {{ y }}
         </div>
         <div class="spacer"></div>
       </div>
+    </ng-container>
+
+
+    <!-- Time Picker -->
+    <ng-container *ngIf="pickerType === 'time'">
+
+      <div class="column" #hourScroll (scroll)="onScroll('hour', hourScroll, hours, 'selectedHour')">
+        <div class="spacer"></div>
+        <div *ngFor="let h of hours" class="item" [class.selected]="isSelected('hour', h)">
+          {{ h }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="column" #minuteScroll (scroll)="onScroll('minute', minuteScroll, minutes, 'selectedMinute')">
+        <div class="spacer"></div>
+        <div *ngFor="let m of minutes" class="item" [class.selected]="isSelected('minute', m)">
+          {{ m }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="column" #periodScroll (scroll)="onScroll('period', periodScroll, periods, 'selectedPeriod')">
+        <div class="spacer"></div>
+        <div *ngFor="let p of periods" class="item" [class.selected]="isSelected('period', p)">
+          {{ p }}
+        </div>
+        <div class="spacer"></div>
+      </div>
+
     </ng-container>
 
     <div class="highlight-bar"></div>
