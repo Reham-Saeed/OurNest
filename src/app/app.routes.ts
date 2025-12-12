@@ -21,8 +21,9 @@ import { TodoListComponent } from './components/organizer/todo-list/todo-list.co
 import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
-    path: '',
+    path: 'auth',
     component: AuthLayoutComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
