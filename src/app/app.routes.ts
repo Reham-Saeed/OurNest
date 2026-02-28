@@ -19,6 +19,7 @@ import { ClinicComponent } from './components/clinic/clinic.component';
 import { HeroComponent } from './components/hero/hero.component';
 import { TodoListComponent } from './components/organizer/todo-list/todo-list.component';
 import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
+import { HomeMainComponent } from './components/home-main/home-main.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -44,8 +45,8 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'hero', pathMatch: 'full' },
-      { path: 'hero', component: HeroComponent },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomeMainComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'organizer/todo', component: TodoListComponent },
       { path: 'organizer/reminder', component: ReminderListComponent },
