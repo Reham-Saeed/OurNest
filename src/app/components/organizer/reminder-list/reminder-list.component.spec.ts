@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupsComponent } from './groups.component';
+import { ReminderListComponent } from './reminder-list.component';
 
-describe('GroupsComponent', () => {
-  let component: GroupsComponent;
-  let fixture: ComponentFixture<GroupsComponent>;
+describe('ReminderListComponent', () => {
+  let component: ReminderListComponent;
+  let fixture: ComponentFixture<ReminderListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupsComponent]
+      imports: [ReminderListComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(GroupsComponent);
+    
+    fixture = TestBed.createComponent(ReminderListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

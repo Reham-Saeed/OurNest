@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './date-picker.component.scss',
 })
 export class DatePickerComponent {
-  @Input() pickerType!: 'lastPeriodDate' | 'expectedDate' | 'pregnancy' | 'age';
+  @Input() pickerType!: 'lastPeriodDate' | 'expectedDate' | 'pregnancy' | 'age' | 'time';
   @Input() showLabel = true;
   @Input() labelDay = 'days';
   @Input() labelWeek = 'weeks';
@@ -20,10 +20,18 @@ export class DatePickerComponent {
   years: number[] = [];
   weeks: number[] = [];
 
+  hours: number[] = [];
+  minutes: string[] = [];
+  periods: string[] = ['AM', 'PM'];
+
   selectedDay!: number;
   selectedMonth!: string;
   selectedYear!: number;
   selectedWeek!: number;
+
+  selectedHour!: number;
+  selectedMinute!: string;
+  selectedPeriod!: string;
 
   itemHeight = 40;
   spacer = this.itemHeight * 2;
@@ -69,6 +77,16 @@ export class DatePickerComponent {
     this.selectedYear = this.years[0];
   }
 
+  private initTimePicker() {
+    this.hours = Array.from({ length: 12 }, (_, i) => i + 1);
+
+    this.minutes = Array.from({ length: 60 }, (_, i) => (i < 10 ? `0${i}` : `${i}`));
+
+    this.selectedHour = 12;
+    this.selectedMinute = '00';
+    this.selectedPeriod = 'AM';
+  }
+
   scrollTimeout: any;
   onScroll(type: string, element: HTMLElement, array: any[], key: string) {
     clearTimeout(this.scrollTimeout);
@@ -95,6 +113,12 @@ export class DatePickerComponent {
         return { week: this.selectedWeek, day: this.selectedDay };
       case 'age':
         return { day: this.selectedDay, month: this.selectedMonth, year: this.selectedYear };
+      case 'time':
+        return {
+          hour: this.selectedHour,
+          minute: this.selectedMinute,
+          period: this.selectedPeriod,
+        };
     }
   }
 
@@ -108,6 +132,12 @@ export class DatePickerComponent {
         return value === this.selectedYear;
       case 'week':
         return value === this.selectedWeek;
+      case 'hour':
+        return value === this.selectedHour;
+      case 'minute':
+        return value === this.selectedMinute;
+      case 'period':
+        return value === this.selectedPeriod;
     }
     return false;
   }
@@ -128,6 +158,10 @@ export class DatePickerComponent {
 
       case 'age':
         this.initAgePicker();
+        break;
+
+      case 'time':
+        this.initTimePicker();
         break;
     }
   }

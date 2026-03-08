@@ -42,7 +42,7 @@ export class QuestionsFlowComponent {
   goNext() {
   
     if (this.currentStep === 9) {
-      this.router.navigate(['/signup']);
+      this.router.navigate(['auth/signup']);
     }else{
         this.currentStep = 9;
     }

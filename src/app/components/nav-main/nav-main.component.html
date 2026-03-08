@@ -11,7 +11,7 @@
     <ul class="hidden gap-6 lg:flex xl:gap-11 [@media(width:1280px)]:gap-6 text-lg lg:text-xl font-medium">
       <li>
         <a
-          routerLink="/hero"
+          routerLink="/home"
           routerLinkActive="text-[#B34962]"
           class="text-[#00000059] hover:text-[#B34962]"
           >Home</a
@@ -43,7 +43,7 @@
       </li>
       <li>
         <a
-          routerLink="/list"
+          routerLink="/organizer/todo"
           routerLinkActive="text-[#B34962]"
           class="text-[#00000059] hover:text-[#B34962]"
           >List</a
@@ -104,6 +104,7 @@
 
   <!-- Mobile Menu -->
   <div class="lg:hidden absolute top-full left-0 w-full z-[1]">
+
     <div
       class="bg-white overflow-hidden transition-all duration-300 ease-in-out"
       [ngStyle]="{ 'max-height': mobileMenuOpen ? '500px' : '0' }"
