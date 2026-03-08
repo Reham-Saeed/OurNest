@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   AbstractControl,
 } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,8 +17,13 @@ import {
   styleUrl: './sign-up.component.scss',
 })
 export class SignUpComponent {
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
   hidePassword = true;
   hideConfirmPassword = true;
+  isLoading = false;
+  errorMessage = '';
 
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
@@ -34,7 +40,7 @@ export class SignUpComponent {
         Validators.minLength(3),
         Validators.maxLength(30),
       ]),
-      phone: new FormControl(null, [Validators.required, Validators.pattern(/^\+?[0-9]{11,15}$/)]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(8),
@@ -42,7 +48,7 @@ export class SignUpComponent {
       ]),
       rePassword: new FormControl(null),
     },
-    this.confirmPassword
+    this.confirmPassword,
   );
 
   confirmPassword(form: AbstractControl) {
@@ -58,6 +64,32 @@ export class SignUpComponent {
       this.signUpForm.markAllAsTouched();
       return;
     }
-    console.log('Form is valid! Sending data:', this.signUpForm.value);
+    this.isLoading = true;
+    this.errorMessage = '';
+    const role = localStorage.getItem('selectedRole') || 'mother';
+
+    const payload = {
+      email: this.signUpForm.value.email,
+      password: this.signUpForm.value.password,
+      confirmPassword: this.signUpForm.value.rePassword,
+      role: role,
+    };
+
+    this.authService.register(payload).subscribe({
+      next: (response) => {
+        if (response.success) {
+          localStorage.removeItem('selectedRole');
+          localStorage.removeItem('currentStep');
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = response.error || 'Registration failed.';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.error || 'An account with this email already exists.';
+        console.error('Registration failed:', err);
+      },
+    });
   }
 }

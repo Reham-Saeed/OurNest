@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,12 +11,15 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   hidePassword = true;
+  isLoading = false;
+  errorMessage = '';
 
   loginForm: FormGroup = new FormGroup({
-    phone: new FormControl(null, [Validators.required]), // Only check if it's not empty
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl(null, [Validators.required]),
     remember: new FormControl(false),
   });
@@ -29,9 +33,30 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
-  }
 
-  login() {
-    this.router.navigate(['/home']);
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const credentials = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
+    };
+
+    this.authService.login(credentials).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+
+        if (response.success) {
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = response.error || 'Invalid credentials.';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.error || 'Server error. Please try again later.';
+        console.error('Login error:', err);
+      },
+    });
   }
 }
