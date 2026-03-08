@@ -15,16 +15,19 @@ import { ThirdTrimesterComponent } from './components/trimesters/third-trimester
 import { MothersCommunityComponent } from './components/mothers-community/mothers-community.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { ClinicComponent } from './components/clinic/clinic.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { HomeMainComponent } from './components/home-main/home-main.component';
 import { TodoListComponent } from './components/organizer/todo-list/todo-list.component';
 import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
+import { HomeMainComponent } from './components/home-main/home-main.component';
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
+import { SettingsComponent } from './components/settings/settings.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
     path: 'auth',
     component: AuthLayoutComponent,
+    canActivate: [guestGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
@@ -43,6 +46,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeMainComponent },

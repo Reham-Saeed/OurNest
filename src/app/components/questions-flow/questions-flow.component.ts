@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
   styleUrl: './questions-flow.component.scss',
 })
 export class QuestionsFlowComponent {
-
   private _currentStep: number = 1;
 
   constructor(private router: Router) {}
@@ -21,7 +20,7 @@ export class QuestionsFlowComponent {
 
   set currentStep(step: number) {
     this._currentStep = step;
-    localStorage.setItem('currentStep', step.toString()); 
+    localStorage.setItem('currentStep', step.toString());
   }
 
   ngOnInit() {
@@ -40,16 +39,16 @@ export class QuestionsFlowComponent {
   }
 
   goNext() {
-  
     if (this.currentStep === 9) {
       this.router.navigate(['auth/signup']);
-    }else{
-        this.currentStep = 9;
+    } else {
+      this.currentStep = 9;
     }
   }
 
   chooseRole(role: 'mother' | 'father') {
     this.formData.role = role;
+    localStorage.setItem('selectedRole', role);
     this.currentStep = role === 'mother' ? 2 : 9;
   }
 
@@ -75,10 +74,18 @@ export class QuestionsFlowComponent {
     if (type === 'dueDate') this.currentStep = 8;
   }
 
-  onLastPeriodSelect(date: any) { this.formData.lastPeriodDate = date; }
-  onGestationalAgeSelect(age: any) { this.formData.gestationalAge = age; }
-  onExpectedDueDateSelect(date: any) { this.formData.expectedDueDate = date; }
-  onBirthDateSelect(date: any) { this.formData.birthDate = date; }
+  onLastPeriodSelect(date: any) {
+    this.formData.lastPeriodDate = date;
+  }
+  onGestationalAgeSelect(age: any) {
+    this.formData.gestationalAge = age;
+  }
+  onExpectedDueDateSelect(date: any) {
+    this.formData.expectedDueDate = date;
+  }
+  onBirthDateSelect(date: any) {
+    this.formData.birthDate = date;
+  }
 
   formData: any = {
     role: null,
@@ -96,5 +103,4 @@ export class QuestionsFlowComponent {
     height: new FormControl(''),
     weight: new FormControl(''),
   });
-
 }

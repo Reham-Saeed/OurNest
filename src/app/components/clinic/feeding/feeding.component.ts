@@ -21,8 +21,6 @@ export class FeedingComponent {
     if (!file) return;
 
     this.selectedFile = file;
-
-    // عرض الصورة
     const reader = new FileReader();
     reader.onload = () => {
       this.previewImage = reader.result as string;
