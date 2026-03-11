@@ -19,21 +19,30 @@
         <h1 class="text-[var(--color-dark-pink)] text-5xl font-normal">Log In</h1>
       </div>
 
-      <form [formGroup]="loginForm" class="space-y-6">
+      @if (errorMessage) {
+      <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+        {{ errorMessage }}
+      </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
 
         <div>
-          <label for="login-phone" class="block text-[var(--color-dark-pink)] text-base mb-2">Phone Number</label>
+          <label for="login-email" class="block text-[var(--color-dark-pink)] text-base mb-2">Email Address</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-dark-pink)] text-lg">
-              <i class="fa-solid fa-phone"></i>
-            </span>
-            <input formControlName="phone" type="tel" id="login-phone" name="phone"
-              placeholder="Enter your phone number"
+              <i class="fa-solid fa-envelope"></i> </span>
+            <input formControlName="email" type="email" id="login-email" placeholder="Enter your email"
               class="w-full border border-[var(--color-dark-pink)] rounded-xl py-3 pl-12 pr-4 outline-none focus:border-[var(--color-dark-pink)] transition-colors text-gray-700">
           </div>
-          @if (loginForm.get('phone')?.invalid && loginForm.get('phone')?.touched) {
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
           <div class="text-red-500 text-sm mt-1 ml-1">
-            <div>Phone number is required.</div>
+            @if (loginForm.get('email')?.hasError('required')) {
+            <div>Email is required.</div>
+            }
+            @if (loginForm.get('email')?.hasError('email')) {
+            <div>Please enter a valid email address.</div>
+            }
           </div>
           }
         </div>
@@ -45,7 +54,7 @@
               <i class="fa-solid fa-lock"></i>
             </span>
             <input formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="login-password"
-              name="password" placeholder="Enter your password"
+              placeholder="Enter your password"
               class="w-full border border-[var(--color-dark-pink)] rounded-xl py-3 pl-12 pr-12 outline-none focus:border-[var(--color-dark-pink)] transition-colors text-gray-700">
             <button type="button" (click)="togglePasswordVisibility()"
               class="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-dark-pink)] hover:opacity-100 transition-opacity">
@@ -61,24 +70,25 @@
 
         <div class="flex justify-between items-center text-sm">
           <label for="login-remember" class="flex items-center cursor-pointer select-none">
-            <input formControlName="remember" type="checkbox" id="login-remember" name="remember" class="sr-only" />
+            <input formControlName="remember" type="checkbox" id="login-remember" class="sr-only" />
             <div class="toggle-switch relative w-10 h-6 bg-gray-300 rounded-full transition-colors duration-300">
               <div
                 class="toggle-knob absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300">
               </div>
             </div>
-            <span class="toggle-text ml-3 text-gray-500 text-sm transition-colors duration-300">
-              Remember me
-            </span>
+            <span class="toggle-text ml-3 text-gray-500 text-sm transition-colors duration-300">Remember me</span>
           </label>
-          <a routerLink="/auth/forgot-password" class="text-[var(--color-dark-pink)] hover:underline">Forget password ?</a>
+          <a routerLink="/auth/forgot-password" class="text-[var(--color-dark-pink)] hover:underline">Forget password
+            ?</a>
         </div>
 
-        <button 
-        (click)="login()"
-        class="w-full bg-[var(--color-dark-pink)] text-white text-xl py-3 rounded-xl hover:brightness-110 transition-all shadow-sm cursor-pointer 
-           disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:shadow-none">
+        <button type="submit" [disabled]="isLoading"
+          class="w-full bg-[var(--color-dark-pink)] text-white text-xl py-3 rounded-xl hover:brightness-110 transition-all shadow-sm cursor-pointer disabled:bg-[var(--color-pink)] disabled:cursor-not-allowed disabled:hover:brightness-100 disabled:shadow-none flex justify-center items-center">
+          @if (isLoading) {
+          <i class="fa-solid fa-spinner fa-spin mr-2"></i> Logging in...
+          } @else {
           Log In
+          }
         </button>
 
       </form>

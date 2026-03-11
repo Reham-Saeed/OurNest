@@ -19,6 +19,12 @@
         <h1 class="text-[var(--color-dark-pink)] text-5xl font-normal">Sign Up</h1>
       </div>
 
+      @if (errorMessage) {
+      <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+        {{ errorMessage }}
+      </div>
+      }
+
       <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="space-y-6 ">
 
         <div>
@@ -39,22 +45,19 @@
         </div>
 
         <div>
-          <label for="signup-phone" class="block text-[var(--color-dark-pink)] text-base mb-2">Phone Number</label>
+          <label for="signup-email" class="block text-[var(--color-dark-pink)] text-base mb-2">Email Address</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-dark-pink)] text-lg">
-              <i class="fa-solid fa-phone"></i>
+              <i class="fa-solid fa-envelope"></i>
             </span>
-            <input formControlName="phone" type="tel" id="signup-phone" name="phone"
-              placeholder="Enter your phone number"
+            <input formControlName="email" type="email" id="signup-email" placeholder="Enter your email"
               class="w-full border border-[var(--color-dark-pink)] rounded-xl py-3 pl-12 pr-4 outline-none focus:border-[var(--color-dark-pink)] transition-colors text-gray-700">
           </div>
-          @if (signUpForm.get('phone')?.invalid && signUpForm.get('phone')?.touched) {
+          @if (signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched) {
           <div class="text-red-500 text-sm mt-1 ml-1">
-            @if (signUpForm.get('phone')?.errors?.['required']) { <div>Phone number is required.</div> }
-            @if (signUpForm.get('phone')?.errors?.['pattern']) {
-            <div>Must be 11-15 digits (e.g. 010xxxxxxxx).</div>
-            }
-          </div>}
+            <div>Valid email is required.</div>
+          </div>
+          }
         </div>
 
         <div>
