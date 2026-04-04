@@ -123,19 +123,22 @@
         <div class="flex-1 border-t border-[var(--color-pink)] opacity-60"></div>
       </div>
 
-      <div class="space-y-3">
-        <button
-          class="w-full border border-[var(--color-pink)] py-3 rounded-xl flex justify-center items-center gap-3 text-gray-700 font-medium hover:bg-pink-50 transition-colors cursor-pointer">
-          <!-- <i class="fa-brands fa-google text-xl text-red-500"></i> -->
-          <img src="assets/google-icon.svg" alt="My Icon" class="w-6 h-6 translate-y-[2px]">
-          Sign Up with Google
-        </button>
+      <div class="flex flex-col items-center mt-6">
+        <p class="text-gray-500 text-sm mb-4">Continue with</p>
 
-        <button
-          class="w-full border border-[var(--color-pink)] py-3 rounded-xl flex justify-center items-center gap-3 text-gray-700 font-medium hover:bg-pink-50 transition-colors cursor-pointer">
-          <i class="fa-brands fa-facebook text-xl text-blue-600"></i>
-          Sign Up with Facebook
-        </button>
+        <div class="flex items-center justify-center gap-6">
+
+          <div class="hover:scale-105 transition-transform">
+            <asl-google-signin-button type="icon" shape="circle" size="large" logo_alignment="center" [width]="400">
+            </asl-google-signin-button>
+          </div>
+
+          <button type="button" (click)="signInWithFB()"
+            class="w-[40px] h-[40px] rounded-full bg-[#1877F2] text-white flex items-center justify-center shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            <i class="fa-brands fa-facebook-f text-xl"></i>
+          </button>
+
+        </div>
       </div>
 
       <div class="text-center mt-8 text-gray-500">

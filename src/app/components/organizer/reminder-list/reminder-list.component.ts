@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatePickerComponent } from '../../../shared/components/date-picker/date-picker.component';
 import { RouterLinkActive, RouterLinkWithHref } from '@angular/router';
+import {
+  BackendReminder,
+  ReminderService,
+} from '../../../core/services/Organizer/reminder.service';
 
-interface Reminder {
-  id: number;
+interface UIReminder {
+  id: string;
   title: string;
   date: string;
   time: string;
@@ -18,20 +22,31 @@ interface Reminder {
   templateUrl: './reminder-list.component.html',
   styleUrl: './reminder-list.component.scss',
 })
-export class ReminderListComponent {
-  reminders: Reminder[] = [
-    { id: 1, title: 'Medical consultation', date: 'October 12, 2025', time: '7:00AM' },
-    { id: 2, title: 'Take prenatal vitamins', date: 'October 12, 2025', time: '9:45AM' },
-  ];
+export class ReminderListComponent implements OnInit {
+  private reminderService = inject(ReminderService);
+
+  reminders: UIReminder[] = [];
 
   newReminderTitle = '';
   showDateModal = false;
-  editingId: number | null = null;
+  editingId: string | null = null;
 
   modalStep: 'date' | 'time' = 'date';
-
   tempDate: any = null;
   tempTime: any = null;
+
+  ngOnInit() {
+    this.loadReminders();
+  }
+
+  loadReminders() {
+    this.reminderService.getReminders().subscribe({
+      next: (data) => {
+        this.reminders = data.map((item) => this.formatDateForUI(item));
+      },
+      error: (err) => console.error('Failed to load reminders', err),
+    });
+  }
 
   openDateModal() {
     if (this.newReminderTitle.trim()) {
@@ -48,10 +63,9 @@ export class ReminderListComponent {
     this.tempTime = val;
   }
 
-  editReminder(item: Reminder) {
+  editReminder(item: UIReminder) {
     this.editingId = item.id;
     this.newReminderTitle = item.title;
-
     this.modalStep = 'date';
     this.showDateModal = true;
   }
@@ -66,37 +80,80 @@ export class ReminderListComponent {
   }
 
   addReminder() {
-    const d = this.tempDate;
-    const dateStr = `${d.month} ${d.day}, ${d.year}`;
-
     const t = this.tempTime || { hour: 12, minute: '00', period: 'AM' };
-    const timeStr = `${t.hour}:${t.minute}${t.period}`;
+    const isoString = this.createIsoString(this.tempDate, t);
 
     if (this.editingId) {
-      const index = this.reminders.findIndex((r) => r.id === this.editingId);
-      if (index !== -1) {
-        this.reminders[index] = {
-          id: this.editingId,
-          title: this.newReminderTitle,
-          date: dateStr,
-          time: timeStr,
-        };
-      }
+      //place holder till we get an edit endpoint
+      console.warn('Backend missing PUT endpoint to save edits!');
     } else {
-      this.reminders.push({
-        id: Date.now(),
+      const payload = {
         title: this.newReminderTitle,
-        date: dateStr,
-        time: timeStr,
+        description: '',
+        reminderDateTime: isoString,
+        category: 'General',
+      };
+
+      this.reminderService.addReminder(payload).subscribe({
+        next: (createdReminder) => {
+          this.reminders.push(this.formatDateForUI(createdReminder));
+          this.resetForm();
+        },
+        error: (err) => console.error('Failed to add reminder', err),
       });
     }
+  }
+
+  deleteReminder(id: string) {
+    this.reminderService.deleteReminder(id).subscribe({
+      next: () => {
+        this.reminders = this.reminders.filter((r) => r.id !== id);
+      },
+      error: (err) => console.error('Failed to delete reminder', err),
+    });
+  }
+
+  resetForm() {
     this.newReminderTitle = '';
     this.showDateModal = false;
     this.tempDate = null;
     this.tempTime = null;
   }
 
-  deleteReminder(id: number) {
-    this.reminders = this.reminders.filter((r) => r.id !== id);
+  private formatDateForUI(item: BackendReminder): UIReminder {
+    const d = new Date(item.reminderDateTime);
+    return {
+      id: item.id,
+      title: item.title,
+      date: d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      time: d
+        .toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+        .replace(' ', ''),
+    };
+  }
+
+  private createIsoString(dateObj: any, timeObj: any): string {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    const monthIndex = months.indexOf(dateObj.month);
+
+    let hour = Number(timeObj.hour);
+    if (timeObj.period === 'PM' && hour !== 12) hour += 12;
+    if (timeObj.period === 'AM' && hour === 12) hour = 0;
+
+    const date = new Date(dateObj.year, monthIndex, dateObj.day, hour, Number(timeObj.minute));
+    return date.toISOString();
   }
 }

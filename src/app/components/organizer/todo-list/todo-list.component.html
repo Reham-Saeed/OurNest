@@ -43,15 +43,15 @@
 
         <div
           class="flex-1 flex items-center justify-between border rounded-2xl px-6 py-4 bg-white hover:shadow-sm transition-all"
-          [class.border-[var(--color-dark-pink)]]="!task.completed" [class.border-gray-300]="task.completed">
+          [class.border-[var(--color-dark-pink)]]="!task.isCompleted" [class.border-gray-300]="task.isCompleted">
 
           <div class="flex items-center gap-4 flex-1">
 
             <div (click)="toggleComplete(task)"
               class="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-              [class.border-[var(--color-dark-pink)]]="task.completed"
-              [class.bg-[var(--color-dark-pink)]]="task.completed">
-              @if (task.completed) { <i class="fa-solid fa-check text-white text-xs"></i> }
+              [class.border-[var(--color-dark-pink)]]="task.isCompleted"
+              [class.bg-[var(--color-dark-pink)]]="task.isCompleted">
+              @if (task.isCompleted) { <i class="fa-solid fa-check text-white text-xs"></i> }
             </div>
 
             @if (task.isEditing) {
@@ -60,7 +60,7 @@
               autofocus>
             } @else {
             <span (click)="toggleComplete(task)" class="text-lg font-medium text-black cursor-pointer truncate"
-              [class.line-through]="task.completed" [class.text-gray-400]="task.completed">
+              [class.line-through]="task.isCompleted" [class.text-gray-400]="task.isCompleted">
               {{ task.title }}
             </span>
             }
