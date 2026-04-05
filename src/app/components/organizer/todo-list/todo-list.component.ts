@@ -1,14 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLinkActive, RouterLinkWithHref } from '@angular/router';
-
-interface Task {
-  id: number;
-  title: string;
-  completed: boolean;
-  isEditing?: boolean;
-}
+import { Task, TodoService } from '../../../core/services/Organizer/todo.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -17,29 +11,62 @@ interface Task {
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss',
 })
-export class TodoListComponent {
-  newTask = '';
+export class TodoListComponent implements OnInit {
+  private todoService = inject(TodoService);
 
-  tasks: Task[] = [{ id: 1, title: 'Task1', completed: false, isEditing: false }];
+  newTask = '';
+  tasks: Task[] = [];
+
+  ngOnInit() {
+    this.loadTasks();
+  }
+
+  loadTasks() {
+    this.todoService.getTodos().subscribe({
+      next: (data) => (this.tasks = data),
+      error: (err) => console.error('Failed to load tasks', err),
+    });
+  }
 
   addTask() {
     if (this.newTask.trim()) {
-      this.tasks.push({
-        id: Date.now(),
+      const payload = {
         title: this.newTask,
-        completed: false,
+        description: '',
+        priority: 0,
+        category: 'General',
+        dueDate: new Date().toISOString(),
+      };
+
+      this.todoService.addTodo(payload).subscribe({
+        next: (createdTask) => {
+          this.tasks.push(createdTask);
+          this.newTask = '';
+        },
+        error: (err) => console.error('Failed to add task', err),
       });
-      this.newTask = '';
     }
   }
 
-  deleteTask(id: number) {
-    this.tasks = this.tasks.filter((t) => t.id !== id);
+  deleteTask(id: string) {
+    this.todoService.deleteTodo(id).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter((t) => t.id !== id);
+      },
+      error: (err) => console.error('Failed to delete task', err),
+    });
   }
 
   toggleComplete(task: Task) {
     if (!task.isEditing) {
-      task.completed = !task.completed;
+      task.isCompleted = !task.isCompleted;
+
+      this.todoService.toggleComplete(task.id).subscribe({
+        error: (err) => {
+          task.isCompleted = !task.isCompleted;
+          console.error('Failed to toggle task', err);
+        },
+      });
     }
   }
 
@@ -52,7 +79,6 @@ export class TodoListComponent {
       this.deleteTask(task.id);
       return;
     }
-
     task.isEditing = false;
   }
 
