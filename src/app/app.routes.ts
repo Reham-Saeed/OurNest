@@ -21,6 +21,13 @@ import { HomeMainComponent } from './components/home-main/home-main.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { SettingsComponent } from './components/settings/settings.component';
+import { BabyCareComponent } from './components/baby-care/baby-care.component';
+import { FeedingTimeComponent } from './components/baby-care/feeding-time/feeding-time.component';
+import { NapsComponent } from './components/baby-care/naps/naps.component';
+import { CryingComponent } from './components/baby-care/crying/crying.component';
+import { TemperatureComponent } from './components/baby-care/temperature/temperature.component';
+import { VaccinationComponent } from './components/baby-care/vaccination/vaccination.component';
+import { FeedingAdviceComponent } from './components/baby-care/feeding-advice/feeding-advice.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -49,12 +56,24 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeMainComponent },
+      // { path: 'home', component: HomeMainComponent },
+      { path: 'home', component: BabyCareComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'organizer/todo', component: TodoListComponent },
       { path: 'organizer/reminder', component: ReminderListComponent },
       { path: 'clinic', component: ClinicComponent },
       { path: 'community', component: MothersCommunityComponent },
+      {
+        path: 'baby-care',
+        children: [
+          { path: 'feeding-time', component: FeedingTimeComponent },
+          { path: 'baby-naps', component: NapsComponent },
+          { path: 'baby-crying', component: CryingComponent },
+          { path: 'baby-temperature', component: TemperatureComponent },
+          { path: 'feeding-guide', component: FeedingAdviceComponent },
+          { path: 'vaccination', component: VaccinationComponent },
+        ],
+      },
       { path: 'settings', component: SettingsComponent },
     ],
   },

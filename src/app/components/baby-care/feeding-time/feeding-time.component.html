@@ -1,0 +1,179 @@
+<!-- app.component.html -->
+<div
+  class="min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#FFC5D0] flex flex-col items-center justify-center py-10 px-20"
+>
+  <h2 class="font-semibold text-5xl text-[#B34962] mb-10">GUIDE TO FEEDING : MONTH 2</h2>
+  <div
+    class="inline-flex items-center justify-center gap-5 px-10 py-3 rounded-[20px] border border-[#B34962] bg-[#FFF3F5]"
+  >
+    <h2 class="text-lg font-medium text-gray-800 m-0 text-center">Add the last Feeding time</h2>
+    <div
+      (click)="openModal()"
+      class="cursor-pointer bg-[#B34962] p-1 flex items-center justify-center rounded-xl"
+    >
+      <i class="fa-solid fa-plus text-white text-2xl"></i>
+    </div>
+  </div>
+  <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <!-- LEFT COLUMN -->
+    <div class="flex flex-col items-center gap-6">
+      <!-- Baby Photo -->
+      <div class="flex justify-between gap-6">
+        <div class="relative z-10 mx-6 w-72 h-72">
+          <div
+            class="absolute -inset-x-5 -inset-y-5 rounded-full border-2 border-[#B34962] bg-white"
+          ></div>
+          <div
+            class="absolute -inset-x-1.5 -inset-y-3.5 rounded-full border-2 border-[#B34962]"
+          ></div>
+
+          <div
+            class="w-72 h-72 rounded-full border-2 border-[#B34962] shadow-xl overflow-hidden relative z-10"
+          >
+            <img src="assets/feeding-time.jpg" alt="Baby" class="w-full h-full object-cover" />
+          </div>
+        </div>
+        <div class="mt-20">
+          <h3 class="font-semibold text-3xl">
+            BABY: MARIAM <br />
+            (MONTH 2)
+          </h3>
+          <h3 class="text-3xl pt-6">Weight: 4.8km</h3>
+          <h3 class="text-3xl pt-2">Length: 57cm</h3>
+        </div>
+      </div>
+
+      <!-- Daily Needs Card -->
+      <div
+        class="w-full bg-white/80 backdrop-blur-sm rounded-3xl border border-[#B34962] shadow-lg p-6 mt-6"
+      >
+        <div class="flex items-center gap-3 mb-5">
+          <div class="flex-1 h-px bg-pink-200"></div>
+          <h2 class="text-[#B34962] font-extrabold text-2xl tracking-widest uppercase">
+            Daily Needs
+          </h2>
+          <div class="flex-1 h-px bg-pink-200"></div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          @for (need of dailyNeeds; track $index) {
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 flex items-center justify-center text-2xl">
+                <img [src]="need.icon" alt="" />
+              </div>
+              <div class="text-lg">
+                <span class="font-medium">{{ need.label }}: </span>
+                <span class="text-[#B34962] font-bold">{{ need.value }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20">
+      <!-- RIGHT COLUMN: Food Schedule -->
+      <div
+        class="relative bg-white/80 backdrop-blur-sm rounded-[20px] border border-[#B34962] shadow-lg p-6"
+      >
+        <h2
+          class="absolute -top-8 left-1/2 -translate-x-1/2 w-max text-center text-[#B34962] font-extrabold text-2xl bg-white rounded-xl uppercase px-4"
+        >
+          PROPOSED FOOD <br />
+          SCHDULE (Month 2)
+        </h2>
+
+        <!-- Wrapper عشان الخط -->
+        <div class="relative mt-10">
+          <!-- الخط العمودي -->
+          <div class="absolute top-0 bottom-0 left-1/2 w-[0.07px] bg-gray-300 z-0"></div>
+
+          <!-- Table Header -->
+          <div
+            class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
+          >
+            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl">
+              Time
+            </span>
+            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl">
+              Activity
+            </span>
+          </div>
+
+          <!-- Feeding Rows -->
+          <div class="flex flex-col divide-y divide-gray-300 relative z-10">
+            @for (slot of feedingSchedule; track $index) {
+              <div
+                class="grid grid-cols-2 text-center py-4 px-4 hover:bg-pink-50 transition-colors"
+              >
+                <span class="font-medium text-lg">
+                  {{ slot.time }}
+                </span>
+                <span class="font-medium text-lg uppercase"> Feeding </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL OVERLAY -->
+  @if (showModal) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center" (click)="closeModal()">
+      <div class="absolute inset-0 bg-pink-100/40 backdrop-blur-md"></div>
+
+      <!-- Modal Box -->
+      <div
+        class="relative z-10 bg-white rounded-3xl shadow-2xl p-8 w-[40%] flex flex-col border border-[#B34962] animate-pop"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- TITLE -->
+        <h3
+          class="absolute -top-4 left-1/2 -translate-x-1/2 text-[#B34962] font-extrabold text-4xl bg-white rounded-xl uppercase px-4 whitespace-nowrap"
+        >
+          The Last Feeding
+        </h3>
+
+        <!-- INPUT SECTION -->
+        <div class="flex items-center gap-3 w-full mt-10">
+          <label class="text-gray-700 font-bold text-xl uppercase tracking-wide">Time:</label>
+
+          <div class="relative flex-1">
+            <!-- input -->
+            <input
+              type="text"
+              [(ngModel)]="lastFeedingTimeDisplay"
+              readonly
+              placeholder="--:-- --"
+              class="w-full border border-[#B34962] rounded-[20px] px-4 pr-12 py-2 text-xl text-[#B34962] font-semibold bg-[#FFF3F5] placeholder-[#B34962] focus:outline-none"
+            />
+
+            <!-- clock icon toggle -->
+            <button
+              type="button"
+              class="absolute right-4 top-1/2 -translate-y-1/2 transition-transform duration-200"
+            >
+              <i class="fa-regular fa-clock text-[#B34962]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- TIME PICKER (toggle) -->
+        <div>
+          <app-date-picker pickerType="time" (dateSelected)="onTimeChange($event)">
+          </app-date-picker>
+        </div>
+
+        <!-- DONE BUTTON -->
+        <button
+          (click)="saveFeeding()"
+          [disabled]="!lastFeedingTime"
+          class="w-full bg-[#B34962] text-white font-extrabold uppercase tracking-widest py-3 rounded-2xl shadow-md transition-all duration-200 text-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-pink-800"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  }
+</div>

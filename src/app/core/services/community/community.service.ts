@@ -12,23 +12,15 @@ export class CommunityService {
   constructor(private http: HttpClient) {}
 
   getPosts(): Observable<IPost[]> {
-    return this.http.get<IPost[]>(`${baseUrl}communitycommunity/posts`);
+    return this.http.get<IPost[]>(`${baseUrl}community/posts`);
   }
 
   createPost(post: ICreatePost): Observable<IPost> {
     return this.http.post<IPost>(`${baseUrl}community/posts`, post);
   }
 
-  deletePost(postId: string): Observable<any> {
-    return this.http.delete(`${baseUrl}community/posts/${postId}`);
-  }
-
   addLike(postId: string): Observable<any> {
     return this.http.post<any>(`${baseUrl}community/posts/${postId}/like`, {});
-  }
-
-  reportPost(postId: string, report: IReport): Observable<any> {
-    return this.http.post(`${baseUrl}community/posts/${postId}/report`, report);
   }
 
   getComments(postId: string): Observable<IComment[]> {
