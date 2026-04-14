@@ -32,6 +32,10 @@ export class TodoService {
     return this.http.patch<Task>(`${this.apiUrl}/${id}/toggle`, {});
   }
 
+  updateTodo(id: string, payload: { task: string; isDone: boolean }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, payload);
+  }
+
   deleteTodo(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }

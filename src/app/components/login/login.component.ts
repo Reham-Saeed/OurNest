@@ -27,8 +27,8 @@ export class LoginComponent {
   errorMessage = '';
 
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl(null, [Validators.required]),
+    username: new FormControl('', [Validators.required]), // Changed from email
+    password: new FormControl('', [Validators.required]),
     remember: new FormControl(false),
   });
 
@@ -87,8 +87,9 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
+    // CHANGED: email to username
     const credentials = {
-      email: this.loginForm.value.email,
+      username: this.loginForm.value.username,
       password: this.loginForm.value.password,
     };
 

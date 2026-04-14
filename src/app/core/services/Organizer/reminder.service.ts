@@ -28,6 +28,10 @@ export class ReminderService {
     return this.http.post<BackendReminder>(this.apiUrl, payload);
   }
 
+  updateReminder(id: string, payload: { title: string; date: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, payload);
+  }
+
   completeReminder(id: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/complete`, {});
   }
