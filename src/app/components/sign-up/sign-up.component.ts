@@ -55,6 +55,8 @@ export class SignUpComponent {
           next: (response) => {
             this.isLoading = false;
             if (response.success) {
+              localStorage.removeItem('selectedRole');
+              localStorage.removeItem('currentStep');
               this.router.navigate(['/home']);
             } else {
               this.errorMessage = response.error || `${user.provider} login failed.`;
@@ -84,20 +86,15 @@ export class SignUpComponent {
 
   signUpForm: FormGroup = new FormGroup(
     {
-      name: new FormControl(null, [
+      username: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      phoneNumber: new FormControl(null, [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30),
+        Validators.pattern(/^\+?[0-9]{11,15}$/),
       ]),
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(30),
-      ]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       rePassword: new FormControl(null),
     },
-    this.confirmPassword,
+    { validators: this.confirmPassword },
   );
 
   confirmPassword(form: AbstractControl) {
@@ -118,10 +115,9 @@ export class SignUpComponent {
     const role = localStorage.getItem('selectedRole') || 'mother';
 
     const payload = {
-      email: this.signUpForm.value.email,
+      username: this.signUpForm.value.username,
       password: this.signUpForm.value.password,
-      confirmPassword: this.signUpForm.value.rePassword,
-      role: role,
+      phoneNumber: this.signUpForm.value.phoneNumber,
     };
 
     this.authService.register(payload).subscribe({

@@ -38,16 +38,60 @@ export class DatePickerComponent {
 
   currentYear = new Date().getFullYear();
 
-  private initDatePicker(startYear: number, yearCount: number = 1) {
-    this.days = Array.from({ length: 31 }, (_, i) => i + 1);
-    this.months = Array.from({ length: 12 }, (_, i) =>
-      new Date(0, i).toLocaleString('en', { month: 'long' })
-    );
+  restrictPastDates = false;
+
+  private initDatePicker(
+    startYear: number,
+    yearCount: number = 1,
+    useCurrentDate: boolean = false,
+  ) {
+    this.restrictPastDates = useCurrentDate;
+
+    const now = new Date();
     this.years = Array.from({ length: yearCount }, (_, i) => startYear + i);
 
-    this.selectedDay = this.days[0];
-    this.selectedMonth = this.months[0];
-    this.selectedYear = this.years[0];
+    if (useCurrentDate) {
+      this.selectedYear = this.years.includes(now.getFullYear())
+        ? now.getFullYear()
+        : this.years[0];
+      const allMonths = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      this.selectedMonth = allMonths[now.getMonth()];
+      this.selectedDay = now.getDate();
+    } else {
+      this.days = Array.from({ length: 31 }, (_, i) => i + 1);
+      this.months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      this.selectedYear = this.years[0];
+      this.selectedMonth = this.months[0];
+      this.selectedDay = this.days[0];
+    }
+
+    this.updateDateBoundaries();
   }
 
   private initPregnancyPicker() {
@@ -61,7 +105,7 @@ export class DatePickerComponent {
   private initAgePicker() {
     this.days = Array.from({ length: 31 }, (_, i) => i + 1);
     this.months = Array.from({ length: 12 }, (_, i) =>
-      new Date(0, i).toLocaleString('en', { month: 'long' })
+      new Date(0, i).toLocaleString('en', { month: 'long' }),
     );
 
     const minAge = 16;
@@ -79,12 +123,17 @@ export class DatePickerComponent {
 
   private initTimePicker() {
     this.hours = Array.from({ length: 12 }, (_, i) => i + 1);
-
     this.minutes = Array.from({ length: 60 }, (_, i) => (i < 10 ? `0${i}` : `${i}`));
 
-    this.selectedHour = 12;
-    this.selectedMinute = '00';
-    this.selectedPeriod = 'AM';
+    const now = new Date();
+    let currentHour = now.getHours();
+
+    this.selectedPeriod = currentHour >= 12 ? 'PM' : 'AM';
+
+    currentHour = currentHour % 12 || 12;
+    this.selectedHour = currentHour;
+
+    this.selectedMinute = this.minutes[now.getMinutes()];
   }
 
   scrollTimeout: any;
@@ -95,8 +144,20 @@ export class DatePickerComponent {
 
     (this as any)[key] = array[index] ?? array[0];
 
+    if (type === 'year' || type === 'month') {
+      this.updateDateBoundaries();
+    }
+
     this.dateSelected.emit(this.getCurrentValue());
-    this.scrollTimeout = setTimeout(() => this.snapToCenter(element, index), 120);
+
+    const freshArray =
+      type === 'day' ? this.days : type === 'month' ? this.months : (this as any)[type + 's'];
+    const newIndex = freshArray ? freshArray.indexOf((this as any)[key]) : 0;
+
+    this.scrollTimeout = setTimeout(
+      () => this.snapToCenter(element, newIndex !== -1 ? newIndex : 0),
+      120,
+    );
   }
 
   snapToCenter(element: HTMLElement, index: number) {
@@ -145,11 +206,11 @@ export class DatePickerComponent {
   ngOnInit() {
     switch (this.pickerType) {
       case 'lastPeriodDate':
-        this.initDatePicker(this.currentYear - 1, 2);
+        this.initDatePicker(this.currentYear - 1, 2, true);
         break;
 
       case 'expectedDate':
-        this.initDatePicker(this.currentYear, 2);
+        this.initDatePicker(this.currentYear, 2, true);
         break;
 
       case 'pregnancy':
@@ -163,6 +224,50 @@ export class DatePickerComponent {
       case 'time':
         this.initTimePicker();
         break;
+    }
+  }
+
+  updateDateBoundaries() {
+    if (!this.restrictPastDates) return;
+
+    const now = new Date();
+    const allMonths = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    if (this.selectedYear === now.getFullYear()) {
+      this.months = allMonths.slice(now.getMonth());
+    } else {
+      this.months = allMonths;
+    }
+
+    if (!this.months.includes(this.selectedMonth)) {
+      this.selectedMonth = this.months[0];
+    }
+
+    const monthIndex = allMonths.indexOf(this.selectedMonth);
+    const totalDaysInMonth = new Date(this.selectedYear, monthIndex + 1, 0).getDate();
+
+    let startDay = 1;
+    if (this.selectedYear === now.getFullYear() && monthIndex === now.getMonth()) {
+      startDay = now.getDate();
+    }
+
+    this.days = Array.from({ length: totalDaysInMonth - startDay + 1 }, (_, i) => startDay + i);
+
+    if (!this.days.includes(this.selectedDay)) {
+      this.selectedDay = this.days[0];
     }
   }
 }

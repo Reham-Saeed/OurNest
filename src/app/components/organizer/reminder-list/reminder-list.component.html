@@ -41,8 +41,25 @@
       <div class="flex items-center gap-3 group">
 
         <div
-          class="flex-1 flex items-center justify-between border border-[var(--color-dark-pink)]/50 rounded-2xl px-4 py-3 bg-white hover:shadow-sm transition-all">
+          class="flex-1 flex items-center justify-between border border-[var(--color-dark-pink)]/50 rounded-2xl px-4 py-3 bg-white hover:shadow-sm transition-all"
+          (dblclick)="!item.isEditing && startInlineEdit(item)">
 
+          @if (item.isEditing) {
+          <div class="w-full flex items-center gap-3 py-1">
+            <input type="text" [(ngModel)]="item.editTitle" (keyup.enter)="saveInlineEdit(item)"
+              (keyup.escape)="cancelInlineEdit(item)"
+              class="flex-1 border-b-2 border-[var(--color-dark-pink)] bg-transparent px-2 py-1 outline-none text-black font-bold text-lg placeholder-gray-300"
+              placeholder="Reminder title..." autofocus>
+            <button (click)="saveInlineEdit(item)" class="text-green-500 hover:text-green-600 transition-colors px-2">
+              <i class="fa-solid fa-check text-2xl"></i>
+            </button>
+            <button (click)="cancelInlineEdit(item)" class="text-gray-400 hover:text-red-500 transition-colors px-2">
+              <i class="fa-solid fa-rotate-left text-xl"></i>
+            </button>
+          </div>
+          }
+
+          @else {
           <div class="flex items-center gap-4">
             <div class="relative w-12 h-10">
               <i class="fa-regular fa-calendar text-cyan-400 text-2xl absolute top-0 left-0"></i>
@@ -51,7 +68,7 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-black leading-tight">{{ item.title }}</h3>
+              <h3 class="text-lg font-bold text-black leading-tight cursor-text">{{ item.title }}</h3>
               <div class="text-gray-500 text-sm flex gap-4 mt-0.5">
                 <span>{{ item.date }}</span>
                 <span>{{ item.time }}</span>
@@ -59,13 +76,22 @@
             </div>
           </div>
 
-          <button (click)="editReminder(item)"
-            class="text-gray-600 hover:text-[var(--color-dark-pink)] transition-colors pr-2">
-            <i class="fa-regular fa-calendar-days text-2xl"></i>
-          </button>
+          <div class="flex gap-4 pr-2">
+            <button (click)="startInlineEdit(item)"
+              class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors" title="Edit Title">
+              <i class="fa-solid fa-pen text-xl"></i>
+            </button>
+
+            <button (click)="openDateEditModal(item)"
+              class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors" title="Change Date/Time">
+              <i class="fa-regular fa-calendar-days text-2xl"></i>
+            </button>
+          </div>
+          }
         </div>
 
-        <button (click)="deleteReminder(item.id)" class="text-gray-400 hover:text-red-500 transition-colors p-2">
+        <button (click)="deleteReminder(item.id)" class="text-gray-400 hover:text-red-500 transition-colors p-2"
+          title="Delete">
           <i class="fa-solid fa-xmark text-2xl"></i>
         </button>
 
@@ -99,6 +125,12 @@
         }
 
       </div>
+
+      @if (timeError) {
+      <div class="text-red-500 text-sm text-center font-medium mb-3 bg-red-50 py-2 rounded-lg">
+        <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ timeError }}
+      </div>
+      }
 
       <div class="flex justify-between mt-4 items-center">
 

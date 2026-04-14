@@ -28,20 +28,17 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
 
         <div>
-          <label for="login-email" class="block text-[var(--color-dark-pink)] text-base mb-2">Email Address</label>
+          <label for="login-username" class="block text-[var(--color-dark-pink)] text-base mb-2">Username</label>
           <div class="relative">
             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-dark-pink)] text-lg">
-              <i class="fa-solid fa-envelope"></i> </span>
-            <input formControlName="email" type="email" id="login-email" placeholder="Enter your email"
+              <i class="fa-solid fa-user"></i> </span>
+            <input formControlName="username" type="text" id="login-username" placeholder="Enter your username"
               class="w-full border border-[var(--color-dark-pink)] rounded-xl py-3 pl-12 pr-4 outline-none focus:border-[var(--color-dark-pink)] transition-colors text-gray-700">
           </div>
-          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
           <div class="text-red-500 text-sm mt-1 ml-1">
-            @if (loginForm.get('email')?.hasError('required')) {
-            <div>Email is required.</div>
-            }
-            @if (loginForm.get('email')?.hasError('email')) {
-            <div>Please enter a valid email address.</div>
+            @if (loginForm.get('username')?.hasError('required')) {
+            <div>Username is required.</div>
             }
           </div>
           }

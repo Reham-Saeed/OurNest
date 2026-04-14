@@ -25,21 +25,20 @@ export class AuthService {
 
   private _HttpClient = inject(HttpClient);
 
-  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
+  login(credentials: { username: string; password: string }): Observable<AuthResponse> {
     return this._HttpClient
       .post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(tap((res) => this.handleAuthResponse(res)));
   }
 
   register(data: {
-    email: string;
+    username: string;
     password: string;
-    confirmPassword: string;
-    role: string;
+    phoneNumber: string;
   }): Observable<AuthResponse> {
-    return this._HttpClient.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
-      tap((res) => this.handleAuthResponse(res)), // Auto-login after register
-    );
+    return this._HttpClient
+      .post<AuthResponse>(`${this.apiUrl}/register`, data)
+      .pipe(tap((res) => this.handleAuthResponse(res)));
   }
 
   refreshSession(): Observable<AuthResponse> {
