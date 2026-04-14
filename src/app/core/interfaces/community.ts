@@ -3,10 +3,11 @@ export interface IPost {
   authorId: string;
   authorName: string;
   content: string;
-  image?: string;
-  likes: number;
-  comments: number;
-  likedByUser: boolean;
+  imageUrl?: string | null;
+  category: string;
+  likesCount: number;
+  commentsCount: number;
+  isLikedByCurrentUser: boolean;
   createdAt: string;
 }
 
@@ -16,7 +17,7 @@ export interface IComment {
   authorId: string;
   authorName: string;
   content: string;
-  replies: number;
+  repliesCount: number;
   createdAt: string;
 }
 
@@ -31,7 +32,8 @@ export interface IReply {
 
 export interface ICreatePost {
   content: string;
-  image?: string;
+  imageUrl?: string;
+  category: string;
 }
 
 export interface ICreateComment {
@@ -44,5 +46,5 @@ export interface ICreateReply {
 
 export interface IReport {
   reason: string;
-  notes?: string;
+  additionalNotes?: string;
 }

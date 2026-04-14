@@ -4,25 +4,48 @@ import { FormsModule } from '@angular/forms';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { FeedingComponent } from './feeding/feeding.component';
 import { SkinComponent } from './skin/skin.component';
+import { MedicineComponent } from './medicine/medicine.component';
+import { AiService } from '../../core/services/AI/ai.service';
+import { Conversation } from '../../core/interfaces/chatbot';
 
 @Component({
   selector: 'app-clinic',
-  imports: [CommonModule, ChatbotComponent, FeedingComponent, SkinComponent],
+  imports: [CommonModule, ChatbotComponent, FeedingComponent, SkinComponent, MedicineComponent],
   templateUrl: './clinic.component.html',
   styleUrl: './clinic.component.scss',
 })
 export class ClinicComponent {
-  questions = [
-    'What vitamins or supplements should I take?',
-    'When can I feel my baby move?',
-    'What foods are safe during pregnancy?',
-    'What vitamins or supplements should I take?',
-    'When can I feel my baby move?',
-    'What foods are safe during pregnancy?',
-  ];
   activeTab: string = 'clinic';
+  conversations: Conversation[] = [];
+  selectedConversationId: string | null = null;
+
+  constructor(private aiService: AiService) {}
 
   setActive(tab: string) {
     this.activeTab = tab;
+  }
+  
+  selectConversation(id: string) {
+    this.selectedConversationId = id;
+  }
+
+  onNewChat() {
+    this.selectedConversationId = null;
+  }
+
+  ngOnInit() {
+    this.loadConversations();
+    this.aiService.refreshConversations$.subscribe(() => {
+      this.loadConversations();
+    });
+  }
+
+  loadConversations() {
+    this.aiService.getConversations().subscribe({
+      next: (res) => {
+        this.conversations = res;
+      },
+      error: () => console.error('Failed to load conversations'),
+    });
   }
 }

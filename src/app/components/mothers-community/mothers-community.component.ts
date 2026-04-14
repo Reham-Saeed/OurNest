@@ -10,77 +10,113 @@ import {
   ICreateReply,
   IReply,
 } from '../../core/interfaces/community';
-
-export interface Group {
-  title: string;
-  description: string;
-  members: number;
-}
+import { TimeAgoPipe } from '../../core/pipes/time-ago.pipe';
+import { SearchPipe } from '../../core/pipes/search.pipe';
 
 @Component({
   selector: 'app-mothers-community',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TimeAgoPipe, SearchPipe],
   templateUrl: './mothers-community.component.html',
   styleUrl: './mothers-community.component.scss',
 })
 export class MothersCommunityComponent {
-   posts = [
-    {
-      name: 'Salma Mohamed',
-      image: 'assets/user.jpg',
-      text: 'A little advice for all moms: Take care of yourself so you can take care of your child. Even 10 minutes a day just for yourself can make a huge difference ❤️',
-      likes: 10,
-      comments: [
-        { name: 'Sara', image: 'assets/user.jpg', text: 'So true 👏', replies: [], time: '2 h' },
-        {
-          name: 'Mona',
-          image: 'assets/user.jpg',
-          text: 'Absolutely agree ❤️',
-          replies: [],
-          time: '7 d',
-        },
-      ],
-      showComments: false,
-      newComment: '',
-      replyIndex: null,
-      replyText: '',
-    },
+  posts: IPost[] = [];
+  newPostContent: string = '';
+  newCommentContent: { [postId: string]: string } = {};
+  newReplyContent: { [commentId: string]: string } = {};
+  comments: { [postId: string]: IComment[] } = {};
+  replies: { [commentId: string]: IReply[] } = {};
+  commentsVisible: { [postId: string]: boolean } = {};
+  repliesVisible: { [commentId: string]: boolean } = {};
+  searchTitle: string = '';
+  hasText = false;
 
-    {
-      name: 'Lina Mohamed',
-      image: 'assets/user.jpg',
-      text: 'If your child sleeps late, try creating a fixed bedtime routine. Dim lights, a short story, and a consistent sleep time can make a big difference within a week 🌙✨',
-      likes: 5,
-      comments: [
-        {
-          name: 'Sara',
-          image: 'assets/user.jpg',
-          text: 'I’ll try this tonight 👌',
-          replies: [],
-          time: '2 h',
-        },
-      ],
-      showComments: false,
-      newComment: '',
-      replyIndex: null,
-      replyText: '',
-    },
-  ];
+  constructor(private _CommunityService: CommunityService) {}
 
-  toggleComments(post: any) {
-    post.showComments = !post.showComments;
+  onInputChange() {
+    this.hasText = this.newPostContent.trim().length > 0;
+  }
+  ngOnInit(): void {
+    this.loadPosts();
   }
 
-  addComment(post: any) {}
-
-  startReply(post: any, index: number) {
-    post.replyIndex = index;
-    post.replyText = '';
+  loadPosts(): void {
+    this._CommunityService.getPosts().subscribe((posts) => {
+      this.posts = posts;
+    });
   }
 
-  addReply(post: any, index: number) {}
+  addPost(): void {
+    if (!this.newPostContent.trim()) return;
+    const post: ICreatePost = {
+      content: this.newPostContent,
+      category: 'Pregnancy',
+    };
+    this._CommunityService.createPost(post).subscribe((newPost) => {
+      this.posts.unshift(newPost);
+      this.newPostContent = '';
+    });
+  }
 
-  likeComment(post: any, index: number) {}
+  loadComments(postId: string): void {
+    this._CommunityService.getComments(postId).subscribe((comments) => {
+      this.comments[postId] = comments;
+      comments.forEach((c) => this.loadReplies(c.id));
+    });
+  }
 
-  dislikeComment(post: any, index: number) {}
+  toggleComments(postId: string) {
+    this.commentsVisible[postId] = !this.commentsVisible[postId];
+    if (this.commentsVisible[postId] && !this.comments[postId]) {
+      this.loadComments(postId);
+    }
+  }
+
+  startReply(commentId: string) {
+    this.repliesVisible[commentId] = !this.repliesVisible[commentId];
+    if (this.repliesVisible[commentId] && !this.replies[commentId]) {
+      this.loadReplies(commentId);
+    }
+  }
+
+  addComment(postId: string): void {
+    const content = this.newCommentContent[postId];
+    if (!content?.trim()) return;
+
+    const comment: ICreateComment = { content };
+    this._CommunityService.createComment(postId, comment).subscribe((newComment) => {
+      if (!this.comments[postId]) this.comments[postId] = [];
+      this.comments[postId].push(newComment);
+      this.newCommentContent[postId] = '';
+    });
+  }
+
+  loadReplies(commentId: string): void {
+    this._CommunityService.getReplies(commentId).subscribe((replies) => {
+      this.replies[commentId] = replies;
+    });
+  }
+
+  addReply(commentId: string): void {
+    const content = this.newReplyContent[commentId];
+    if (!content?.trim()) return;
+
+    const reply: ICreateReply = { content };
+    this._CommunityService.createReply(commentId, reply).subscribe((newReply) => {
+      if (!this.replies[commentId]) this.replies[commentId] = [];
+      this.replies[commentId].push(newReply);
+      this.newReplyContent[commentId] = '';
+    });
+  }
+
+  addLike(post: IPost): void {
+    this._CommunityService.addLike(post.id).subscribe((res) => {
+      post.isLikedByCurrentUser = res.liked;
+      if (res.liked) {
+        post.likesCount++;
+      } else {
+        post.likesCount--;
+      }
+    });
+  }
 }

@@ -1,5 +1,5 @@
 <section
-  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] mx-auto py-16 px-4 sm:px-6 lg:px-20"
+  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] min-h-screen mx-auto py-16 px-4 sm:px-6 lg:px-20"
 >
   <div class="flex flex-col items-center">
     <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#B34962] mb-4 text-center">
@@ -7,121 +7,170 @@
     </h2>
 
     <p
-      class="font-medium text-base sm:text-lg md:text-xl text-center text-[#00000099] mb-12 max-w-full sm:max-w-[600px] md:max-w-[789px]"
+      class="font-medium text-base sm:text-lg md:text-xl text-center text-[#00000099] mb-6 max-w-full sm:max-w-[600px] md:max-w-[789px]"
     >
       Connect, share, and support each other on this beautiful journey
     </p>
-   <section class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-0">
-  <div class="bg-white rounded-3xl p-4 sm:p-6 shadow-lg mb-6">
-    <textarea
-      placeholder="Share your thoughts with the community..."
-      class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-[#FFC5D0] rounded-2xl focus:outline-none focus:border-[#B34962] transition-colors resize-none placeholder-gray-400"
-      rows="3"
-    ></textarea>
-    <div class="flex justify-end mt-4">
-      <button
-        class="px-6 sm:px-8 py-2 sm:py-3 bg-[#B34962] text-white rounded-full hover:bg-[#8d3a4d] transition-all duration-300 shadow-md hover:shadow-lg"
+    <section class="w-[1200px] mx-auto px-4 sm:px-6 lg:px-0">
+      <div
+        class="w-[70%] mx-auto bg-white rounded-[20px] p-4 shadow-lg mb-12 border border-[#B34962]"
       >
-        Post
-      </button>
-    </div>
-  </div>
-
-  @for(post of posts; track $index){
-  <div class="bg-white rounded-3xl p-4 sm:p-8 shadow-lg hover:shadow-xl transition-shadow mb-6">
-    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
-      <img
-        [src]="post.image"
-        alt="{{ post.name }}"
-        class="w-12 h-12 rounded-full object-cover border"
-      />
-      <h3 class="font-semibold text-gray-800">{{ post.name }}</h3>
-    </div>
-
-    <p class="text-gray-700 mb-6">
-      {{ post.text }}
-    </p>
-
-    <div
-      class="flex flex-row items-center space-x-6 space-y-2 space-y-0 pt-4 border-t border-gray-300"
-    >
-      <button class="flex items-center space-x-2 text-[#B34962] transition-colors">
-        <i class="fa-regular fa-heart fa-xl"></i>
-        <span>{{ post.likes }}</span>
-      </button>
-
-      <button
-        class="flex items-center space-x-2 text-[#B34962] transition-colors"
-        (click)="toggleComments(post)"
-      >
-        <i class="fa-regular fa-message fa-xl"></i>
-        <span>{{ post.comments.length }}</span>
-      </button>
-
-      <button class="flex items-center space-x-2 text-[#B34962] transition-colors ml-0 md:ml-auto">
-        <i class="fa-solid fa-share-nodes fa-xl"></i>
-      </button>
-    </div>
-
-    @if (post.showComments) {
-    <div class="mt-6 border-t border-gray-200 pt-4">
-      @for (comment of post.comments; track $index) {
-      <div class="mb-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between">
-          <div>
-            <div
-              class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2"
-            >
-              <img [src]="comment.image" class="w-8 h-8 rounded-full object-cover border" />
-              <p class="font-semibold">{{ comment.name }}</p>
-              <span class="text-gray-500 text-sm">· {{ comment.time }}</span>
-            </div>
-            <p class="ml-0 sm:ml-10">{{ comment.text }}</p>
-          </div>
-          <div class="flex space-x-3 mt-2 sm:mt-0">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-regular fa-thumbs-down"></i>
-          </div>
-        </div>
-
-        <button class="ml-0 sm:ml-10 text-sm text-[#B34962]" (click)="startReply(post, $index)">
-          Reply
-        </button>
-
-        @if (post.replyIndex === $index) {
-        <div class="ml-0 sm:ml-10 mt-2 flex flex-col sm:flex-row gap-2">
+        <div class="flex items-center">
+          <i class="fa-solid fa-magnifying-glass text-gray-400 text-2xl mr-2"></i>
           <input
-            [(ngModel)]="post.replyText"
-            placeholder="Write a reply..."
-            class="flex-1 px-4 py-2 border rounded-2xl focus:outline-none focus:border-[#B34962]"
+            type="text"
+            [(ngModel)]="searchTitle"
+            placeholder="Search for Post or Person"
+            class="flex-1 outline-none text-gray-500 text-md"
           />
-          <button
-            class="px-4 py-2 bg-[#B34962] text-white rounded-full"
-            (click)="addReply(post, $index)"
-          >
-            <i class="fa-solid fa-paper-plane rotate-45"></i>
+          <i class="fa-solid fa-sliders text-gray-400 text-2xl mr-3"></i>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-[20px] p-4 sm:p-6 shadow-lg mb-6 border border-[#B34962]">
+        <textarea
+          placeholder="Share your thoughts with the community..."
+          [(ngModel)]="newPostContent"
+          class="w-full px-2 resize-none placeholder-gray-400 focus:outline-none"
+          rows="2"
+          (input)="onInputChange()"
+        ></textarea>
+        <hr class="text-gray-300" />
+        <div class="flex justify-end pt-3 px-3">
+          <button (click)="addPost()">
+            <i
+              class="fa-solid fa-paper-plane fa-xl rotate-45"
+              [ngClass]="{ 'text-[#B34962]': hasText, 'text-gray-400': !hasText }"
+            ></i>
           </button>
         </div>
-        } @for (r of comment.replies; track $index) {
-        <div class="ml-0 sm:ml-10 mt-2 pl-4 border-l-2 border-gray-200"></div>
-        }
       </div>
-      }
+      @for (post of posts | search: searchTitle; track post.id) {
+        <div
+          class="bg-white border border-[#B34962] rounded-[20px] p-4 sm:p-8 shadow-lg hover:shadow-xl transition-shadow mb-6"
+        >
+          <div
+            class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4"
+          >
+            <img src="assets/mother-img.jpg" class="w-12 h-12 rounded-full object-cover border" />
+            <h3 class="font-semibold text-gray-800 text-lg">{{ post.authorName | titlecase }}</h3>
+          </div>
 
-      <div class="mt-4 flex flex-col sm:flex-row gap-2">
-        <input
-          [(ngModel)]="post.newComment"
-          placeholder="write a comment..."
-          class="flex-1 px-4 py-2 border rounded-2xl focus:outline-none focus:border-[#B34962]"
-        />
-        <button class="px-4 py-2 bg-[#B34962] text-white rounded-full" (click)="addComment(post)">
-          <i class="fa-solid fa-paper-plane rotate-45"></i>
-        </button>
-      </div>
-    </div>
-    }
-  </div>
-  }
-</section>
+          <p class="text-gray-700 mb-6 text-lg">
+            {{ post.content }}
+          </p>
+
+          <div
+            class="flex flex-row items-center space-x-6 space-y-2 space-y-0 pt-4 border-t border-gray-300"
+          >
+            <button
+              (click)="addLike(post)"
+              class="flex items-center space-x-2 text-[#B34962] transition-colors"
+            >
+              <i
+                [ngClass]="
+                  post.isLikedByCurrentUser
+                    ? 'fa-solid fa-heart fa-xl'
+                    : 'fa-regular fa-heart fa-xl'
+                "
+              ></i>
+              <span>{{ post.likesCount }}</span>
+            </button>
+
+            <button
+              class="flex items-center space-x-2 text-[#B34962] transition-colors"
+              (click)="toggleComments(post.id)"
+            >
+              <i class="fa-regular fa-message fa-xl"></i>
+              <span>{{ post.commentsCount }}</span>
+            </button>
+
+            <button
+              class="flex items-center space-x-2 text-[#B34962] transition-colors ml-0 md:ml-auto"
+            >
+              <i class="fa-solid fa-share-nodes fa-xl"></i>
+            </button>
+          </div>
+
+          @if (commentsVisible[post.id]) {
+            <div class="mt-6 border-t border-gray-200 pt-4">
+              @for (comment of comments[post.id]; track $index) {
+                <div class="mb-4 text-xl">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+                    <div>
+                      <div
+                        class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2"
+                      >
+                        <img
+                          src="assets/mother-img.jpg"
+                          alt="user-img"
+                          class="w-8 h-8 rounded-full object-cover border"
+                        />
+                        <p class="font-medium text-lg">{{ comment.authorName | titlecase }}</p>
+                        <span class="text-gray-500 text-sm"
+                          >· {{ comment.createdAt | timeAgo }}</span
+                        >
+                      </div>
+                      <p class="ml-0 sm:ml-10 text-lg">{{ comment.content }}</p>
+                    </div>
+                  </div>
+
+                  <button
+                    class="ml-0 sm:ml-10 text-lg text-[#B34962]"
+                    (click)="startReply(comment.id)"
+                  >
+                    Reply
+                  </button>
+                  @if (repliesVisible[comment.id]) {
+                    @for (reply of replies[comment.id]; track $index) {
+                      <div class="ml-10 mt-3 text-lg flex gap-2 items-start">
+                        <img
+                          src="assets/mother-img.jpg"
+                          class="w-6 h-6 rounded-full object-cover"
+                        />
+
+                        <div>
+                          <p class="font-medium">{{ reply.authorName | titlecase }}</p>
+                          <p class="text-gray-700">{{ reply.content }}</p>
+                        </div>
+                        <span class="text-gray-500 text-sm">· {{ reply.createdAt | timeAgo }}</span>
+                      </div>
+                    }
+                    <div class="ml-0 sm:ml-10 mt-2 flex flex-col sm:flex-row gap-2">
+                      <input
+                        [(ngModel)]="newReplyContent[comment.id]"
+                        placeholder="Write a reply..."
+                        class="flex-1 px-4 py-2 border rounded-2xl text-lg focus:outline-none focus:border-[#B34962]"
+                      />
+
+                      <button
+                        class="px-4 py-2 bg-[#B34962] text-white rounded-full"
+                        (click)="addReply(comment.id)"
+                      >
+                        <i class="fa-solid fa-paper-plane rotate-45"></i>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+
+              <div class="mt-4 flex flex-col sm:flex-row gap-2 text-xl">
+                <input
+                  [(ngModel)]="newCommentContent[post.id]"
+                  placeholder="write a comment..."
+                  class="flex-1 px-4 py-2 border rounded-2xl focus:outline-none focus:border-[#B34962] text-lg"
+                />
+                <button
+                  class="px-4 py-2 bg-[#B34962] text-white rounded-full"
+                  (click)="addComment(post.id)"
+                >
+                  <i class="fa-solid fa-paper-plane rotate-45"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
   </div>
 </section>

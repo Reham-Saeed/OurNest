@@ -1,0 +1,62 @@
+<div class="p-4 flex flex-col">
+  <div class="flex gap-2 items-start">
+    <!-- AI icon -->
+
+    <img src="assets/chat-bot.svg" alt="" />
+
+    <!-- AI message -->
+    <div class="border border-[#1919194D] rounded-[8px] p-4 text-sm bg-[#B349620F] max-w-md">
+      Hello! <br />
+      I'm your <b>Medicines AI assistant</b>. <br />
+      Upload a food image and I will analyze it for you.
+    </div>
+  </div>
+  @if (previewImage) {
+    <div class="w-40 h-40 overflow-hidden ml-4 self-end">
+      <img [src]="previewImage" class="w-full h-full object-cover" />
+    </div>
+  }
+  <div class="flex gap-2 items-start">
+    @if (loading) {
+      <div class="flex items-start gap-2">
+        <img src="assets/chat-bot.svg" alt="" />
+        <div
+          class="border border-[#1919194D] rounded-[8px] p-4 bg-[#B349620F] flex gap-1 items-center"
+        >
+          <span class="dot"></span>
+          <span class="dot delay-1"></span>
+          <span class="dot delay-2"></span>
+        </div>
+      </div>
+    }
+
+    @if (!loading && predictions.length) {
+      <div class="flex gap-2 items-start">
+        <img src="assets/chat-bot.svg" alt="" />
+
+        <p class="border border-[#1919194D] rounded-[8px] p-4 font-semibold bg-[#B349620F]">
+          @for (p of predictions; track $index) {
+            Food: {{ p.label }} <br />
+            Confidence: {{ p.confidence * 100 }} % <br />
+          }
+        </p>
+      </div>
+    }
+  </div>
+  <div class="absolute bottom-12">
+    <button
+      (click)="fileInput.click()"
+      class="flex items-center justify-center gap-3 text-2xl text-[#8E8E8E] border-[0.5px] border-[#B34962] rounded-[20px] border-dashed bg-[#FBEAEE] px-14 py-3 shadow-[0px_4px_4px_0px_#00000040]"
+    >
+      <i class="fa-solid fa-paperclip rotate-225"></i>
+      Attach
+    </button>
+    <input
+      type="file"
+      accept="image/*"
+      #fileInput
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
+  </div>
+</div>
