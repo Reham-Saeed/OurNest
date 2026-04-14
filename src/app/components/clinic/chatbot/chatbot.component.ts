@@ -4,6 +4,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { Conversation, Message } from '../../../core/interfaces/chatbot';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-chatbot',
@@ -12,9 +13,12 @@ import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
   styleUrl: './chatbot.component.scss',
 })
 export class ChatbotComponent {
-  @ViewChild('chatContainer') chatContainer!: ElementRef;
+   @ViewChild('chatContainer') chatContainer!: ElementRef;
 
-  constructor(private _AiService: AiService) {}
+  constructor(
+    private _AiService: AiService,
+    private _AuthService: AuthService,
+  ) {}
 
   @Input() conversationId!: string | null;
 
@@ -39,10 +43,11 @@ export class ChatbotComponent {
     this._AiService.getMessages(this.conversationId).subscribe({
       next: (res) => {
         this.messages = res;
+        this.loading = false;
       },
       error: () => {
         this.loading = false;
-      },
+      }
     });
   }
 
@@ -70,7 +75,13 @@ export class ChatbotComponent {
         ? this.newMessage.slice(0, maxLength) + '...'
         : this.newMessage;
 
-    const userId = 'FF60A8B0-42C1-4B94-BFBE-B0036C9D0EDA';
+    const user = this._AuthService.getUser();
+    const userId = user?.id;
+
+    if (!userId) {
+      console.error('No user found');
+      return;
+    }
 
     this.loading = true;
 
@@ -79,10 +90,11 @@ export class ChatbotComponent {
         this.conversationId = conv.id;
         this._AiService.notifyConversationsChanged();
         this.sendToExistingConversation();
-      },
-      error: (err) => {
         this.loading = false;
       },
+      error: () => {
+        this.loading = false;
+      }
     });
   }
 
@@ -104,10 +116,12 @@ export class ChatbotComponent {
           content: res.reply || res.content,
           role: 'ai',
         });
+
+        this.loading = false;
       },
       error: () => {
         this.loading = false;
-      },
+      }
     });
   }
 
