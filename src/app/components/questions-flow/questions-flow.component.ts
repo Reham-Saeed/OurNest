@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { BabyService } from '../../core/services/baby/baby.service';
 import { MotherService } from '../../core/services/mother/mother.service';
+import { OnboardingService } from '../../core/services/onboarding/onboarding.service';
 import { PeriodTrackerService } from '../../core/services/trackers/period-tracker.service';
 import { of, switchMap, tap } from 'rxjs';
 import { PregnancyService } from '../../core/services/pregnancy/pregnancy.service';
@@ -100,6 +101,7 @@ export class QuestionsFlowComponent implements OnInit {
     this.pushHistory();
 
     switch (this.currentStep) {
+      // pregnant flow
       case 'mother:pregnant:firstChild':
         this.currentStep = 'mother:pregnant:knownInfo';
         break;
@@ -114,6 +116,7 @@ export class QuestionsFlowComponent implements OnInit {
         this.submitAll();
         return;
 
+      // baby flow
       case 'mother:notPregnant:notPlanning:hasBaby:birthDate':
         this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:gender';
         break;
@@ -125,6 +128,7 @@ export class QuestionsFlowComponent implements OnInit {
 
     this.saveState();
   }
+
 
   chooseRole(role: 'mother' | 'father') {
     this.pushHistory();
@@ -210,6 +214,7 @@ export class QuestionsFlowComponent implements OnInit {
     this.saveState();
   }
 
+
   detailsForm = new FormGroup({
     height: new FormControl('', Validators.required),
     weight: new FormControl('', Validators.required),
@@ -238,6 +243,7 @@ export class QuestionsFlowComponent implements OnInit {
     }
   }
 
+
   submitAll() {
     this.submitMother()
       .pipe(
@@ -248,6 +254,7 @@ export class QuestionsFlowComponent implements OnInit {
           return of(null);
         }),
 
+        // planning
         switchMap(() => {
           if (this.formData.motherMode === 'planning') {
             return this.submitPeriod();
@@ -255,12 +262,13 @@ export class QuestionsFlowComponent implements OnInit {
           return of(null);
         }),
 
+        // baby
         switchMap(() => {
           if (this.formData.motherMode === 'hasBaby') {
             return this.submitBaby();
           }
           return of(null);
-        }),
+        })
       )
       .subscribe({
         next: () => {
@@ -275,6 +283,7 @@ export class QuestionsFlowComponent implements OnInit {
     const payload = {
       height: Number(this.formData.height),
       weight: Number(this.formData.weight),
+      bloodType: this.formData.bloodType || null,
     };
     return this._MotherService.createMother(payload);
   }
@@ -306,10 +315,9 @@ export class QuestionsFlowComponent implements OnInit {
       startDate: this.formData.lastPeriod,
       cycleLengthDays: Number(this.formData.cycleLengthDays),
       periodLengthDays: Number(this.formData.periodLengthDays),
-      endDate: this.formData.endDate,
-      flowIntensity: this.formData.flowIntensity,
-      symptoms: this.formData.symptoms,
-      notes: this.formData.notes,
+      flowIntensity: 'Medium',
+      symptoms: '',
+      notes: '',
     };
     return this._PeriodTrackerService.addPeriod(payload);
   }
@@ -325,6 +333,7 @@ export class QuestionsFlowComponent implements OnInit {
     return this._BabyService.createBaby(payload);
   }
 
+  
   onLastPeriodSelect(date: any) {
     this.formData.lastPeriodDate = this.formatDate(date);
   }
@@ -341,14 +350,15 @@ export class QuestionsFlowComponent implements OnInit {
   onBirthDateSelect(date: any) {
     this.formData.birthDate = this.formatDate(date);
   }
+
   formData: any = {
     role: null,
     isPregnant: null,
-    height: null,
-    weight: null,
-    isFirstChild: null,
+    height: null, 
+    weight: null, 
+    isFirstChild: false,
     knowledgeType: null,
-    lastPeriodDate: null,
+    lastPeriodDate: '2024-10-01',
     gestationalWeeks: null,
     gestationalDays: null,
     expectedDueDate: null,
@@ -356,10 +366,6 @@ export class QuestionsFlowComponent implements OnInit {
     lastPeriod: null,
     cycleLengthDays: null,
     periodLengthDays: null,
-    endDate: '',
-    flowIntensity: '',
-    symptoms: '',
-    notes: '',
     babyGender: null,
     babyWeight: null,
     babyName: null,
