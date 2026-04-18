@@ -129,7 +129,7 @@ export class SignUpComponent {
         if (response.success) {
           localStorage.removeItem('selectedRole');
           localStorage.removeItem('currentStep');
-          this.router.navigate(['/home']);
+          this.router.navigate(['/questions']);
         } else {
           this.errorMessage = response.error || 'Registration failed.';
         }
