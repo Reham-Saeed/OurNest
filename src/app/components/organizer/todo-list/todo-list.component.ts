@@ -79,7 +79,20 @@ export class TodoListComponent implements OnInit {
       this.deleteTask(task.id);
       return;
     }
-    task.isEditing = false;
+
+    const payload = {
+      task: task.title,
+      isDone: task.isCompleted,
+    };
+
+    this.todoService.updateTodo(task.id, payload).subscribe({
+      next: () => {
+        task.isEditing = false;
+      },
+      error: (err) => {
+        console.error('Failed to update task', err);
+      },
+    });
   }
 
   onEditEnter(task: Task) {

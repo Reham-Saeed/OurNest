@@ -306,6 +306,10 @@ export class QuestionsFlowComponent implements OnInit {
       startDate: this.formData.lastPeriod,
       cycleLengthDays: Number(this.formData.cycleLengthDays),
       periodLengthDays: Number(this.formData.periodLengthDays),
+      endDate: this.formData.endDate,
+      flowIntensity: this.formData.flowIntensity,
+      symptoms: this.formData.symptoms,
+      notes: this.formData.notes,
     };
     return this._PeriodTrackerService.addPeriod(payload);
   }
@@ -352,6 +356,10 @@ export class QuestionsFlowComponent implements OnInit {
     lastPeriod: null,
     cycleLengthDays: null,
     periodLengthDays: null,
+    endDate: '',
+    flowIntensity: '',
+    symptoms: '',
+    notes: '',
     babyGender: null,
     babyWeight: null,
     babyName: null,

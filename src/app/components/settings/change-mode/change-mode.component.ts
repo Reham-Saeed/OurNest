@@ -10,7 +10,7 @@ import { DatePickerComponent } from '../../../shared/components/date-picker/date
   styleUrl: './change-mode.component.scss',
 })
 export class ChangeModeComponent {
- savedRole: 'mother' | 'father' | null = null;
+  savedRole: 'mother' | 'father' | null = null;
 
   isChildbirthMode = false;
   isTryingMode = false;
@@ -33,7 +33,7 @@ export class ChangeModeComponent {
       lastPeriod: ['20-09-2025'],
       laborDate: ['27-06-2026'],
       conceptionDate: ['04-10-2026'],
-      gestational:['Week: 9, days: 5']
+      gestational: ['Week: 9, days: 5'],
     });
   }
 

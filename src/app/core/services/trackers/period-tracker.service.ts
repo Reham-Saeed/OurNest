@@ -31,7 +31,7 @@ export class PeriodTrackerService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  addPeriod(payload: any): Observable<any> {
+  addPeriod(payload: PeriodPayload): Observable<any> {
     return this.http.post<any>(this.apiUrl, payload);
   }
 
