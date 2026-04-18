@@ -28,6 +28,7 @@ import { CryingComponent } from './components/baby-care/crying/crying.component'
 import { TemperatureComponent } from './components/baby-care/temperature/temperature.component';
 import { VaccinationComponent } from './components/baby-care/vaccination/vaccination.component';
 import { FeedingAdviceComponent } from './components/baby-care/feeding-advice/feeding-advice.component';
+import { ExercisesComponent } from './components/exercises/exercises.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -58,6 +59,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       // { path: 'home', component: HomeMainComponent },
       { path: 'home', component: BabyCareComponent },
+      { path: 'exercises', component: ExercisesComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'organizer/todo', component: TodoListComponent },
       { path: 'organizer/reminder', component: ReminderListComponent },
