@@ -10,33 +10,6 @@ export class PregnancyService {
   constructor(private http: HttpClient) {}
 
   createPregnancy(data: any) {
-    return this.http.post(`${baseUrl}pregnancy/start`, data);
-  }
-
-  getCurrentPregnancy() {
-    return this.http.get(`${baseUrl}pregnancy/current`).pipe(
-      map((res: any) => {
-        const week = res.currentWeek;
-
-        let trimester: 'first' | 'second' | 'third';
-
-        if (week <= 12) {
-          trimester = 'first';
-        } else if (week <= 27) {
-          trimester = 'second';
-        } else {
-          trimester = 'third';
-        }
-
-        return {
-          ...res,
-          trimester,
-        };
-      }),
-    );
-  }
-
-  updatePregnancy(data: any) {
-    return this.http.put(`${baseUrl}pregnancy`, data);
+    return this.http.post<any>(`${baseUrl}pregnancy/start`, data);
   }
 }

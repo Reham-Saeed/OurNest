@@ -51,34 +51,54 @@
         <h2 class="text-3xl pb-10 max-w-xl text-center text-[#B34962]">
           Please enter your pre-pregnancy weight and height
         </h2>
-        <form [formGroup]="detailsForm" class="text-xl flex flex-col gap-6">
+
+        <form [formGroup]="bodyDetails" class="text-xl flex flex-col gap-6">
+          <!-- HEIGHT -->
           <div>
             <label class="text-[#B34962]">Height</label>
+
             <div class="relative mt-1">
               <input
                 formControlName="height"
                 type="number"
                 class="px-2 py-3 border border-[#B34962] rounded-md w-full"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">cm</span>
+
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm"> cm </span>
             </div>
+
+            @if (bodyDetails.get('height')?.touched && bodyDetails.get('height')?.invalid) {
+              <small class="text-red-700"> Please enter a valid height (120 - 220 cm) </small>
+            }
           </div>
+
+          <!-- WEIGHT -->
           <div>
             <label class="text-[#B34962]">Weight</label>
+
             <div class="relative mt-1">
               <input
                 formControlName="weight"
                 type="number"
                 class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm">kg</span>
+
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm"> kg </span>
             </div>
+
+            @if (bodyDetails.get('weight')?.touched && bodyDetails.get('weight')?.invalid) {
+              <small class="text-red-700"> Please enter a valid weight (35 - 200 kg) </small>
+            }
           </div>
+
+          <!-- BUTTON -->
+
           <div class="flex justify-center mt-10">
             <button
               type="button"
               class="btn-dark-pink md:text-xl px-40 py-6"
-              (click)="saveDetails()"
+              (click)="saveCurrentForm()"
+              [disabled]="bodyDetails.invalid"
             >
               Save
             </button>
@@ -135,7 +155,9 @@
     <!-- LAST PERIOD -->
     @if (currentStep === 'mother:pregnant:lastPeriodDate') {
       <div class="flex flex-col justify-center items-center">
-        <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">Select the date of your last menstrual period.</h2>
+        <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">
+          Select the date of your last menstrual period.
+        </h2>
         <app-date-picker
           pickerType="lastPeriodDate"
           (dateSelected)="onLastPeriodSelect($event)"
@@ -159,7 +181,9 @@
     <!-- EXPECTED DUE DATE -->
     @if (currentStep === 'mother:pregnant:expectedDueDate') {
       <div class="flex flex-col justify-center items-center text-center">
-        <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">Select your estimated date of conception.</h2>
+        <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">
+          Select your estimated date of conception.
+        </h2>
         <app-date-picker
           pickerType="expectedDate"
           (dateSelected)="onExpectedDueDateSelect($event)"
@@ -179,7 +203,9 @@
           pickerType="age"
           (dateSelected)="onBirthDateSelect($event)"
         ></app-date-picker>
-        <button class="btn-dark-pink px-40 py-5 mt-10 text-lg" (click)="submitAll()">Continue</button>
+        <button class="btn-dark-pink px-40 py-5 mt-10 text-lg" (click)="submitAll()">
+          Continue
+        </button>
       </div>
     }
 
@@ -210,69 +236,107 @@
 
     <!-- PLANNING FORM -->
     @if (currentStep === 'mother:notPregnant:planning') {
-      @if (!showLastPeriodPicker) {
+      @if (currentView === 'planningForm') {
         <form [formGroup]="periodDetails" class="text-xl flex flex-col gap-6 min-w-lg">
+          <!-- LAST PERIOD -->
           <div>
             <label class="text-[#B34962]">Your last period</label>
+
             <div class="relative mt-1">
               <input
-                formControlName="lastPeriod"
-                placeholder="Enter your last period date"
+                formControlName="lastPeriodDate"
                 type="text"
                 readonly
                 class="px-2 py-3 border border-[#B34962] rounded-md w-full"
               />
+
               <span
                 class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                (click)="openLastPeriodPicker()"
+                (click)="openLastPeriodSelect()"
               >
                 <img src="assets/calendar-date.svg" alt="" />
               </span>
             </div>
+
+            @if (
+              periodDetails.get('lastPeriodDate')?.touched &&
+              periodDetails.get('lastPeriodDate')?.invalid
+            ) {
+              <small class="text-red-700"> Please select your last period date </small>
+            }
           </div>
+
+          <!-- PERIOD LENGTH -->
           <div>
             <label class="text-[#B34962]">Your period length</label>
+
             <div class="relative mt-1">
               <input
                 formControlName="periodLength"
-                placeholder="Enter your period length"
                 type="number"
                 class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
               />
+
               <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
                 <img src="assets/blood-drops.svg" alt="" />
               </span>
             </div>
+
+            @if (
+              periodDetails.get('periodLength')?.touched &&
+              periodDetails.get('periodLength')?.invalid
+            ) {
+              <small class="text-red-700"> Please enter a valid period length (2 - 10 days) </small>
+            }
           </div>
+
+          <!-- CYCLE LENGTH -->
           <div>
             <label class="text-[#B34962]">Your cycle length</label>
+
             <div class="relative mt-1">
               <input
                 formControlName="cycleLength"
-                placeholder="Enter your cycle length"
                 type="number"
                 class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
               />
+
               <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
                 <img src="assets/cycle.svg" alt="" />
               </span>
             </div>
+
+            @if (
+              periodDetails.get('cycleLength')?.touched && periodDetails.get('cycleLength')?.invalid
+            ) {
+              <small class="text-red-700"> Please enter a valid cycle length (15 - 60 days) </small>
+            }
           </div>
+
+          <!-- SAVE BUTTON -->
           <div class="flex justify-center mt-10">
-            <button class="btn-dark-pink md:text-xl px-40 py-6" (click)="saveDetails()">
+            <button
+              class="btn-dark-pink md:text-xl px-40 py-6"
+              (click)="saveCurrentForm()"
+              [disabled]="periodDetails.invalid"
+            >
               Save
             </button>
           </div>
         </form>
       }
-      @if (showLastPeriodPicker) {
-        <div class="flex flex-col justify-center items-center text-center">
-          <h2 class="text-3xl mb-5 text-[#B34962]">Select your last period date</h2>
+      @if (currentView === 'lastPeriodSelect') {
+        <div class="flex flex-col justify-center items-center">
+          <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">
+            Select the date of your last period.
+          </h2>
           <app-date-picker
             pickerType="lastPeriodDate"
             (dateSelected)="onLastPeriodPicked($event)"
           ></app-date-picker>
-          <button class="btn-dark-pink px-40 py-5 mt-10 text-lg" (click)="closePicker()">Continue</button>
+          <button class="btn-dark-pink px-40 py-5 mt-10 text-lg" (click)="closeLastPeriodSelect()">
+            Continue
+          </button>
         </div>
       }
     }
@@ -280,7 +344,9 @@
     <!-- HAS BABY -->
     @if (currentStep === 'mother:notPregnant:notPlanning:isHasBaby') {
       <div class="flex flex-col justify-center items-center">
-        <h2 class="text-3xl pb-5 text-[#B34962] max-w-md text-center">Do you already have a newborn baby?</h2>
+        <h2 class="text-3xl pb-5 text-[#B34962] max-w-md text-center">
+          Do you already have a newborn baby?
+        </h2>
         <button class="btn-dark-pink px-40 py-6 mb-3" (click)="selectHasBaby(true)">Yes</button>
         <span class="text-base text-[#B34962]">Or</span>
         <button class="btn-dark-pink px-40 py-6 mt-3" (click)="selectHasBaby(false)">No</button>
@@ -318,34 +384,58 @@
 
     <!-- BABY WEIGHT -->
     @if (currentStep === 'mother:notPregnant:notPlanning:hasBaby:weight') {
-      <div class="text-xl min-w-lg ">
+      <div [formGroup]="babyWeightForm" class="text-xl min-w-lg">
         <label class="text-[#B34962]">Enter your baby's weight</label>
+
         <div class="relative mt-1">
           <input
-            placeholder="Enter your baby's weight"
+            formControlName="babyWeight"
             type="number"
             class="px-2 py-3 border border-[#B34962] rounded-md w-full"
-            (change)="formData.babyWeight = $any($event.target).value"
           />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">Kg</span>
+
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
+            Kg
+          </span>
         </div>
-        <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10 mx-auto" (click)="next()">Continue</button>
+
+        @if (
+          babyWeightForm.get('babyWeight')?.touched && babyWeightForm.get('babyWeight')?.invalid
+        ) {
+          <small class="text-red-700"> Please enter a valid baby weight (2 - 16 kg) </small>
+        }
+
+        <button
+          class="btn-dark-pink md:text-xl px-40 py-6 mt-10 mx-auto"
+          (click)="saveCurrentForm()"
+          [disabled]="babyWeightForm.invalid"
+        >
+          Continue
+        </button>
       </div>
     }
 
-    <!-- BABY NAME -->
     @if (currentStep === 'mother:notPregnant:notPlanning:hasBaby:name') {
-      <div class="text-xl min-w-lg">
+      <div [formGroup]="babyNameForm" class="text-xl min-w-lg">
         <label class="text-[#B34962]">Enter your baby's name</label>
+
         <div class="relative mt-1">
           <input
-            placeholder="Enter your baby's name"
+            formControlName="babyName"
             type="text"
             class="px-2 py-3 border border-[#B34962] rounded-md w-full"
-            (change)="formData.babyName = $any($event.target).value"
           />
         </div>
-        <button class="btn-dark-pink md:text-xl px-40 py-5 mt-10 mx-auto" (click)="submitAll()">
+
+        @if (babyNameForm.get('babyName')?.touched && babyNameForm.get('babyName')?.invalid) {
+          <small class="text-red-700"> Please enter a valid baby name </small>
+        }
+
+        <button
+          class="btn-dark-pink md:text-xl px-40 py-6 mt-10 mx-auto"
+          (click)="saveCurrentForm()"
+          [disabled]="babyNameForm.invalid"
+        >
           Continue
         </button>
       </div>

@@ -12,7 +12,7 @@ export class MotherService {
     return this.http.post<any>(`${baseUrl}mother`, data);
   }
 
-  getMotherdashboard() {
+  getMotherDashboard() {
     return this.http.get<any>(`${baseUrl}mother/dashboard`);
   }
 }

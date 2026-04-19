@@ -11,7 +11,7 @@ import { DecimalPipe } from '@angular/common';
 export class SkinComponent {
   previewImage: string | null = null;
   selectedFile!: File;
-  predictions: any[] = [];
+  prediction: any ;
   loading = false;
 
   constructor(private _AiService: AiService) {}
@@ -28,18 +28,18 @@ export class SkinComponent {
     };
     reader.readAsDataURL(file);
 
-    this.analyzeFood();
+    this.analyzeSkin();
   }
 
-  analyzeFood() {
+  analyzeSkin() {
     if (!this.selectedFile) return;
 
     this.loading = true;
 
-    this._AiService.analyzeImage(this.selectedFile, 'skin').subscribe({
+    this._AiService.analyzeSkin(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.predictions = res.predictions || [];
+        this.prediction = res.label;
         console.log(res);
       },
       error: () => {

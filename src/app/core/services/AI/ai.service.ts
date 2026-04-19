@@ -17,13 +17,26 @@ export class AiService {
     this.refreshConversationsSubject.next(true);
   }
 
-  analyzeImage(file: File, modelType: string) {
+  analyzeFood(file: File) {
     const formData = new FormData();
 
     formData.append('image', file);
-    formData.append('modelType', modelType);
 
-    return this.http.post(`${baseUrl}AI/inference`, formData);
+    return this.http.post(`${baseUrl}ai/food/analyze`, formData);
+  }
+  analyzeSkin(file: File) {
+    const formData = new FormData();
+
+    formData.append('image', file);
+
+    return this.http.post(`${baseUrl}ai/skin/analyze`, formData);
+  }
+  analyzeMedicine(file: File) {
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    return this.http.post(`http://127.0.0.1:8000/predict`, formData);
   }
 
   createConversation(userId: string, title: string): Observable<Conversation> {

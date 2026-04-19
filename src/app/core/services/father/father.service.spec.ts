@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MotherStateService } from './mother-state.service';
+import { FatherService } from './father.service';
 
-describe('MotherStateService', () => {
-  let service: MotherStateService;
+describe('FatherService', () => {
+  let service: FatherService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MotherStateService);
+    service = TestBed.inject(FatherService);
   });
 
   it('should be created', () => {

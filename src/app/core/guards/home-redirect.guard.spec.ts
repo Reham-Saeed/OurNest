@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { motherStateGuard } from './mother-state.guard';
+import { homeRedirectGuard } from './home-redirect.guard';
 
-describe('motherStateGuard', () => {
+describe('homeRedirectGuardGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => motherStateGuard(...guardParameters));
+      TestBed.runInInjectionContext(() => homeRedirectGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

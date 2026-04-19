@@ -57,7 +57,7 @@ export class SignUpComponent {
             if (response.success) {
               localStorage.removeItem('selectedRole');
               localStorage.removeItem('currentStep');
-              this.router.navigate(['/home']);
+              this.router.navigate(['/questions-flow']);
             } else {
               this.errorMessage = response.error || `${user.provider} login failed.`;
             }
@@ -125,7 +125,7 @@ export class SignUpComponent {
         if (response.success) {
           localStorage.removeItem('selectedRole');
           localStorage.removeItem('currentStep');
-          this.router.navigate(['/questions']);
+          this.router.navigate(['/questions-flow']);
         } else {
           this.errorMessage = response.error || 'Registration failed.';
         }

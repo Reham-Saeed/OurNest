@@ -28,8 +28,8 @@ import { TrackerComponent } from './components/tracker/tracker.component';
 import { HomeMainComponent } from './components/home-main/home-main.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
-import { motherStateGuard } from './core/guards/mother-state.guard';
 import { HomeComponent } from './components/home/home.component';
+import { homeRedirectGuard } from './core/guards/home-redirect.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -54,10 +54,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'questions', component: QuestionsFlowComponent },
+      { path: 'questions-flow', component: QuestionsFlowComponent },
       {
         path: 'home',
-        canActivate: [motherStateGuard],
+        canActivate: [homeRedirectGuard],
         component: HomeMainComponent,
       },
       { path: 'trimester/first', component: FirstTrimesterComponent },
