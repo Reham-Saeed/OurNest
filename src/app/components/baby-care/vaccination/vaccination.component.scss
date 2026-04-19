@@ -1,0 +1,28 @@
+.date-picker-container {
+  /* Keep your existing styles, but make sure it flexes properly */
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* Adds nice breathing room between Day, Month, and Year */
+  width: 100%;
+  max-width: 400px; /* Gives it enough room to stretch out */
+  margin: 0 auto;
+}
+
+.column {
+  /* Keep your existing styles */
+  flex: 1; /* Forces the columns to share space equally */
+  min-width: 80px; /* Prevents columns from getting crushed */
+  
+  /* (Optional) Hide the ugly default scrollbars while keeping scroll active */
+  scrollbar-width: none; 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.item {
+  /* Keep your existing styles */
+  white-space: nowrap; /* THIS IS THE MAGIC FIX! It stops text from dropping to the next line */
+  text-align: center;
+  padding: 0 0.5rem;
+}

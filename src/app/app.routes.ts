@@ -75,8 +75,8 @@ export const routes: Routes = [
       { path: 'community', component: MothersCommunityComponent },
       {
         path: 'baby-care',
-        component: BabyCareComponent,
         children: [
+          { path: '', component: BabyCareComponent },
           { path: 'feeding-time', component: FeedingTimeComponent },
           { path: 'baby-naps', component: NapsComponent },
           { path: 'baby-crying', component: CryingComponent },
