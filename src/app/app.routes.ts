@@ -30,6 +30,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { HomeComponent } from './components/home/home.component';
 import { homeRedirectGuard } from './core/guards/home-redirect.guard';
+import { ExercisesComponent } from './components/exercises/exercises.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -63,11 +64,16 @@ export const routes: Routes = [
       { path: 'trimester/first', component: FirstTrimesterComponent },
       { path: 'trimester/second', component: SecondTrimesterComponent },
       { path: 'trimester/third', component: ThirdTrimesterComponent },
-      { path: 'period-tracker', component: TrackerComponent },
+      { path: 'exercises', component: ExercisesComponent },
+      { path: 'services', component: OurServicesComponent },
+      { path: 'organizer/todo', component: TodoListComponent },
+      { path: 'organizer/reminder', component: ReminderListComponent },
+      { path: 'clinic', component: ClinicComponent },
+      { path: 'community', component: MothersCommunityComponent },
       {
         path: 'baby-care',
-        component: BabyCareComponent,
         children: [
+          { path: '', component: BabyCareComponent },
           { path: 'feeding-time', component: FeedingTimeComponent },
           { path: 'baby-naps', component: NapsComponent },
           { path: 'baby-crying', component: CryingComponent },

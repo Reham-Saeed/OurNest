@@ -1,1 +1,136 @@
-<p>vaccination.component works!</p>
+<div
+  class="min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#FFC5D0] flex flex-col items-center justify-center py-10 px-20">
+
+  <h2 class="font-semibold text-5xl text-[#B34962] mb-10 uppercase">GUIDE TO VACCINATIONS : MONTH {{ babyMonth }}</h2>
+
+  <div
+    class="inline-flex items-center justify-center gap-5 px-10 py-3 rounded-[20px] border border-[#B34962] bg-[#FFF3F5]">
+    <h2 class="text-lg font-medium text-gray-800 m-0 text-center">Log a Completed Vaccination</h2>
+    <div (click)="openModal()"
+      class="cursor-pointer bg-[#B34962] p-1 flex items-center justify-center rounded-xl hover:bg-pink-800 transition-colors">
+      <i class="fa-solid fa-plus text-white text-2xl px-1"></i>
+    </div>
+  </div>
+
+  <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <div class="flex flex-col items-center gap-6">
+      <div class="flex justify-between gap-6">
+        <div class="relative z-10 mx-6 w-72 h-72">
+          <div class="absolute -inset-x-5 -inset-y-5 rounded-full border-2 border-[#B34962] bg-white"></div>
+          <div class="absolute -inset-x-1.5 -inset-y-3.5 rounded-full border-2 border-[#B34962]"></div>
+          <div class="w-72 h-72 rounded-full border-2 border-[#B34962] shadow-xl overflow-hidden relative z-10">
+            <img src="assets/feeding-time.jpg" alt="Baby" class="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <div class="mt-20">
+          <h3 class="font-semibold text-3xl uppercase">
+            BABY: {{ babyName }} <br />
+            (MONTH {{ babyMonth }})
+          </h3>
+          <h3 class="text-3xl pt-6">Weight: {{ babyWeight }}</h3>
+          <h3 class="text-3xl pt-2">Length: {{ babyLength }}</h3>
+        </div>
+      </div>
+
+      <div class="w-full bg-white/80 backdrop-blur-sm rounded-3xl border border-[#B34962] shadow-lg p-6 mt-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="flex-1 h-px bg-pink-200"></div>
+          <h2 class="text-[#B34962] font-extrabold text-2xl tracking-widest uppercase">Daily Needs</h2>
+          <div class="flex-1 h-px bg-pink-200"></div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          @for (need of dailyNeeds; track $index) {
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 flex items-center justify-center text-2xl">
+              <img [src]="need.icon" alt="" />
+            </div>
+            <div class="text-lg">
+              <span class="font-medium">{{ need.label }}: </span>
+              <span class="text-[#B34962] font-bold">{{ need.value }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20">
+      <div class="relative bg-white/80 backdrop-blur-sm rounded-[20px] border border-[#B34962] shadow-lg p-6">
+        <h2
+          class="absolute -top-8 left-1/2 -translate-x-1/2 w-max text-center text-[#B34962] font-extrabold text-2xl bg-white rounded-xl uppercase px-4">
+          REQUIRED SHOTS <br />
+          (Month {{ babyMonth }})
+        </h2>
+
+        <div class="relative mt-10">
+          <div class="absolute top-0 bottom-0 left-1/2 w-px bg-gray-300 z-0"></div>
+
+          <div class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10">
+            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl">Vaccine</span>
+            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl">Status</span>
+          </div>
+
+          <div class="flex flex-col divide-y divide-gray-300 relative z-10">
+            @for (slot of vaccinationSchedule; track $index) {
+            <div class="grid grid-cols-2 text-center py-4 px-4 hover:bg-pink-50 transition-colors">
+              <span class="font-medium text-lg flex items-center justify-center">{{ slot.name }}</span>
+              <div class="flex flex-col items-center justify-center gap-1">
+                <span class="font-medium text-lg uppercase" [class.text-green-600]="slot.isNew">{{ slot.status }}</span>
+                @if (slot.isNew) { <span class="bg-[#B34962] text-white text-xs px-2 rounded-full">Logged</span> }
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (showModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center" (click)="closeModal()">
+    <div class="absolute inset-0 bg-pink-100/40 backdrop-blur-md"></div>
+
+    <div
+      class="relative z-10 bg-white rounded-3xl shadow-2xl p-8 w-[40%] flex flex-col border border-[#B34962] animate-pop"
+      (click)="$event.stopPropagation()">
+
+      <h3
+        class="absolute -top-4 left-1/2 -translate-x-1/2 text-[#B34962] font-extrabold text-4xl bg-white rounded-xl uppercase px-4 whitespace-nowrap">
+        Log Vaccination
+      </h3>
+
+      <div class="flex items-center gap-3 w-full mt-10">
+        <label class="text-gray-700 font-bold text-xl uppercase tracking-wide w-20">Shot:</label>
+        <input type="text" [(ngModel)]="newVaccineName" placeholder="e.g. Polio, Hep B"
+          class="w-full border border-[#B34962] rounded-[20px] px-4 py-2 text-xl text-[#B34962] font-semibold bg-[#FFF3F5] placeholder-[#B34962] focus:outline-none" />
+      </div>
+
+      <div class="flex items-center gap-3 w-full mt-6">
+        <label class="text-gray-700 font-bold text-xl uppercase tracking-wide w-20">Date:</label>
+        <div class="relative flex-1">
+          <input type="text" [(ngModel)]="lastVaccineDateDisplay" readonly (click)="togglePicker()"
+            placeholder="Select Date"
+            class="w-full border border-[#B34962] rounded-[20px] px-4 pr-12 py-2 text-xl text-[#B34962] font-semibold bg-[#FFF3F5] placeholder-[#B34962] focus:outline-none cursor-pointer" />
+          <button type="button" (click)="togglePicker()"
+            class="absolute right-4 top-1/2 -translate-y-1/2 transition-transform duration-200 hover:scale-110">
+            <i class="fa-solid fa-calendar-day text-[#B34962] text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      @if (showPicker) {
+      <div class="mt-4 pt-4 border-t border-gray-100">
+        <app-date-picker pickerType="babyAge" (dateSelected)="onDateChange($event)"></app-date-picker>
+      </div>
+      }
+
+      <button (click)="saveVaccination()" [disabled]="!lastVaccineDateDisplay || !newVaccineName"
+        class="w-full mt-6 bg-[#B34962] text-white font-extrabold uppercase tracking-widest py-3 rounded-2xl shadow-md transition-all duration-200 text-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-pink-800">
+        Save Entry
+      </button>
+    </div>
+  </div>
+  }
+</div>

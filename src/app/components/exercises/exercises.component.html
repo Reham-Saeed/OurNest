@@ -1,0 +1,135 @@
+<div
+  class="min-h-screen bg-gradient-to-t from-[var(--color-pink)] to-white pt-8 pb-20 pl-4 md:pl-8 lg:pl-12 pr-4 md:pr-8 lg:pr-0 font-sans overflow-x-hidden">
+
+  <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
+
+    <div class="flex-1 flex flex-col gap-6">
+
+      <div class="flex items-center gap-4 mb-2">
+        <button
+          class="w-10 h-10 bg-[var(--color-dark-pink)] text-white rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-md shrink-0">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--color-dark-pink)] uppercase tracking-wide">
+          Guide to Activities : Month {{ babyMonth }}
+        </h1>
+      </div>
+
+      <div class="bg-white rounded-3xl p-4 shadow-sm">
+        <div class="w-full aspect-video rounded-2xl overflow-hidden bg-black mb-4 relative">
+          <iframe [src]="currentVideo.safeUrl" class="absolute top-0 left-0 w-full h-full" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 px-2">{{ currentVideo.title }}</h2>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button (click)="prevVideo()" [disabled]="currentVideoIndex === 0"
+          class="w-36 md:w-40 justify-center px-6 py-3 bg-white border-2 border-[var(--color-dark-pink)] text-gray-800 font-bold rounded-2xl hover:bg-[var(--color-dark-pink)] hover:text-white transition-colors flex items-center gap-2 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-gray-800">
+          <i class="fa-solid fa-chevron-left"></i> Previous
+        </button>
+
+        <button (click)="nextVideo()" [disabled]="currentVideoIndex === videos.length - 1"
+          class="w-36 md:w-40 justify-center px-6 py-3 bg-white border-2 border-[var(--color-dark-pink)] text-gray-800 font-bold rounded-2xl hover:bg-[var(--color-dark-pink)] hover:text-white transition-colors flex items-center gap-2 disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-gray-800">
+          Next <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-pink-100 overflow-hidden mt-2">
+        <div class="p-4 bg-gray-50 border-b border-pink-100 flex justify-between items-center font-bold text-gray-800">
+          <span>Most Asked Questions</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="flex flex-col">
+          @for (faq of faqs; track $index) {
+          <div class="border-b border-pink-100 last:border-b-0">
+            <button (click)="toggleFaq($index)"
+              class="w-full text-left p-4 flex justify-between items-center hover:bg-pink-50/50 transition-colors">
+              <span class="font-bold text-gray-700">{{ faq.question }}</span>
+              <i class="fa-solid fa-circle-chevron-down text-[var(--color-dark-pink)] text-xl transition-transform"
+                [class.rotate-180]="faq.isOpen"></i>
+            </button>
+
+            @if (faq.isOpen) {
+            <div class="px-4 pb-4 text-gray-600 animate-in fade-in slide-in-from-top-2">
+              {{ faq.answer }}
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="w-full lg:w-[400px] xl:w-[450px] shrink-0 flex flex-col gap-6 bg-white rounded-3xl lg:rounded-l-3xl lg:rounded-r-none p-5 lg:p-6 shadow-sm z-10 border-l border-t border-b border-gray-100">
+
+      <div class="relative mt-1">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search for Video"
+          class="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 outline-none focus:border-[var(--color-dark-pink)] shadow-sm bg-gray-50/50">
+      </div>
+
+      <div>
+        <h3 class="font-black text-lg text-black uppercase tracking-wide mb-3">Tummy Time Sessions</h3>
+        <div
+          class="w-full aspect-[16/9] rounded-2xl bg-gray-200 overflow-hidden relative shadow-sm mb-2 cursor-pointer group">
+          <img [src]="currentVideo.thumbnail" alt="Featured"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div
+              class="w-16 h-16 bg-pink-100/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[var(--color-dark-pink)] text-2xl shadow-lg">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center gap-2 mt-3">
+          <div class="w-2 h-2 rounded-full bg-[var(--color-dark-pink)]"></div>
+          <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+          <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+          <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+        </div>
+      </div>
+
+      <div class="flex-1 flex flex-col min-h-0">
+        <h4 class="font-black text-lg text-black mb-4">{{ filteredVideos.length }} Video Sessions</h4>
+
+        <div class="flex-1 flex flex-col gap-3 pr-2 overflow-y-auto custom-scrollbar">
+
+          @for (video of filteredVideos; track video.id) {
+          <div (click)="selectVideo(video)"
+            class="flex gap-4 p-3 rounded-2xl cursor-pointer transition-all border border-transparent"
+            [class.bg-pink-50]="currentVideo.id === video.id" [class.border-pink-200]="currentVideo.id === video.id"
+            [class.hover:bg-gray-50]="currentVideo.id !== video.id">
+
+            <div class="relative w-32 shrink-0 aspect-video rounded-xl overflow-hidden shadow-sm">
+              <img [src]="video.thumbnail" class="w-full h-full object-cover">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div
+                  class="w-8 h-8 bg-pink-100/90 rounded-full flex items-center justify-center text-[var(--color-dark-pink)] text-sm shadow">
+                  <i class="fa-solid fa-play ml-0.5"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-center">
+              <h5 class="font-bold text-gray-900 leading-tight mb-1">{{ video.title }}</h5>
+              <p class="text-xs text-gray-500 line-clamp-3 leading-snug">{{ video.description }}</p>
+            </div>
+          </div>
+          }
+
+          @if (filteredVideos.length === 0) {
+          <div class="text-center text-gray-400 py-8 font-medium">
+            No videos found matching "{{ searchQuery }}"
+          </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>

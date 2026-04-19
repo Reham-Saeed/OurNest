@@ -1,7 +1,7 @@
-import { routes } from './../../app.routes';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BabyService } from '../../core/services/baby/baby.service'; 
 
 interface Article {
   title: string;
@@ -10,20 +10,25 @@ interface Article {
 }
 
 @Component({
-  selector: 'app-baby-care.component',
+  selector: 'app-baby-care', 
+  standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './baby-care.component.html',
   styleUrl: './baby-care.component.scss',
 })
-export class BabyCareComponent {
-  currentWeek = 9;
-  selectedWeek = 9;
-  babyAge = '2 month 2 days';
-  babyWeight = '3.3 kg';
+export class BabyCareComponent implements OnInit {
+  private babyService = inject(BabyService);
 
-  pastWeeks = [6, 7, 8];
-  futureWeeks = [10, 11, 12];
+  // Dynamic UI Variables
+  currentWeek = 1;
+  selectedWeek = 1;
+  babyAge = 'Loading...';
+  babyWeight = '-- kg';
 
+  pastWeeks: number[] = [];
+  futureWeeks: number[] = [];
+
+  
   currentPage = 1;
   itemsPerPage = 3;
 
@@ -36,6 +41,55 @@ export class BabyCareComponent {
     { title: 'Vaccination', image: 'assets/baby-vaccination.jpg', route: 'vaccination' },
   ];
 
+  ngOnInit() {
+    this.loadBabyData();
+  }
+
+  loadBabyData() {
+    this.babyService.getAllBabies().subscribe({
+      next: (babies) => {
+        
+        if (babies && babies.length > 0) {
+          const baby = babies[0];
+          this.calculateTimeline(baby.dateOfBirth);
+          this.babyWeight = `${baby.birthWeight || 0} kg`; 
+        } else {
+          this.calculateTimeline(new Date().toISOString()); 
+          this.babyAge = 'No baby found';
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load baby data', err);
+        this.calculateTimeline(new Date(new Date().setDate(new Date().getDate() - 65)).toISOString());
+      }
+    });
+  }
+
+  calculateTimeline(dobString: string) {
+    const dob = new Date(dobString);
+    const today = new Date();
+    
+    const diffTime = Math.abs(today.getTime() - dob.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    this.currentWeek = Math.floor(diffDays / 7) + 1;
+    this.selectedWeek = this.currentWeek;
+
+    this.pastWeeks = [this.currentWeek - 3, this.currentWeek - 2, this.currentWeek - 1].filter(w => w > 0);
+    this.futureWeeks = [this.currentWeek + 1, this.currentWeek + 2, this.currentWeek + 3];
+
+    const months = Math.floor(diffDays / 30);
+    const days = diffDays % 30;
+    
+    let ageText = '';
+    if (months > 0) ageText += `${months} month${months > 1 ? 's' : ''} `;
+    if (days > 0 || months === 0) ageText += `${days} day${days !== 1 ? 's' : ''}`;
+    
+    this.babyAge = ageText.trim();
+  }
+
+  // --- UI Methods ---
+
   get totalPages(): number {
     return Math.ceil(this.allArticles.length / this.itemsPerPage);
   }
@@ -47,6 +101,7 @@ export class BabyCareComponent {
 
   selectWeek(week: number): void {
     this.selectedWeek = week;
+    
   }
 
   nextPage(): void {

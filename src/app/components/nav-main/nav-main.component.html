@@ -1,21 +1,39 @@
 <nav class="w-full border-b-[0.5px] border-[#B34962] relative">
   <div class="flex justify-between items-center py-1.5 md:py-3.5 px-4 md:px-16 lg:px-20 xl:px-24">
-    <!-- Logo -->
     <div>
       <a routerLink="/">
         <img src="assets/small-logo.png" alt="Logo" class="w-32 md:w-auto" />
       </a>
     </div>
 
-    <!-- Desktop Menu -->
-    <ul class="hidden gap-6 lg:flex xl:gap-11 [@media(width:1280px)]:gap-6 text-lg lg:text-xl font-medium">
+    <ul
+      class="hidden gap-6 lg:flex xl:gap-11 [@media(width:1280px)]:gap-6 text-lg lg:text-xl font-medium"
+    >
       <li>
+        <<<<<<< HEAD
         <a
           routerLink="/"
           routerLinkActive="text-[#B34962]"
           class="text-[#00000059] hover:text-[#B34962]"
           >Home</a
         >
+        =======
+        <a
+          routerLink="/home"
+          routerLinkActive="text-[#B34962]"
+          class="text-[#00000059] hover:text-[#B34962]"
+          >Home</a
+        >
+      </li>
+
+      <li>
+        <a
+          routerLink="/exercises"
+          routerLinkActive="text-[#B34962]"
+          class="text-[#00000059] hover:text-[#B34962]"
+          >Exercises</a
+        >
+        >>>>>>> origin/marco
       </li>
       <li>
         <a
@@ -81,20 +99,17 @@
     </ul>
 
     <div class="flex gap-1">
-      <!-- Avatar -->
       <img
         src="assets/user.jpg"
         alt="user-avatar"
         class="h-10 w-10 md:h-14 md:w-14 rounded-full object-cover object-top border border-[#B34962]"
       />
-      <!-- Mobile Menu Button -->
       <button class="lg:hidden text-[#B34962] mt-1" (click)="toggleMobileMenu()">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </div>
   </div>
 
-  <!-- Mobile Menu -->
   <div class="lg:hidden absolute top-full left-0 w-full z-[1]">
     <div
       class="bg-white overflow-hidden transition-all duration-300 ease-in-out"
@@ -108,6 +123,15 @@
               routerLinkActive="text-[#B34962]"
               class="text-[#00000059] hover:text-[#B34962]"
               >Home</a
+            >
+          </li>
+
+          <li>
+            <a
+              routerLink="/exercises"
+              routerLinkActive="text-[#B34962]"
+              class="text-[#00000059] hover:text-[#B34962]"
+              >Exercises</a
             >
           </li>
           <li>
