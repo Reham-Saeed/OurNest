@@ -1,17 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PeriodTrackerService } from './period-tracker.service';
+import { FatherService } from './father.service';
 
-describe('PeriodTrackerService', () => {
-  let service: PeriodTrackerService;
+describe('FatherService', () => {
+  let service: FatherService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PeriodTrackerService);
+    service = TestBed.inject(FatherService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
 });

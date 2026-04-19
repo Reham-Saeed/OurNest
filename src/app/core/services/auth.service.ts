@@ -87,14 +87,14 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
-
+  
   logout(): Observable<any> {
-    const request = this._HttpClient.post(`${this.apiUrl}/logout`, {});
-
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('current_user');
-
-    return request;
+    return this._HttpClient.post(`${this.apiUrl}/logout`, {}).pipe(
+      tap(() => {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('current_user');
+      }),
+    );
   }
 }

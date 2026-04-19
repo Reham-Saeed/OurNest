@@ -11,7 +11,7 @@ import { DecimalPipe } from '@angular/common';
 export class FeedingComponent {
   previewImage: string | null = null;
   selectedFile!: File;
-  predictions: any[] = [];
+  prediction: any ;
   loading = false;
 
   constructor(private _AiService: AiService) {}
@@ -21,6 +21,7 @@ export class FeedingComponent {
     if (!file) return;
 
     this.selectedFile = file;
+
     const reader = new FileReader();
     reader.onload = () => {
       this.previewImage = reader.result as string;
@@ -35,10 +36,10 @@ export class FeedingComponent {
 
     this.loading = true;
 
-    this._AiService.analyzeImage(this.selectedFile, 'food').subscribe({
+    this._AiService.analyzeFood(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.predictions = res.predictions || [];
+        this.prediction = res.label;
         console.log(res);
       },
       error: () => {

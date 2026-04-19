@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { AiService } from '../../../core/services/AI/ai.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-medicine',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './medicine.component.html',
   styleUrl: './medicine.component.scss',
 })
 export class MedicineComponent {
   previewImage: string | null = null;
   selectedFile!: File;
-  predictions: any[] = [];
+  prediction: any;
   loading = false;
 
   constructor(private _AiService: AiService) {}
@@ -26,18 +27,18 @@ export class MedicineComponent {
     };
     reader.readAsDataURL(file);
 
-    this.analyzeFood();
+    this.analyzeMedicine();
   }
 
-  analyzeFood() {
+  analyzeMedicine() {
     if (!this.selectedFile) return;
 
     this.loading = true;
 
-    this._AiService.analyzeImage(this.selectedFile, 'food').subscribe({
+    this._AiService.analyzeMedicine(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.predictions = res.predictions || [];
+        this.prediction = this.formatMedicineText(res.formatted_text);
         console.log(res);
       },
       error: () => {
@@ -45,4 +46,28 @@ export class MedicineComponent {
       },
     });
   }
+
+formatMedicineText(content: string) {
+  if (!content) return '';
+
+  // خلي كل سطر لوحده
+  let lines = content.split('\n');
+
+  lines = lines.map(line => {
+    // لو السطر بيبدأ بـ -
+    if (line.trim().startsWith('-')) {
+      return `<strong>${line}</strong>`;
+    }
+
+    // لو فيه icon في البداية (زي 🧪)
+    if (line.trim().startsWith('🧪')) {
+      return `<strong>${line}</strong>`;
+    }
+
+    return line;
+  });
+
+  // رجعهم مع <br>
+  return lines.join('<br>');
+}
 }

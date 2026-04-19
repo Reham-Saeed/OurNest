@@ -38,7 +38,7 @@ export class SettingsComponent {
           this.socialAuthService.signOut();
         } catch (err) {}
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       },
       error: (err) => {
         console.error('Logout failed on the backend:', err);
