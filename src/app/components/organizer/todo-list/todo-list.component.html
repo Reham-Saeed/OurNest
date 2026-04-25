@@ -1,101 +1,184 @@
 <div class="min-h-screen bg-[var(--color-pink)]/40 pb-20 pt-10 px-4 md:px-8">
-
   <div class="text-center mb-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-3 text-black">My Organizer</h1>
     <p class="text-gray-400 text-lg">Keep track of your tasks and important reminders</p>
   </div>
 
   <div class="max-w-7xl mx-auto bg-white rounded-[2rem] shadow-xl p-8 md:p-12 min-h-[600px]">
-
     <div class="flex justify-center mb-12">
       <div class="bg-gray-100 p-1.5 rounded-full flex w-full max-w-md">
-
-        <a routerLink="/organizer/todo" routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
-          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer">
+        <a
+          routerLink="/organizer/todo"
+          routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
+          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer"
+        >
           To-Do List
         </a>
 
-        <a routerLink="/organizer/reminder" routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
-          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer">
+        <a
+          routerLink="/organizer/reminder"
+          routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
+          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer"
+        >
           Reminder Me
         </a>
-
       </div>
     </div>
 
     <div class="flex gap-4 mb-10">
-      <input [(ngModel)]="newTask" (keyup.enter)="addTask()" type="text" placeholder="Add a new task..."
-        class="flex-1 border border-[var(--color-dark-pink)] rounded-full px-8 py-4 text-gray-600 outline-none focus:ring-2 focus:ring-[var(--color-pink)]/50 transition-all placeholder-gray-400">
+      <input
+        [(ngModel)]="newTask"
+        (keyup.enter)="addTask()"
+        type="text"
+        placeholder="Add a new task..."
+        class="flex-1 border border-[var(--color-dark-pink)] rounded-full px-8 py-4 text-gray-600 outline-none focus:ring-2 focus:ring-[var(--color-pink)]/50 transition-all placeholder-gray-400"
+      />
 
-      <button (click)="addTask()" [disabled]="!newTask.trim()"
+      <button
+        (click)="addTask()"
+        [disabled]="!newTask.trim()"
         class="w-20 md:w-24 h-14 text-white rounded-full flex items-center justify-center shadow-md transition-all shrink-0"
-        [class.bg-gray-300]="!newTask.trim()" [class.cursor-not-allowed]="!newTask.trim()"
-        [class.cursor-pointer]="newTask.trim()" [class.bg-[var(--color-dark-pink)]]="newTask.trim()"
-        [class.hover:scale-105]="newTask.trim()">
+        [class.bg-gray-300]="!newTask.trim()"
+        [class.cursor-not-allowed]="!newTask.trim()"
+        [class.cursor-pointer]="newTask.trim()"
+        [class.bg-[var(--color-dark-pink)]]="newTask.trim()"
+        [class.hover:scale-105]="newTask.trim()"
+      >
         <i class="fa-solid fa-plus text-2xl"></i>
       </button>
     </div>
 
     <div class="space-y-4">
-
       @for (task of tasks; track task.id) {
-      <div class="flex items-center gap-3 group">
+        <div class="flex items-center gap-3 group">
+          <div
+            class="flex-1 flex items-center justify-between border rounded-2xl px-6 py-4 bg-white hover:shadow-sm transition-all"
+            [class.border-[var(--color-dark-pink)]]="!task.isCompleted"
+            [class.border-gray-300]="task.isCompleted"
+          >
+            <div class="flex items-center gap-4 flex-1">
+              <div
+                (click)="toggleComplete(task)"
+                class="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                [class.border-[var(--color-dark-pink)]]="task.isCompleted"
+                [class.bg-[var(--color-dark-pink)]]="task.isCompleted"
+              >
+                @if (task.isCompleted) {
+                  <i class="fa-solid fa-check text-white text-xs"></i>
+                }
+              </div>
 
-        <div
-          class="flex-1 flex items-center justify-between border rounded-2xl px-6 py-4 bg-white hover:shadow-sm transition-all"
-          [class.border-[var(--color-dark-pink)]]="!task.isCompleted" [class.border-gray-300]="task.isCompleted">
-
-          <div class="flex items-center gap-4 flex-1">
-
-            <div (click)="toggleComplete(task)"
-              class="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-              [class.border-[var(--color-dark-pink)]]="task.isCompleted"
-              [class.bg-[var(--color-dark-pink)]]="task.isCompleted">
-              @if (task.isCompleted) { <i class="fa-solid fa-check text-white text-xs"></i> }
+              @if (task.isEditing) {
+                <input
+                  [(ngModel)]="task.title"
+                  (blur)="saveEdit(task)"
+                  (keyup.enter)="saveEdit(task)"
+                  class="flex-1 border-b border-[var(--color-dark-pink)] outline-none text-lg text-black px-2 py-1"
+                  autofocus
+                />
+              } @else {
+                <span
+                  (click)="toggleComplete(task)"
+                  class="text-lg font-medium text-black cursor-pointer truncate"
+                  [class.line-through]="task.isCompleted"
+                  [class.text-gray-400]="task.isCompleted"
+                >
+                  {{ task.title }}
+                </span>
+              }
             </div>
+            <div></div>
+            <div class="pl-4">
+              @if (task.isEditing) {
+                <button
+                  (click)="saveEdit(task)"
+                  class="text-[var(--color-dark-pink)] hover:scale-110 transition-transform"
+                >
+                  <i class="fa-solid fa-check text-xl"></i>
+                </button>
+              } @else {
+                <button
+                  (click)="startEdit(task)"
+                  class="text-gray-400 cursor-pointer hover:text-[var(--color-dark-pink)] transition-colors"
+                >
+                  <i class="fa-regular fa-pen-to-square text-xl"></i>
+                </button>
+              }
+            </div>
+            <!-- share toggle (BEST UX) -->
+            <div class="pl-3">
+              @if (appState?.isLinked) {
+                <button
+                  (click)="toggleShare(task)"
+                  class="relative share-btn transition-colors"
+                  [ngClass]="
+                    task.sharedWithPartner ? 'text-[var(--color-dark-pink)]' : 'text-gray-400'
+                  "
+                >
+                  <i
+                    class="fa-solid text-lg"
+                    [ngClass]="{
+                      'fa-user-group': !task.sharedWithPartner,
+                      'fa-user-check': task.sharedWithPartner,
+                    }"
+                  ></i>
 
-            @if (task.isEditing) {
-            <input [(ngModel)]="task.title" (blur)="saveEdit(task)" (keyup.enter)="saveEdit(task)"
-              class="flex-1 border-b border-[var(--color-dark-pink)] outline-none text-lg text-black px-2 py-1"
-              autofocus>
-            } @else {
-            <span (click)="toggleComplete(task)" class="text-lg font-medium text-black cursor-pointer truncate"
-              [class.line-through]="task.isCompleted" [class.text-gray-400]="task.isCompleted">
-              {{ task.title }}
-            </span>
-            }
+                  <span
+                    class="tooltip absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 invisible transition whitespace-nowrap pointer-events-none"
+                  >
+                    Share with partner
+                  </span>
+                </button>
+              }
+            </div>
           </div>
 
-          <div class="pl-4">
-            @if (task.isEditing) {
-            <button (click)="saveEdit(task)" class="text-[var(--color-dark-pink)] hover:scale-110 transition-transform">
-              <i class="fa-solid fa-check text-xl"></i>
-            </button>
-            } @else {
-            <button (click)="startEdit(task)"
-              class="text-gray-400 cursor-pointer hover:text-[var(--color-dark-pink)] transition-colors">
-              <i class="fa-regular fa-pen-to-square text-xl"></i>
-            </button>
-            }
-          </div>
-
+          <button
+            (click)="deleteTask(task.id)"
+            class="text-gray-400 cursor-pointer hover:text-red-500 transition-colors p-2"
+          >
+            <i class="fa-solid fa-xmark text-2xl"></i>
+          </button>
         </div>
-
-        <button (click)="deleteTask(task.id)"
-          class="text-gray-400 cursor-pointer hover:text-red-500 transition-colors p-2">
-          <i class="fa-solid fa-xmark text-2xl"></i>
-        </button>
-
-      </div>
       }
 
       @if (tasks.length === 0) {
-      <div class="text-center text-gray-400 mt-10">
-        <p>No tasks yet. Add one above!</p>
-      </div>
+        <div class="text-center text-gray-400 mt-10">
+          <p>No tasks yet. Add one above!</p>
+        </div>
       }
-
     </div>
 
+    <div>
+      @if (partnerTasks.length!=0) {
+        <h2 class="text-xl font-bold mt-8 mb-3 text-gray-500">Partner Tasks</h2>
+
+        <!-- ONE SINGLE BOX -->
+        <div class="border rounded-2xl bg-white p-6 space-y-4">
+          @for (task of partnerTasks; track task.id) {
+            <div class="flex items-center justify-between">
+              <!-- LEFT SIDE -->
+              <div class="flex items-center gap-4">
+                <!-- completion -->
+                <div
+                  class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center"
+                  [class.border-[var(--color-dark-pink)]]="task.isCompleted"
+                  [class.bg-[var(--color-dark-pink)]]="task.isCompleted"
+                >
+                  @if (task.isCompleted) {
+                    <i class="fa-solid fa-check text-white text-xs"></i>
+                  }
+                </div>
+
+                <!-- title -->
+                <span class="text-gray-600" [class.line-through]="task.isCompleted">
+                  {{ task.title }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
 </div>

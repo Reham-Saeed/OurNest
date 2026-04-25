@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { BabyService } from '../../core/services/baby/baby.service';
 import { MotherService } from '../../core/services/mother/mother.service';
 import { PeriodTrackerService } from '../../core/services/trackers/period-tracker.service';
-import { catchError, of, switchMap, tap, throwError } from 'rxjs';
-import { PregnancyService } from '../../core/services/pregnancy/pregnancy.service';
+import { of, switchMap, tap } from 'rxjs';
 import { FatherService } from '../../core/services/father/father.service';
 import { OnboardingService } from '../../core/services/onboarding/onboarding.service';
+import { AuthService } from '../../core/services/auth.service';
+import { AppStateService } from '../../core/services/app-state/app-state.service';
 
 type Step =
   | 'role'
@@ -47,12 +48,31 @@ export class QuestionsFlowComponent implements OnInit {
     private _MotherService: MotherService,
     private _FatherService: FatherService,
     private _OnboardingService: OnboardingService,
-    private _PregnancyService: PregnancyService,
     private _BabyService: BabyService,
     private _PeriodTrackerService: PeriodTrackerService,
+    private _AuthService: AuthService,
+    private _AppStateService: AppStateService,
   ) {}
 
   ngOnInit() {
+    const context = localStorage.getItem('onboarding-context');
+
+    if (context) {
+      const parsed = JSON.parse(context);
+
+      this.formData.role = parsed.role;
+      this.formData.motherMode = parsed.motherMode;
+      if (parsed.motherMode === 'pregnancy') {
+        this.formData.isPregnant = true;
+      }
+
+      if (parsed.resumeStep) {
+        this.currentStep = parsed.resumeStep as Step;
+      }
+
+      return;
+    }
+
     const saved = localStorage.getItem('step');
     if (saved) this.currentStep = saved as Step;
   }
@@ -86,13 +106,11 @@ export class QuestionsFlowComponent implements OnInit {
 
   periodDetails = new FormGroup({
     lastPeriodDate: new FormControl('', Validators.required),
-
     periodLength: new FormControl(null, [
       Validators.required,
       Validators.min(1),
       Validators.max(10),
     ]),
-
     cycleLength: new FormControl(null, [
       Validators.required,
       Validators.min(15),
@@ -121,20 +139,17 @@ export class QuestionsFlowComponent implements OnInit {
     switch (this.currentStep) {
       case 'mother:pregnant:bodyDetails':
         return this.bodyDetails;
-
       case 'mother:notPregnant:planning':
         return this.periodDetails;
-
       case 'mother:notPregnant:notPlanning:hasBaby:weight':
         return this.babyWeightForm;
-
       case 'mother:notPregnant:notPlanning:hasBaby:name':
         return this.babyNameForm;
-
       default:
         return null;
     }
   }
+
   saveCurrentForm() {
     const form = this.getCurrentForm();
 
@@ -146,31 +161,24 @@ export class QuestionsFlowComponent implements OnInit {
     }
 
     switch (this.currentStep) {
-      // ---------------- BODY DETAILS ----------------
       case 'mother:pregnant:bodyDetails':
         this.formData.height = form.value.height;
         this.formData.weight = form.value.weight;
-
         this.currentStep = 'mother:pregnant:firstChild';
         break;
 
-      // ---------------- PERIOD DETAILS ----------------
       case 'mother:notPregnant:planning':
         this.formData.lastPeriodDate = form.value.lastPeriodDate;
         this.formData.periodLengthDays = form.value.periodLength;
         this.formData.cycleLengthDays = form.value.cycleLength;
-
         this.submitAll();
         return;
 
-      // ---------------- BABY WEIGHT ----------------
       case 'mother:notPregnant:notPlanning:hasBaby:weight':
         this.formData.babyWeight = form.value.babyWeight;
-
         this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:name';
         break;
 
-      // ---------------- BABY NAME ----------------
       case 'mother:notPregnant:notPlanning:hasBaby:name':
         this.formData.babyName = form.value.babyName;
         this.submitAll();
@@ -236,12 +244,10 @@ export class QuestionsFlowComponent implements OnInit {
   // CHOICES
   // -----------------------
 
-  chooseRole(role: 'mother' | 'father') {
+  chooseRole(role: 'Mother' | 'Father') {
     this.pushHistory();
     this.formData.role = role;
-
-    this.currentStep = role === 'mother' ? 'mother:isPregnant' : 'father:birthDate';
-
+    this.currentStep = role === 'Mother' ? 'mother:isPregnant' : 'father:birthDate';
     this.saveState();
   }
 
@@ -249,9 +255,7 @@ export class QuestionsFlowComponent implements OnInit {
     this.pushHistory();
     this.formData.isPregnant = val;
     this.formData.motherMode = val ? 'pregnant' : 'planning';
-
     this.currentStep = val ? 'mother:pregnant:bodyDetails' : 'mother:notPregnant:isPlanning';
-
     this.saveState();
   }
 
@@ -266,15 +270,9 @@ export class QuestionsFlowComponent implements OnInit {
     this.pushHistory();
     this.formData.knowledgeType = type;
 
-    if (type === 'lastPeriod') {
-      this.currentStep = 'mother:pregnant:lastPeriodDate';
-    }
-    if (type === 'pregnantAge') {
-      this.currentStep = 'mother:pregnant:gestationalAge';
-    }
-    if (type === 'dueDate') {
-      this.currentStep = 'mother:pregnant:expectedDueDate';
-    }
+    if (type === 'lastPeriod') this.currentStep = 'mother:pregnant:lastPeriodDate';
+    if (type === 'pregnantAge') this.currentStep = 'mother:pregnant:gestationalAge';
+    if (type === 'dueDate') this.currentStep = 'mother:pregnant:expectedDueDate';
 
     this.saveState();
   }
@@ -283,9 +281,7 @@ export class QuestionsFlowComponent implements OnInit {
     const formattedDate = this.formatDate(date);
     this.periodDetails.patchValue({ lastPeriodDate: formattedDate });
   }
-  onLastPeriodSelect(date: any) {
-    this.formData.lastPeriodDate = this.formatDate(date);
-  }
+
   openLastPeriodSelect() {
     this.currentView = 'lastPeriodSelect';
   }
@@ -294,13 +290,26 @@ export class QuestionsFlowComponent implements OnInit {
     this.currentView = 'planningForm';
   }
 
+  onLastPeriodSelect(date: any) {
+    this.formData.lastPeriodDate = this.formatDate(date);
+    if (this.formData.knowledgeType === 'lastPeriod') {
+      this.calculateFromLastPeriod();
+    }
+  }
+
   onGestationalAgeSelect(gestationalAge: any) {
     this.formData.gestationalWeeks = gestationalAge.week;
     this.formData.gestationalDays = gestationalAge.day;
+    if (this.formData.knowledgeType === 'pregnantAge') {
+      this.calculateFromGestationalAge();
+    }
   }
 
   onExpectedDueDateSelect(date: any) {
     this.formData.expectedDueDate = this.formatDate(date);
+    if (this.formData.knowledgeType === 'dueDate') {
+      this.calculateFromDueDate();
+    }
   }
 
   onBirthDateSelect(date: any) {
@@ -310,11 +319,9 @@ export class QuestionsFlowComponent implements OnInit {
   selectPlanning(val: boolean) {
     this.pushHistory();
     this.formData.motherMode = val ? 'planning' : 'hasBaby';
-
     this.currentStep = val
       ? 'mother:notPregnant:planning'
       : 'mother:notPregnant:notPlanning:isHasBaby';
-
     this.saveState();
   }
 
@@ -369,57 +376,59 @@ export class QuestionsFlowComponent implements OnInit {
   // -----------------------
 
   submitAll() {
-    this.finalizeFlow().subscribe({
-      next: () => {
-        localStorage.removeItem('step');
-        this.router.navigate(['/']);
-      },
-      error: (err: Error) => console.error(err),
-    });
+    this.finalizeFlow()
+      .pipe(switchMap(() => this._AppStateService.setAppState()))
+      .subscribe({
+        next: () => {
+          localStorage.removeItem('step');
+          localStorage.removeItem('onboarding-context');
+          this.router.navigate(['/']);
+
+          this.formData = {};
+        },
+      });
   }
 
   finalizeFlow() {
-    const role$ = this.formData.role === 'father' ? this.submitFather() : this.submitMother();
+    const isMother = this.formData.role === 'Mother';
+    const contextRaw = localStorage.getItem('onboarding-context');
+    const context = contextRaw ? JSON.parse(contextRaw) : null;
+    const skipMotherCreation = context?.skipMotherCreation === true;
 
-    return role$.pipe(
-      switchMap((res) => {
-        return this.submitOnboarding();
-      }),
+    if (isMother && skipMotherCreation) {
+      return this.submitOnboarding().pipe(switchMap(() => this.submitMotherExtraStep()));
+    }
 
-      switchMap((res) => {
-        return this.submitMotherExtraStep();
-      }),
-    );
+    if (isMother) {
+      return this.submitMother().pipe(
+        switchMap(() => this.submitOnboarding()),
+        tap(() => this._AuthService.updateCurrentUserRole({ role: 'Mother' })),
+        switchMap(() => this._AuthService.refreshSession()),
+        switchMap(() => this.submitMotherExtraStep()),
+      );
+    } else {
+      return this.submitOnboarding().pipe(
+        tap(() => this._AuthService.updateCurrentUserRole({ role: 'Father' })),
+        switchMap(() => this._AuthService.refreshSession()),
+        switchMap(() => this.submitFather()),
+      );
+    }
   }
 
   submitMotherExtraStep() {
-    if (this.formData.role !== 'mother') {
-      return of(null);
-    }
-
-    if (this.formData.motherMode === 'planning') {
-      return this.submitPeriod();
-    }
-
-    if (this.formData.motherMode === 'hasBaby') {
-      return this.submitBaby();
-    }
-
+    if (this.formData.role !== 'Mother') return of(null);
+    if (this.formData.motherMode === 'planning') return this.submitPeriod();
+    if (this.formData.motherMode === 'hasBaby') return this.submitBaby();
     return of(null);
   }
 
   submitFather() {
-    const payload = {
-      dateOfBirth: this.formData.birthDate,
-    };
-
+    const payload = { height: null, weight: null, bloodType: null };
     return this._FatherService.createFather(payload);
   }
 
   submitMother() {
-    if (this.formData.role !== 'mother') {
-      return of(null);
-    }
+    if (this.formData.role !== 'Mother') return of(null);
 
     const payload = {
       height: Number(this.formData.height),
@@ -433,21 +442,15 @@ export class QuestionsFlowComponent implements OnInit {
   submitOnboarding() {
     const payload = {
       isDoctor: false,
-      role: this.formData.role === 'mother' ? 'mother' : 'father',
-
+      role: this.formData.role === 'Mother' ? 'Mother' : 'Father',
       isPregnant: this.formData.isPregnant ?? false,
-
       height: this.formData.height ? Number(this.formData.height) : null,
       weight: this.formData.weight ? Number(this.formData.weight) : null,
-
       isFirstChild: this.formData.isFirstChild ?? null,
       knowledgeType: this.formData.knowledgeType ?? null,
-
       lastMenstrualDate: this.formData.lastPeriodDate ?? null,
-
       gestationalWeeks: this.formData.gestationalWeeks ?? null,
       gestationalDays: this.formData.gestationalDays ?? null,
-
       conceptionDate: this.formData.expectedDueDate ?? null,
       dateOfBirth: this.formData.birthDate ?? null,
     };
@@ -456,20 +459,13 @@ export class QuestionsFlowComponent implements OnInit {
   }
 
   submitPeriod() {
-    if (this.formData.role !== 'mother') {
-      return of(null);
-    }
-
-    if (this.formData.motherMode !== 'planning') {
-      return of(null);
-    }
+    if (this.formData.role !== 'Mother') return of(null);
+    if (this.formData.motherMode !== 'planning') return of(null);
 
     const cycleLength = Number(this.formData.cycleLengthDays);
     const periodLength = Number(this.formData.periodLengthDays);
 
-    if (!cycleLength || !periodLength) {
-      return of(null);
-    }
+    if (!cycleLength || !periodLength) return of(null);
 
     const payload = {
       startDate: this.formData.lastPeriodDate,
@@ -481,13 +477,8 @@ export class QuestionsFlowComponent implements OnInit {
   }
 
   submitBaby() {
-    if (this.formData.role !== 'mother') {
-      return of(null);
-    }
-
-    if (this.formData.motherMode !== 'hasBaby') {
-      return of(null);
-    }
+    if (this.formData.role !== 'Mother') return of(null);
+    if (this.formData.motherMode !== 'hasBaby') return of(null);
 
     const payload = {
       name: this.formData.babyName,
@@ -497,5 +488,58 @@ export class QuestionsFlowComponent implements OnInit {
     };
 
     return this._BabyService.createBaby(payload);
+  }
+
+  calculateFromLastPeriod() {
+    if (!this.formData.lastPeriodDate) return;
+
+    const lastPeriod = new Date(this.formData.lastPeriodDate);
+    const today = new Date();
+    const diffDays = Math.floor((today.getTime() - lastPeriod.getTime()) / (1000 * 60 * 60 * 24));
+
+    this.formData.gestationalWeeks = Math.floor(diffDays / 7);
+    this.formData.gestationalDays = diffDays % 7;
+
+    const dueDate = new Date(lastPeriod);
+    dueDate.setDate(dueDate.getDate() + 280);
+    this.formData.expectedDueDate = this.formatDateFromDate(dueDate);
+  }
+
+  calculateFromGestationalAge() {
+    if (this.formData.gestationalWeeks == null || this.formData.gestationalDays == null) return;
+
+    const today = new Date();
+    const totalDays = this.formData.gestationalWeeks * 7 + this.formData.gestationalDays;
+
+    const lastPeriod = new Date(today);
+    lastPeriod.setDate(lastPeriod.getDate() - totalDays);
+    this.formData.lastPeriodDate = this.formatDateFromDate(lastPeriod);
+
+    const dueDate = new Date(lastPeriod);
+    dueDate.setDate(dueDate.getDate() + 280);
+    this.formData.expectedDueDate = this.formatDateFromDate(dueDate);
+  }
+
+  calculateFromDueDate() {
+    if (!this.formData.expectedDueDate) return;
+
+    const dueDate = new Date(this.formData.expectedDueDate);
+
+    const lastPeriod = new Date(dueDate);
+    lastPeriod.setDate(lastPeriod.getDate() - 280);
+    this.formData.lastPeriodDate = this.formatDateFromDate(lastPeriod);
+
+    const today = new Date();
+    const diffDays = Math.floor((today.getTime() - lastPeriod.getTime()) / (1000 * 60 * 60 * 24));
+
+    this.formData.gestationalWeeks = Math.floor(diffDays / 7);
+    this.formData.gestationalDays = diffDays % 7;
+  }
+
+  formatDateFromDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

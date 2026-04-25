@@ -18,21 +18,22 @@ export class ClinicComponent {
   activeTab: string = 'clinic';
   conversations: Conversation[] = [];
   selectedConversationId: string | null = null;
+  newChatKey = 0;
 
   constructor(private aiService: AiService) {}
 
   setActive(tab: string) {
     this.activeTab = tab;
   }
-  
+
   selectConversation(id: string) {
     this.selectedConversationId = id;
   }
 
-  onNewChat() {
-    this.selectedConversationId = null;
-  }
-
+onNewChat() {
+  this.selectedConversationId = null;
+  this.newChatKey = Date.now(); // بدل ++ عشان يضمن reset فعلي
+}
   ngOnInit() {
     this.loadConversations();
     this.aiService.refreshConversations$.subscribe(() => {

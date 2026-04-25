@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLinkActive, RouterLinkWithHref } from '@angular/router';
 import { Task, TodoService } from '../../../core/services/Organizer/todo.service';
+import { AiService } from '../../../core/services/AI/ai.service';
+import { AppStateService } from '../../../core/services/app-state/app-state.service';
+import { PartnerService } from '../../../core/services/partner/partner.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,11 +17,20 @@ import { Task, TodoService } from '../../../core/services/Organizer/todo.service
 })
 export class TodoListComponent implements OnInit {
   private todoService = inject(TodoService);
+  private _AppStateService = inject(AppStateService);
+  private _PartnerService = inject(PartnerService);
+
+  appState: any = null;
+  currentUserRole: string = '';
 
   newTask = '';
   tasks: Task[] = [];
+  partnerTasks: any[] = [];
 
   ngOnInit() {
+    this.appState = this._AppStateService.getLocalState();
+    this.currentUserRole = this.appState?.role;
+
     this.loadTasks();
   }
 
@@ -25,6 +38,11 @@ export class TodoListComponent implements OnInit {
     this.todoService.getTodos().subscribe({
       next: (data) => (this.tasks = data),
       error: (err) => console.error('Failed to load tasks', err),
+    });
+    this._PartnerService.getFamilyDashboard().subscribe((res: any) => {
+      const role = this.currentUserRole;
+
+      this.partnerTasks = res.todos.filter((t: any) => t.assignedByRole != role);
     });
   }
 
@@ -68,6 +86,19 @@ export class TodoListComponent implements OnInit {
         },
       });
     }
+  }
+
+  toggleShare(task: any) {
+    const newValue = !task.sharedWithPartner;
+
+    this.todoService.shareTodo(task.id, { sharedWithPartner: newValue }).subscribe({
+      next: (res) => {
+        task.sharedWithPartner = newValue;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   startEdit(task: Task) {

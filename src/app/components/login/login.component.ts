@@ -9,6 +9,7 @@ import {
   SocialUser,
   FacebookLoginProvider,
 } from '@abacritt/angularx-social-login';
+import { AppStateService } from '../../core/services/app-state/app-state.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   private socialAuthService = inject(SocialAuthService);
+  private _AppStateService = inject(AppStateService);
 
   hidePassword = true;
   isLoading = false;
@@ -55,7 +57,9 @@ export class LoginComponent {
           next: (response) => {
             this.isLoading = false;
             if (response.success) {
-              this.router.navigate(['/home']);
+              this._AppStateService.setAppState().subscribe(() => {
+                this.router.navigate(['/home']);
+              });
             } else {
               this.errorMessage = response.error || `${user.provider} login failed.`;
             }
@@ -98,7 +102,9 @@ export class LoginComponent {
         this.isLoading = false;
 
         if (response.success) {
-          this.router.navigate(['/home']);
+          this._AppStateService.setAppState().subscribe(() => {
+            this.router.navigate(['/home']);
+          });
         } else {
           this.errorMessage = response.error || 'Invalid credentials.';
         }

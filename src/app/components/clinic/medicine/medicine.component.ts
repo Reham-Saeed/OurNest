@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
 import { AiService } from '../../../core/services/AI/ai.service';
 import { CommonModule } from '@angular/common';
 
@@ -8,22 +8,62 @@ import { CommonModule } from '@angular/common';
   templateUrl: './medicine.component.html',
   styleUrl: './medicine.component.scss',
 })
-export class MedicineComponent {
-  previewImage: string | null = null;
+export class MedicineComponent implements OnInit, AfterViewChecked {
+  @ViewChild('chatContainer') chatContainer!: ElementRef;
+
   selectedFile!: File;
-  prediction: any;
+  messages: any[] = [];
   loading = false;
 
+  private shouldScroll = false;
+
   constructor(private _AiService: AiService) {}
+
+  ngOnInit() {
+    const saved = localStorage.getItem('medicine_chat');
+    if (saved) {
+      this.messages = JSON.parse(saved);
+      this.shouldScroll = true;
+    }
+  }
+
+  ngAfterViewChecked() {
+    if (this.shouldScroll) {
+      this.scrollToBottom();
+      this.shouldScroll = false;
+    }
+  }
+
+  scrollToBottom() {
+    try {
+      this.chatContainer.nativeElement.scrollTo({
+        top: this.chatContainer.nativeElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    } catch {}
+  }
+
+  saveMessages() {
+    localStorage.setItem('medicine_chat', JSON.stringify(this.messages));
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
 
     this.selectedFile = file;
+
     const reader = new FileReader();
     reader.onload = () => {
-      this.previewImage = reader.result as string;
+      const image = reader.result as string;
+      this.messages.push({
+        type: 'user',
+        image: image,
+      });
+
+      this.saveMessages();
+      this.shouldScroll = true;
+      setTimeout(() => this.scrollToBottom(), 0);
     };
     reader.readAsDataURL(file);
 
@@ -38,8 +78,15 @@ export class MedicineComponent {
     this._AiService.analyzeMedicine(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.prediction = this.formatMedicineText(res.formatted_text);
-        console.log(res);
+
+        const parsed = this.parseMedicine(res.formatted_text);
+
+        this.messages.push({
+          type: 'bot',
+          data: parsed,
+        });
+        this.saveMessages();
+        this.shouldScroll = true;
       },
       error: () => {
         this.loading = false;
@@ -47,27 +94,50 @@ export class MedicineComponent {
     });
   }
 
-formatMedicineText(content: string) {
-  if (!content) return '';
+  parseMedicine(content: string) {
+    const result: any[] = [];
 
-  // خلي كل سطر لوحده
-  let lines = content.split('\n');
+    const items = content.split('-').slice(1);
 
-  lines = lines.map(line => {
-    // لو السطر بيبدأ بـ -
-    if (line.trim().startsWith('-')) {
-      return `<strong>${line}</strong>`;
-    }
+    items.forEach((item) => {
+      const lines = item
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean);
 
-    // لو فيه icon في البداية (زي 🧪)
-    if (line.trim().startsWith('🧪')) {
-      return `<strong>${line}</strong>`;
-    }
+      const name = lines[0].replace(':', '');
 
-    return line;
-  });
+      const obj: any = { name };
 
-  // رجعهم مع <br>
-  return lines.join('<br>');
-}
+      lines.forEach((line) => {
+        if (line.startsWith('Reason for caution'))
+          obj.reason = line.replace('Reason for caution:', '').trim();
+
+        if (line.startsWith('Potential risks'))
+          obj.risks = line.replace('Potential risks:', '').trim();
+
+        if (line.startsWith('Advice/Solution'))
+          obj.advice = line.replace('Advice/Solution:', '').trim();
+      });
+
+      result.push(obj);
+    });
+
+    return result;
+  }
+
+  formatMedicineText(content: string) {
+    if (!content) return '';
+
+    let lines = content.split('\n');
+
+    lines = lines.map((line) => {
+      if (line.trim().startsWith('-') || line.trim().startsWith('🧪')) {
+        return `<strong>${line}</strong>`;
+      }
+      return line;
+    });
+
+    return lines.join('<br>');
+  }
 }

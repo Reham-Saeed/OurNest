@@ -11,6 +11,7 @@ export interface Task {
   priority?: number;
   category?: string;
   isEditing?: boolean;
+  sharedWithPartner?: boolean;
 }
 
 @Injectable({
@@ -38,5 +39,9 @@ export class TodoService {
 
   deleteTodo(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  shareTodo(id: string,body:any): Observable<Task> {
+    return this.http.patch<Task>(`${this.apiUrl}/${id}/share`,body);
   }
 }

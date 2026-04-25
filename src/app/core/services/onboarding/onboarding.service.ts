@@ -11,4 +11,8 @@ export class OnboardingService {
   submitOnboarding(data: any) {
     return this.http.post<any>(`${baseUrl}onboarding/submit`, data);
   }
+
+  getOnboarding() {
+    return this.http.get<any>(`${baseUrl}onboarding`);
+  }
 }

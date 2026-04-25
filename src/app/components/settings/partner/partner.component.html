@@ -1,24 +1,95 @@
 <div class="flex items-center justify-center">
-  <div class="w-full max-w-md text-center">
+  <div class="w-full max-w-xl text-center">
     <!-- Title -->
     <h1 class="text-4xl font-bold mb-12">Link with your Partner</h1>
 
     <!-- Image -->
     <img src="assets/share-partner.png" alt="partner" class="w-72 mx-auto mb-12" />
 
-    <!-- Code Box -->
-    <p
-      class="w-full border-2 border-[#B34962] rounded-2xl px-6 py-5 mb-8 text-3xl font-bold tracking-widest"
-    >
-      61U9CI
-    </p>
+    <!-- ===== MOTHER FLOW ===== -->
+    <ng-container *ngIf="role === 'Mother'">
+      <!-- STEP 1: Enter partner username -->
+      <div *ngIf="step === 'input'">
+        <p class="text-gray-500 text-sm mb-4">
+          Enter your partner's username to send them an invite
+        </p>
 
-    <!-- Button -->
-    <button
-      class="w-full bg-[#B34962] text-white py-4 text-lg font-medium rounded-full hover:scale-[1.02] transition"
-    >
-      Send pairing code
-    </button>
+        <input
+          type="text"
+          [(ngModel)]="partnerUsername"
+          placeholder="Enter your partner's username"
+          class="w-full border-2 border-[#B34962] rounded-2xl px-6 py-5 mb-4 text-lg text-center outline-none focus:ring-2 focus:ring-[#B34962]/40 transition"
+        />
+
+        <p *ngIf="errorMsg" class="text-red-500 text-sm mb-4">{{ errorMsg }}</p>
+
+        <button
+          (click)="handleSubmit()"
+          [disabled]="isLoading"
+          class="w-full bg-[#B34962] text-white py-4 text-lg font-medium rounded-full hover:scale-[1.02] transition disabled:opacity-60"
+        >
+          {{ isLoading ? 'Sending...' : 'Send pairing code' }}
+        </button>
+      </div>
+
+      <!-- STEP 2: Show token to copy -->
+      <div *ngIf="step === 'code'">
+        <p class="text-gray-500 text-sm mb-3">Your pairing code</p>
+
+        <p
+          class="w-full border-2 border-[#B34962] rounded-2xl px-6 py-5 mb-8 text-xl font-semibold tracking-widest break-all"
+        >
+          {{ pairingToken }}
+        </p>
+
+        <button
+          (click)="copyCode()"
+          class="w-full bg-[#B34962] text-white py-4 text-lg font-medium rounded-full hover:scale-[1.02] transition"
+        >
+          {{ copied ? '✓ Copied!' : 'Copy code & share with partner' }}
+        </button>
+
+        <p class="text-sm text-gray-400 mt-3">
+          Share this code with <span class="font-medium text-[#B34962]">{{ partnerUsername }}</span>
+        </p>
+      </div>
+    </ng-container>
+
+    <!-- ===== FATHER FLOW ===== -->
+    <ng-container *ngIf="role === 'Father'">
+      <!-- STEP 1: Enter invitation code -->
+      <div *ngIf="step === 'input'">
+        <p class="text-gray-500 text-sm mb-4">Enter the pairing code your partner sent you</p>
+
+        <input
+          type="text"
+          [(ngModel)]="invitationCode"
+          placeholder="Enter invitation code"
+          class="w-full border-2 border-[#B34962] rounded-2xl px-6 py-5 mb-4 text-lg text-center outline-none focus:ring-2 focus:ring-[#B34962]/40 transition"
+        />
+
+        <p *ngIf="errorMsg" class="text-red-500 text-sm mb-4">{{ errorMsg }}</p>
+
+        <button
+          (click)="handleSubmit()"
+          [disabled]="isLoading"
+          class="w-full bg-[#B34962] text-white py-4 text-lg font-medium rounded-full hover:scale-[1.02] transition disabled:opacity-60"
+        >
+          {{ isLoading ? 'Verifying...' : 'Confirm pairing code' }}
+        </button>
+      </div>
+
+      <!-- STEP 2: Success message -->
+      <div *ngIf="step === 'code'">
+        <div
+          class="w-20 h-20 bg-[#B34962]/10 rounded-full flex items-center justify-center mx-auto mb-6"
+        >
+          <span class="text-4xl">🎉</span>
+        </div>
+        <p class="text-xl font-bold text-[#B34962] mb-2">You're linked!</p>
+        <p class="text-gray-500 text-sm">You and your partner are now connected successfully.</p>
+      </div>
+    </ng-container>
 
     <!-- Description -->
     <p class="text-gray-600 text-base mt-8 leading-relaxed">

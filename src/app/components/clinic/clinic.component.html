@@ -96,7 +96,10 @@
     <!-- Tab Content -->
     <div class="flex-1 min-h-0 overflow-hidden">
       @if (activeTab === 'clinic') {
-        <app-chatbot [conversationId]="selectedConversationId" />
+        <app-chatbot
+  [conversationId]="selectedConversationId"
+  [resetKey]="newChatKey">
+</app-chatbot>
       }
       @if (activeTab === 'medicine') {
         <app-medicine></app-medicine>

@@ -17,12 +17,7 @@ import { TodoListComponent } from './components/organizer/todo-list/todo-list.co
 import { ReminderListComponent } from './components/organizer/reminder-list/reminder-list.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { BabyCareComponent } from './components/baby-care/baby-care.component';
-import { FeedingTimeComponent } from './components/baby-care/feeding-time/feeding-time.component';
-import { NapsComponent } from './components/baby-care/naps/naps.component';
-import { CryingComponent } from './components/baby-care/crying/crying.component';
-import { TemperatureComponent } from './components/baby-care/temperature/temperature.component';
 import { VaccinationComponent } from './components/baby-care/vaccination/vaccination.component';
-import { FeedingAdviceComponent } from './components/baby-care/feeding-advice/feeding-advice.component';
 import { QuestionsFlowComponent } from './components/questions-flow/questions-flow.component';
 import { TrackerComponent } from './components/tracker/tracker.component';
 import { HomeMainComponent } from './components/home-main/home-main.component';
@@ -31,6 +26,9 @@ import { guestGuard } from './core/guards/guest.guard';
 import { HomeComponent } from './components/home/home.component';
 import { homeRedirectGuard } from './core/guards/home-redirect.guard';
 import { ExercisesComponent } from './components/exercises/exercises.component';
+import { PartnerComponent } from './components/settings/partner/partner.component';
+import { VitaminsComponent } from './components/baby-care/vitamins/vitamins.component';
+import { FeedingAdviceComponent } from './components/baby-care/feeding-advice/feeding-advice.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -64,30 +62,28 @@ export const routes: Routes = [
       { path: 'trimester/first', component: FirstTrimesterComponent },
       { path: 'trimester/second', component: SecondTrimesterComponent },
       { path: 'trimester/third', component: ThirdTrimesterComponent },
+      { path: 'period-tracker', component: TrackerComponent },
       { path: 'exercises', component: ExercisesComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'organizer/todo', component: TodoListComponent },
-      { path: 'organizer/reminder', component: ReminderListComponent },
+      {
+        path: 'organizer/reminder',
+        component: ReminderListComponent,
+      },
       { path: 'clinic', component: ClinicComponent },
       { path: 'community', component: MothersCommunityComponent },
       {
         path: 'baby-care',
+
         children: [
           { path: '', component: BabyCareComponent },
-          { path: 'feeding-time', component: FeedingTimeComponent },
-          { path: 'baby-naps', component: NapsComponent },
-          { path: 'baby-crying', component: CryingComponent },
-          { path: 'baby-temperature', component: TemperatureComponent },
-          { path: 'feeding-guide', component: FeedingAdviceComponent },
+          { path: 'feeding-guid', component: FeedingAdviceComponent },
           { path: 'vaccination', component: VaccinationComponent },
+          { path: 'vitamins', component: VitaminsComponent },
         ],
       },
-      { path: 'services', component: OurServicesComponent },
-      { path: 'organizer/todo', component: TodoListComponent },
-      { path: 'organizer/reminder', component: ReminderListComponent },
-      { path: 'clinic', component: ClinicComponent },
-      { path: 'community', component: MothersCommunityComponent },
       { path: 'settings', component: SettingsComponent },
+      { path: 'partner', component: PartnerComponent },
     ],
   },
 

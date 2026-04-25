@@ -14,22 +14,20 @@
         </defs>
 
         <text fill="#B04A5A" font-size="50" font-weight="bold">
-          <textPath href="#circlePath" startOffset="23%">CURRENT WEEK</textPath>
+          <textPath href="#circlePath" startOffset="23%"></textPath>
         </text>
       </svg>
     </div>
     <!-- Timeline Static -->
     <div class="relative flex items-center justify-around">
-      <!-- الخط الرئيسي -->
+      <!-- Line between weeks-->
       <div class="absolute top-1/2 left-0 right-0 h-1.5 bg-[#FFC5D0] -translate-y-1/2 z-0"></div>
 
       <!-- Past 3 weeks -->
       @for (week of pastWeeks; track $index) {
         <ng-container>
           <button
-            (click)="selectWeek(week)"
-            class="z-10 w-[91px] h-[91px] rounded-full border-3 border-[#B34962] bg-[#FFC5D0] text-white font-bold text-4xl flex items-center justify-center hover:bg-pink-200 transition-all"
-            [class.bg-pink-300]="selectedWeek === week"
+            class="z-10 w-[91px] h-[91px] rounded-full border-3 border-[#B34962] bg-[#FFC5D0] text-white font-bold text-4xl flex items-center justify-center"
           >
             {{ week }}
           </button>
@@ -37,18 +35,36 @@
       }
 
       <!-- Current week -->
-      <div class="relative z-10 mx-6 w-48 h-48">
-        <div
-          class="absolute -inset-x-4 -inset-y-4 rounded-full border-2 border-[#B34962] bg-white"
-        ></div>
-        <div class="absolute -inset-x-1.5 -inset-y-3 rounded-full border-2 border-[#B34962]"></div>
 
-        <div
-          class="w-48 h-48 rounded-full bg-[#B34962] flex flex-col items-center justify-center text-white relative z-10"
-        >
-          <span class="text-4xl font-bold pb-3">{{ currentWeek }}</span>
-          <span class="text-xl font-bold">{{ babyAge }}</span>
-          <span class="text-xl font-bold">{{ babyWeight }}</span>
+      <div class="relative flex items-center justify-center">
+        <!-- Curved text-->
+        <svg class="absolute -top-12" width="400" height="120" viewBox="0 0 800 300">
+          <defs>
+            <path id="circlePath" d="M 100,150 a 250,250 0 0,1 600,0" />
+          </defs>
+
+          <text fill="#B04A5A" font-size="60" font-weight="bold">
+            <textPath href="#circlePath" startOffset="50%" text-anchor="middle">
+              CURRENT WEEK
+            </textPath>
+          </text>
+        </svg>
+
+        <!-- Current week -->
+        <div class="relative z-10 mx-6 w-48 h-48">
+          <div
+            class="absolute -inset-x-4 -inset-y-4 rounded-full border-2 border-[#B34962] bg-white"
+          ></div>
+          <div
+            class="absolute -inset-x-1.5 -inset-y-3 rounded-full border-2 border-[#B34962]"
+          ></div>
+
+          <div
+            class="w-48 h-48 rounded-full bg-[#B34962] flex flex-col items-center justify-center text-white relative z-10"
+          >
+            <span class="text-4xl font-bold pb-3">{{ currentWeek }}</span>
+            <span class="text-xl font-bold whitespace-pre-line text-center">{{ babyAge }}</span>
+          </div>
         </div>
       </div>
 
@@ -56,9 +72,7 @@
       @for (week of futureWeeks; track $index) {
         <ng-container>
           <button
-            (click)="selectWeek(week)"
-            class="z-10 w-[91px] h-[91px] rounded-full border-3 border-[#B34962] bg-[#FFC5D0] text-white font-bold text-4xl flex items-center justify-center hover:bg-pink-200 transition-all"
-            [class.bg-pink-300]="selectedWeek === week"
+            class="z-10 w-[91px] h-[91px] rounded-full border-3 border-[#B34962] bg-[#FFC5D0] text-white font-bold text-4xl flex items-center justify-center"
           >
             {{ week }}
           </button>
@@ -67,13 +81,8 @@
     </div>
 
     <!-- Article Cards Section -->
-    <div class="px-10 mt-20">
+    <div class="px-20 mt-20">
       <div class="relative flex items-center gap-4">
-        <!-- Left Arrow -->
-        <button (click)="prevPage()" class="flex-shrink-0 text-[#c0395e]">
-          <i class="fa-solid fa-angle-left text-5xl"></i>
-        </button>
-
         <!-- Cards -->
         <div class="flex-1 grid grid-cols-3 gap-6 mt-12">
           @for (article of currentArticles; track $index) {
@@ -96,30 +105,6 @@
             </div>
           }
         </div>
-
-        <!-- Right Arrow -->
-        <button (click)="nextPage()" class="flex-shrink-0 text-[#c0395e]">
-          <i class="fa-solid fa-angle-right text-5xl"></i>
-        </button>
-      </div>
-
-      <!-- Pagination -->
-      <div class="flex justify-center items-center gap-3 mt-10">
-        <button
-          (click)="prevPage()"
-          [disabled]="currentPage === 1"
-          class="w-12 h-12 rounded-xl border border-[#B34962] bg-white flex items-center justify-center text-[#c0395e] hover:bg-pink-50 disabled:opacity-30 transition-all"
-        >
-          <i class="fa-solid fa-angle-left text-2xl"></i>
-        </button>
-        <span class="text-3xl font-medium">Page {{ currentPage }} of {{ totalPages }}</span>
-        <button
-          (click)="nextPage()"
-          [disabled]="currentPage === totalPages"
-          class="w-12 h-12 rounded-xl border border-[#B34962] bg-white flex items-center justify-center text-[#c0395e] hover:bg-pink-50 disabled:opacity-30 transition-all"
-        >
-          <i class="fa-solid fa-angle-right text-2xl"></i>
-        </button>
       </div>
     </div>
   </div>

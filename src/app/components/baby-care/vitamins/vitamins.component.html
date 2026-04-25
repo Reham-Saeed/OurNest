@@ -2,7 +2,7 @@
   class="min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#FFC5D0] flex flex-col items-center justify-center py-10 px-20"
 >
   <h2 class="font-semibold text-5xl text-[#B34962] mb-10 uppercase">
-    GUIDE TO FEEDING : MONTH {{ babyMonth }}
+    GUIDE TO VITAMINS : MONTH {{ babyMonth }}
   </h2>
 
   <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -16,7 +16,7 @@
             class="absolute -inset-x-1.5 -inset-y-3.5 rounded-full border-2 border-[#B34962]"
           ></div>
           <div
-            class="w-72 h-72 rounded-full border-2 border-[#B34962] shadow-xl overflow-hidden relative z-10 bg-pink-50"
+            class="w-72 h-72 rounded-full border-2 border-[#B34962] shadow-xl overflow-hidden relative z-10"
           >
             <img src="assets/feeding-time.jpg" alt="Baby" class="w-full h-full object-cover" />
           </div>
@@ -75,53 +75,43 @@
             class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
           >
             <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
-              >Allowed Foods</span
+              >Vitamin</span
             >
             <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
-              >Forbidden Foods</span
+              >Importance</span
             >
           </div>
 
           <!-- BODY -->
           <div class="divide-y divide-gray-300">
-            @for (row of rows; track $index) {
+            @for (v of vitamins; track $index) {
               <div class="grid grid-cols-2 py-4 px-4 hover:bg-pink-50 transition-colors">
-                <!-- ALLOWED -->
-                <div class="flex flex-col text-left pr-4">
-                  @if (row.allowed) {
-                    <span class="font-medium text-lg text-gray-800 text-center">
-                      {{ row.allowed.name }}
-                    </span>
+                <!-- NAME -->
+                <div class="flex flex-col justify-center">
+                  <span class="font-medium text-lg text-gray-800 text-center">
+                    {{ v.name }}
+                  </span>
 
-                    <span class="text-sm text-gray-500 text-center">
-                      {{ row.allowed.notes }}
-                    </span>
-
-                    <span class="text-sm text-green-700 mt-1 text-center">
-                      {{ row.allowed.frequency }}
+                  @if (v.note) {
+                    <span class="text-xs text-gray-500 mt-1 text-center">
+                      {{ v.note }}
                     </span>
                   }
                 </div>
 
-                <!-- FORBIDDEN -->
-                <div class="flex flex-col text-left pl-4 border-l border-gray-200">
-                  @if (row.forbidden) {
-                    <span class="font-medium text-lg text-gray-800 text-center">
-                      {{ row.forbidden.name }}
-                    </span>
-
-                    <span class="text-sm text-red-600 mt-1 text-center">
-                      {{ row.forbidden.reason }}
-                    </span>
-                  }
+                <!-- IMPORTANCE -->
+                <div class="flex items-center justify-center">
+                  <span class="text-[#B34962] font-medium text-center">
+                    {{ v.importance }}
+                  </span>
                 </div>
               </div>
             }
           </div>
 
-          <!-- EMPTY -->
-          @if (rows.length === 0) {
-            <div class="text-center text-gray-500 py-10">No feeding data available</div>
+          <!-- EMPTY STATE -->
+          @if (vitamins.length === 0) {
+            <div class="text-center text-gray-500 py-10">No vitamins data available</div>
           }
         </div>
       </div>

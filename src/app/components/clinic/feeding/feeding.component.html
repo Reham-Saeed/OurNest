@@ -1,7 +1,7 @@
 <div class="flex flex-col h-full overflow-hidden">
-  <!-- Chat area -->
-  <div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
-    <!-- Bot welcome -->
+  <!-- Chat -->
+  <div #chatContainer class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+    <!-- Welcome -->
     <div class="flex gap-2 items-start">
       <img src="assets/chat-bot.svg" alt="" />
       <div class="border border-[#1919194D] rounded-[8px] p-4 text-sm bg-[#B349620F] max-w-md">
@@ -11,25 +11,112 @@
       </div>
     </div>
 
-    <!-- Preview image -->
-    @if (previewImage) {
-      <div class="flex justify-end">
-        <div class="w-60 overflow-hidden rounded-lg">
-          <img [src]="previewImage" class="w-full h-full object-cover" />
+    <!-- Messages -->
+    @for (msg of messages; track $index) {
+      <!-- User -->
+      @if (msg.type === 'user') {
+        <div class="flex justify-end">
+          <div class="w-60 overflow-hidden rounded-lg">
+            <img [src]="msg.image" class="w-full h-full object-cover" />
+          </div>
         </div>
-      </div>
-    }
+      }
 
-    <!-- AI Response -->
-    @if (prediction) {
-      <div class="flex gap-2 items-start">
-        <img src="assets/chat-bot.svg" alt="" />
+      <!-- Bot -->
+      @if (msg.type === 'bot') {
+        <div class="flex gap-2 items-start">
+          <img src="assets/chat-bot.svg" alt="" />
 
-        <div
-          class="border border-[#1919194D] rounded-[8px] px-4 py-2 text-sm max-w-md bg-[#B349620F] leading-6"
-          [innerHTML]="prediction"
-        ></div>
-      </div>
+          <div
+            class="border border-[#1919194D] rounded-xl px-6 py-5 text-sm max-w-md bg-[#B349620F] shadow-sm space-y-4 text-gray-800"
+          >
+            <!-- Title -->
+            <h3 class="text-lg font-semibold text-black">{{ msg.data?.label }} — per 100g</h3>
+
+            <hr class="border-[#00000010]" />
+
+            <!-- Macronutrients -->
+            <div class="space-y-2">
+              <p class="font-semibold text-gray-800">Macronutrients</p>
+
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-6 h-6 flex items-center justify-center rounded-full bg-[#B3496215]"
+                  >
+                    <i class="fa-solid fa-bread-slice text-[#B34962] text-xs"></i>
+                  </span>
+                  <span>Carbs: {{ msg.data?.nutrition?.carbohydrates }}</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-6 h-6 flex items-center justify-center rounded-full bg-[#B3496215]"
+                  >
+                    <i class="fa-solid fa-dumbbell text-[#B34962] text-xs"></i>
+                  </span>
+                  <span>Protein: {{ msg.data?.nutrition?.protein }}</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-6 h-6 flex items-center justify-center rounded-full bg-[#B3496215]"
+                  >
+                    <i class="fa-solid fa-bacon text-[#B34962] text-xs"></i>
+                  </span>
+                  <span>Fat: {{ msg.data?.nutrition?.fat }}</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-6 h-6 flex items-center justify-center rounded-full bg-[#B3496215]"
+                  >
+                    <i class="fa-solid fa-fire text-[#B34962] text-xs"></i>
+                  </span>
+                  <span>Calories: {{ msg.data?.nutrition?.calories }}</span>
+                </div>
+
+                <div class="flex items-center gap-2 col-span-2">
+                  <span
+                    class="w-6 h-6 flex items-center justify-center rounded-full bg-[#B3496215]"
+                  >
+                    <i class="fa-solid fa-candy-cane text-[#B34962] text-xs"></i>
+                  </span>
+                  <span>Sugar: {{ msg.data?.nutrition?.sugar }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nutrients -->
+            @if (msg.data?.nutrition?.nutrients) {
+              <div class="space-y-1 text-sm">
+                <p class="font-semibold text-gray-800">Nutrients</p>
+                <p class="text-gray-700">
+                  {{ msg.data?.nutrition?.nutrients }}
+                </p>
+              </div>
+            }
+
+            <!-- Feedback -->
+            @if (msg.data?.nutrition?.feedback) {
+              <div class="space-y-1 text-sm">
+                <p class="font-semibold text-gray-800">Feedback</p>
+                <p class="text-gray-700">
+                  {{ msg.data?.nutrition?.feedback }}
+                </p>
+              </div>
+            }
+
+            <!-- Pregnancy Advice -->
+            <div class="space-y-1 text-sm">
+              <p class="font-semibold text-gray-800">Pregnancy Advice</p>
+              <p class="text-gray-700">
+                {{ msg.data?.nutrition?.pregnancyAdvice }}
+              </p>
+            </div>
+          </div>
+        </div>
+      }
     }
 
     <!-- Loading -->

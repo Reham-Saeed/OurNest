@@ -1,155 +1,241 @@
 <div class="min-h-screen bg-[var(--color-pink)]/40 pb-20 pt-10 px-4 md:px-8 relative">
-
   <div class="text-center mb-10">
     <h1 class="text-4xl md:text-5xl font-bold mb-3 text-black">My Organizer</h1>
     <p class="text-gray-400 text-lg">Keep track of your tasks and important reminders</p>
   </div>
 
   <div class="max-w-7xl mx-auto bg-white rounded-[2rem] shadow-xl p-8 md:p-12 min-h-[600px]">
-
     <div class="flex justify-center mb-12">
       <div class="bg-gray-100 p-1.5 rounded-full flex w-full max-w-md">
-
-        <a routerLink="/organizer/todo" routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
-          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer">
+        <a
+          routerLink="/organizer/todo"
+          routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
+          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer"
+        >
           To-Do List
         </a>
 
-        <a routerLink="/organizer/reminder" routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
-          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer">
+        <a
+          routerLink="/organizer/reminder"
+          routerLinkActive="!bg-[var(--color-dark-pink)] !text-white !shadow-md"
+          class="flex-1 text-gray-400 py-3 rounded-full font-medium text-center hover:text-gray-600 transition-all cursor-pointer"
+        >
           Reminder Me
         </a>
-
       </div>
     </div>
 
     <div class="flex gap-4 mb-10">
-      <input [(ngModel)]="newReminderTitle" (keyup.enter)="openDateModal()" type="text"
+      <input
+        [(ngModel)]="newReminderTitle"
+        (keyup.enter)="openDateModal()"
+        type="text"
         placeholder="What do you want to be reminded about?"
-        class="flex-1 border border-[var(--color-dark-pink)] rounded-full px-8 py-4 text-gray-600 outline-none focus:ring-2 focus:ring-[var(--color-pink)]/50 transition-all placeholder-gray-400">
+        class="flex-1 border border-[var(--color-dark-pink)] rounded-full px-8 py-4 text-gray-600 outline-none focus:ring-2 focus:ring-[var(--color-pink)]/50 transition-all placeholder-gray-400"
+      />
 
-      <button (click)="openDateModal()" [disabled]="!newReminderTitle.trim()"
+      <button
+        (click)="openDateModal()"
+        [disabled]="!newReminderTitle.trim()"
         class="w-20 md:w-24 h-14 text-white rounded-full flex items-center justify-center shadow-md transition-all shrink-0"
-        [class.bg-gray-300]="!newReminderTitle.trim()" [class.bg-[var(--color-dark-pink)]]="newReminderTitle.trim()"
-        [class.hover:scale-105]="newReminderTitle.trim()">
+        [class.bg-gray-300]="!newReminderTitle.trim()"
+        [class.bg-[var(--color-dark-pink)]]="newReminderTitle.trim()"
+        [class.hover:scale-105]="newReminderTitle.trim()"
+      >
         <i class="fa-solid fa-plus text-2xl"></i>
       </button>
     </div>
 
     <div class="space-y-4">
       @for (item of reminders; track item.id) {
-      <div class="flex items-center gap-3 group">
+        <div class="flex items-center gap-3 group">
+          <div
+            class="flex-1 flex items-center justify-between border border-[var(--color-dark-pink)]/50 rounded-2xl px-4 py-3 bg-white hover:shadow-sm transition-all"
+            (dblclick)="!item.isEditing && startInlineEdit(item)"
+          >
+            @if (item.isEditing) {
+              <div class="w-full flex items-center gap-3 py-1">
+                <input
+                  type="text"
+                  [(ngModel)]="item.editTitle"
+                  (keyup.enter)="saveInlineEdit(item)"
+                  (keyup.escape)="cancelInlineEdit(item)"
+                  class="flex-1 border-b-2 border-[var(--color-dark-pink)] bg-transparent px-2 py-1 outline-none text-black font-bold text-lg placeholder-gray-300"
+                  placeholder="Reminder title..."
+                  autofocus
+                />
+                <button
+                  (click)="saveInlineEdit(item)"
+                  class="text-green-500 hover:text-green-600 transition-colors px-2"
+                >
+                  <i class="fa-solid fa-check text-2xl"></i>
+                </button>
+                <button
+                  (click)="cancelInlineEdit(item)"
+                  class="text-gray-400 hover:text-red-500 transition-colors px-2"
+                >
+                  <i class="fa-solid fa-rotate-left text-xl"></i>
+                </button>
+              </div>
+            } @else {
+              <div class="flex items-center gap-4">
+                <div class="relative w-12 h-10">
+                  <i
+                    class="fa-regular fa-calendar text-cyan-400 text-2xl absolute top-0 left-0"
+                  ></i>
+                  <i
+                    class="fa-regular fa-clock text-[var(--color-dark-pink)] text-2xl absolute bottom-0 right-0 bg-white rounded-full"
+                  ></i>
+                </div>
 
-        <div
-          class="flex-1 flex items-center justify-between border border-[var(--color-dark-pink)]/50 rounded-2xl px-4 py-3 bg-white hover:shadow-sm transition-all"
-          (dblclick)="!item.isEditing && startInlineEdit(item)">
+                <div>
+                  <h3 class="text-lg font-bold text-black leading-tight cursor-text">
+                    {{ item.title }}
+                  </h3>
+                  <div class="text-gray-500 text-sm flex gap-4 mt-0.5">
+                    <span>{{ item.date }}</span>
+                    <span>{{ item.time }}</span>
+                  </div>
+                </div>
+              </div>
 
-          @if (item.isEditing) {
-          <div class="w-full flex items-center gap-3 py-1">
-            <input type="text" [(ngModel)]="item.editTitle" (keyup.enter)="saveInlineEdit(item)"
-              (keyup.escape)="cancelInlineEdit(item)"
-              class="flex-1 border-b-2 border-[var(--color-dark-pink)] bg-transparent px-2 py-1 outline-none text-black font-bold text-lg placeholder-gray-300"
-              placeholder="Reminder title..." autofocus>
-            <button (click)="saveInlineEdit(item)" class="text-green-500 hover:text-green-600 transition-colors px-2">
-              <i class="fa-solid fa-check text-2xl"></i>
-            </button>
-            <button (click)="cancelInlineEdit(item)" class="text-gray-400 hover:text-red-500 transition-colors px-2">
-              <i class="fa-solid fa-rotate-left text-xl"></i>
-            </button>
+              <div class="flex gap-4 pr-2">
+                <button
+                  (click)="startInlineEdit(item)"
+                  class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors"
+                  title="Edit Title"
+                >
+                  <i class="fa-solid fa-pen text-xl"></i>
+                </button>
+
+                <button
+                  (click)="openDateEditModal(item)"
+                  class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors"
+                  title="Change Date/Time"
+                >
+                  <i class="fa-regular fa-calendar-days text-2xl"></i>
+                </button>
+                <!-- share toggle (BEST UX) -->
+                @if (appState?.isLinked) {
+                  <button
+                    (click)="toggleShare(item)"
+                    class="relative share-icon transition-colors"
+                    [ngClass]="
+                      item.sharedWithPartner ? 'text-[var(--color-dark-pink)]' : 'text-gray-400'
+                    "
+                  >
+                    <i
+                      class="fa-solid text-lg"
+                      [ngClass]="{
+                        'fa-user-group': !item.sharedWithPartner,
+                        'fa-user-check': item.sharedWithPartner,
+                      }"
+                    ></i>
+
+                    <!-- Tooltip -->
+                    <span
+                      class="tooltip absolute bottom-full mb-2 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 invisible transition whitespace-nowrap pointer-events-none"
+                    >
+                      Share with partner
+                    </span>
+                  </button>
+                }
+              </div>
+            }
           </div>
-          }
 
-          @else {
+          <button
+            (click)="deleteReminder(item.id)"
+            class="text-gray-400 hover:text-red-500 transition-colors p-2"
+            title="Delete"
+          >
+            <i class="fa-solid fa-xmark text-2xl"></i>
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (partnerReminders.length!=0) {
+      <h2 class="text-xl font-bold mt-8 mb-3 text-gray-500">Partner Reminders</h2>
+
+      <div class="border rounded-2xl bg-white p-6 space-y-4">
+        @for (item of partnerReminders; track item.id) {
           <div class="flex items-center gap-4">
             <div class="relative w-12 h-10">
               <i class="fa-regular fa-calendar text-cyan-400 text-2xl absolute top-0 left-0"></i>
               <i
-                class="fa-regular fa-clock text-[var(--color-dark-pink)] text-2xl absolute bottom-0 right-0 bg-white rounded-full"></i>
+                class="fa-regular fa-clock text-[var(--color-dark-pink)] text-2xl absolute bottom-0 right-0 bg-white rounded-full"
+              ></i>
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-black leading-tight cursor-text">{{ item.title }}</h3>
+              <h3 class="text-lg font-bold text-black leading-tight">
+                {{ item.title }}
+              </h3>
+
               <div class="text-gray-500 text-sm flex gap-4 mt-0.5">
                 <span>{{ item.date }}</span>
                 <span>{{ item.time }}</span>
               </div>
             </div>
           </div>
-
-          <div class="flex gap-4 pr-2">
-            <button (click)="startInlineEdit(item)"
-              class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors" title="Edit Title">
-              <i class="fa-solid fa-pen text-xl"></i>
-            </button>
-
-            <button (click)="openDateEditModal(item)"
-              class="text-gray-400 hover:text-[var(--color-dark-pink)] transition-colors" title="Change Date/Time">
-              <i class="fa-regular fa-calendar-days text-2xl"></i>
-            </button>
-          </div>
-          }
-        </div>
-
-        <button (click)="deleteReminder(item.id)" class="text-gray-400 hover:text-red-500 transition-colors p-2"
-          title="Delete">
-          <i class="fa-solid fa-xmark text-2xl"></i>
-        </button>
-
+        }
       </div>
-      }
-    </div>
-
+    }
   </div>
 
   @if (showDateModal) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/20" (click)="showDateModal = false"></div>
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/20" (click)="showDateModal = false"></div>
 
-    <div
-      class="relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl p-8 animate-in fade-in zoom-in duration-200">
+      <div
+        class="relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl p-8 animate-in fade-in zoom-in duration-200"
+      >
+        <h2 class="text-[var(--color-dark-pink)] text-2xl font-bold text-center mb-6">
+          {{ modalStep === 'date' ? 'Select Date' : 'Select Time' }}
+        </h2>
 
-      <h2 class="text-[var(--color-dark-pink)] text-2xl font-bold text-center mb-6">
-        {{ modalStep === 'date' ? 'Select Date' : 'Select Time' }}
-      </h2>
+        <div class="h-64 mb-6">
+          @if (modalStep === 'date') {
+            <app-date-picker pickerType="expectedDate" (dateSelected)="onDateChange($event)">
+            </app-date-picker>
+          }
 
-      <div class="h-64 mb-6">
-
-        @if (modalStep === 'date') {
-        <app-date-picker pickerType="expectedDate" (dateSelected)="onDateChange($event)">
-        </app-date-picker>
-        }
-
-        @if (modalStep === 'time') {
-        <app-date-picker pickerType="time" (dateSelected)="onTimeChange($event)">
-        </app-date-picker>
-        }
-
-      </div>
-
-      @if (timeError) {
-      <div class="text-red-500 text-sm text-center font-medium mb-3 bg-red-50 py-2 rounded-lg">
-        <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ timeError }}
-      </div>
-      }
-
-      <div class="flex justify-between mt-4 items-center">
-
-        <div class="w-16">
-          <button *ngIf="modalStep === 'time'" (click)="modalStep = 'date'"
-            class="text-gray-400 hover:text-gray-600 font-medium">
-            Back
-          </button>
+          @if (modalStep === 'time') {
+            <app-date-picker pickerType="time" (dateSelected)="onTimeChange($event)">
+            </app-date-picker>
+          }
         </div>
 
-        <button (click)="handleNextStep()"
-          class="w-16 h-12 bg-[var(--color-dark-pink)] text-white rounded-2xl shadow-md hover:scale-105 transition-transform flex items-center justify-center">
-          <i class="fa-solid" [class.fa-arrow-right]="modalStep === 'date'" [class.fa-check]="modalStep === 'time'"></i>
-        </button>
+        @if (timeError) {
+          <div class="text-red-500 text-sm text-center font-medium mb-3 bg-red-50 py-2 rounded-lg">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ timeError }}
+          </div>
+        }
 
+        <div class="flex justify-between mt-4 items-center">
+          <div class="w-16">
+            <button
+              *ngIf="modalStep === 'time'"
+              (click)="modalStep = 'date'"
+              class="text-gray-400 hover:text-gray-600 font-medium"
+            >
+              Back
+            </button>
+          </div>
+
+          <button
+            (click)="handleNextStep()"
+            class="w-16 h-12 bg-[var(--color-dark-pink)] text-white rounded-2xl shadow-md hover:scale-105 transition-transform flex items-center justify-center"
+          >
+            <i
+              class="fa-solid"
+              [class.fa-arrow-right]="modalStep === 'date'"
+              [class.fa-check]="modalStep === 'time'"
+            ></i>
+          </button>
+        </div>
       </div>
-
     </div>
-  </div>
   }
-
 </div>

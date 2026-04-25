@@ -1,35 +1,75 @@
 <div class="flex flex-col h-full overflow-hidden">
-  <!-- Chat area -->
-  <div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
-    <!-- Bot welcome -->
+  <!-- Chat -->
+  <div #chatContainer class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+    <!-- Welcome -->
     <div class="flex gap-2 items-start">
       <img src="assets/chat-bot.svg" alt="" />
       <div class="border border-[#1919194D] rounded-[8px] p-4 text-sm bg-[#B349620F] max-w-md">
         Hello! <br />
         I'm your <b>Medicine AI assistant</b>. <br />
-        Upload a Medicine image and I will analyze it for you.
+        Upload a medicine image and I will analyze it for you.
       </div>
     </div>
 
-    <!-- Preview image -->
-    @if (previewImage) {
-      <div class="flex justify-end">
-        <div class="w-60 overflow-hidden rounded-lg">
-          <img [src]="previewImage" class="w-full h-full object-cover" />
+    <!-- Messages -->
+    @for (msg of messages; track $index) {
+      <!-- User -->
+      @if (msg.type === 'user') {
+        <div class="flex justify-end">
+          <div class="w-60 overflow-hidden rounded-lg">
+            <img [src]="msg.image" class="w-full h-full object-cover" />
+          </div>
         </div>
-      </div>
-    }
+      }
 
-    <!-- AI Response -->
-    @if (prediction) {
-      <div class="flex gap-2 items-start">
-        <img src="assets/chat-bot.svg" alt="" />
+      <!-- Bot -->
 
-        <div
-          class="border border-[#1919194D] rounded-[8px] px-4 py-2 text-sm max-w-md bg-[#B349620F] leading-6"
-          [innerHTML]="prediction"
-        ></div>
-      </div>
+      @if (msg.type === 'bot') {
+        <div class="flex gap-2 items-start">
+          <img src="assets/chat-bot.svg" alt="" />
+
+          <div
+            class="border border-[#1919194D] rounded-xl px-6 py-5 text-base max-w-md bg-[#B349620F] shadow-sm space-y-4"
+          >
+            <!-- Main Title -->
+            <h3 class="text-lg font-semibold">Detected ingredients and pregnancy warnings</h3>
+
+            <!-- Ingredients -->
+            @for (item of msg.data; track $index) {
+              <div class="space-y-2">
+                <!-- Ingredient name -->
+                <p class="font-semibold text-gray-800">
+                  <i class="fa-solid fa-capsules text-[#B34962] mr-1"></i>
+                  {{ item.name }}:
+                </p>
+
+                <!-- Reason -->
+                <p class="text-sm text-gray-800">
+                  <span class="font-medium">Reason for caution:</span>
+                  {{ item.reason }}
+                </p>
+
+                <!-- Risks -->
+                <p class="text-sm text-gray-800">
+                  <span class="font-medium">Potential risks:</span>
+                  {{ item.risks }}
+                </p>
+
+                <!-- Advice -->
+                <p class="text-sm text-gray-800">
+                  <span class="font-medium">Advice/Solution:</span>
+                  {{ item.advice }}
+                </p>
+              </div>
+
+              <!-- Divider -->
+              @if (!$last) {
+                <div class="border-t border-[#1919191A] pt-2"></div>
+              }
+            }
+          </div>
+        </div>
+      }
     }
 
     <!-- Loading -->

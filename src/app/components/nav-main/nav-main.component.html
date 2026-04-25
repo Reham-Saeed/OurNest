@@ -90,11 +90,14 @@
     </ul>
 
     <div class="flex gap-1">
-      <img
-        src="assets/user.jpg"
-        alt="user-avatar"
-        class="h-10 w-10 md:h-14 md:w-14 rounded-full object-cover object-top border border-[#B34962]"
-      />
+      <div class="">
+        <div
+          class="h-12 w-12 rounded-full border border-black flex items-center justify-center bg-gray-100"
+        >
+          <i class="fa-regular fa-user text-2xl text-gray-800"></i>
+        </div>
+      </div>
+
       <button class="lg:hidden text-[#B34962] mt-1" (click)="toggleMobileMenu()">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>

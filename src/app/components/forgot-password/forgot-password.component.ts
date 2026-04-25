@@ -22,6 +22,6 @@ export class ForgotPasswordComponent {
     }
 
     console.log('Sending OTP to:', this.forgotForm.value.phone);
-    this.router.navigate(['/verify-otp']);
+    this.router.navigate(['/auth/verify-otp']);
   }
 }

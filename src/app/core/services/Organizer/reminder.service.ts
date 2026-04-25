@@ -11,6 +11,7 @@ export interface BackendReminder {
   isSent?: boolean;
   recurrencePattern?: string;
   category?: string;
+  sharedWithPartner?: boolean;
 }
 
 @Injectable({
@@ -38,5 +39,9 @@ export class ReminderService {
 
   deleteReminder(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  shareReminder(id: string, body: any): Observable<BackendReminder> {
+    return this.http.patch<BackendReminder>(`${this.apiUrl}/${id}/share`, body);
   }
 }

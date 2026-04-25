@@ -8,7 +8,6 @@ export interface User {
   role: string;
   emailConfirmed: boolean;
 }
-
 export interface AuthResponse {
   success: boolean;
   token: string;
@@ -67,7 +66,9 @@ export class AuthService {
     if (response.success && response.token) {
       localStorage.setItem('auth_token', response.token);
       localStorage.setItem('refresh_token', response.refreshToken);
-      localStorage.setItem('current_user', JSON.stringify(response.user));
+      if (response.user) {
+        localStorage.setItem('current_user', JSON.stringify(response.user));
+      }
     }
   }
 
@@ -87,14 +88,17 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
-  
+
   logout(): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('current_user');
+        localStorage.clear();
       }),
     );
+  }
+
+  updateCurrentUserRole(user: Partial<User>): void {
+    const currentUser = this.getUser();
+    localStorage.setItem('current_user', JSON.stringify({ ...currentUser, ...user }));
   }
 }

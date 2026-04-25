@@ -10,9 +10,7 @@ export class SettingsService {
 
   constructor(private http: HttpClient) { }
 
-  uploadImage(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.put<any>(`${baseUrl}users/profile`, formData);
+  uploadImage(file: FormData): Observable<any> {
+    return this.http.put<any>(`${baseUrl}users/profile/picture`, file);
   }
 }

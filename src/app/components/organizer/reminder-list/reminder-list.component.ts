@@ -7,6 +7,8 @@ import {
   BackendReminder,
   ReminderService,
 } from '../../../core/services/Organizer/reminder.service';
+import { AppStateService } from '../../../core/services/app-state/app-state.service';
+import { PartnerService } from '../../../core/services/partner/partner.service';
 
 interface UIReminder {
   id: string;
@@ -16,6 +18,7 @@ interface UIReminder {
   rawDate: string;
   isEditing?: boolean;
   editTitle?: string;
+  sharedWithPartner?: boolean;
 }
 
 @Component({
@@ -27,8 +30,14 @@ interface UIReminder {
 })
 export class ReminderListComponent implements OnInit {
   private reminderService = inject(ReminderService);
+  private _AppStateService = inject(AppStateService);
+  private _PartnerService = inject(PartnerService);
+
+  appState: any = null;
+  currentUserRole: string = '';
 
   reminders: UIReminder[] = [];
+  partnerReminders: UIReminder[] = [];
 
   newReminderTitle = '';
   showDateModal = false;
@@ -40,6 +49,8 @@ export class ReminderListComponent implements OnInit {
   timeError: string = '';
 
   ngOnInit() {
+    this.appState = this._AppStateService.getLocalState();
+    this.currentUserRole = this.appState?.role;
     this.loadReminders();
   }
 
@@ -49,6 +60,14 @@ export class ReminderListComponent implements OnInit {
         this.reminders = data.map((item) => this.formatDateForUI(item));
       },
       error: (err) => console.error('Failed to load reminders', err),
+    });
+
+    this._PartnerService.getFamilyDashboard().subscribe((res: any) => {
+      const role = this.currentUserRole;
+
+      this.partnerReminders = res.reminders
+        .filter((r: any) => r.assignedByRole != role)
+        .map((r: any) => this.formatDateForUI(r)); 
     });
   }
 
@@ -211,6 +230,7 @@ export class ReminderListComponent implements OnInit {
         .toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
         .replace(' ', ''),
       rawDate: item.reminderDateTime,
+      sharedWithPartner: item.sharedWithPartner ?? false,
     };
   }
 
@@ -264,5 +284,17 @@ export class ReminderListComponent implements OnInit {
       dateObj: { day: now.getDate(), month: months[now.getMonth()], year: now.getFullYear() },
       timeObj: { hour: hour, minute: now.getMinutes().toString().padStart(2, '0'), period: period },
     };
+  }
+  toggleShare(reminder: any) {
+    const newValue = !reminder.sharedWithPartner;
+
+    this.reminderService.shareReminder(reminder.id, { sharedWithPartner: newValue }).subscribe({
+      next: (res) => {
+        reminder.sharedWithPartner = newValue;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 }
