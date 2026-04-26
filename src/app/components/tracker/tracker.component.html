@@ -42,8 +42,13 @@
           </div>
 
           <div class="relative z-10 flex flex-col items-center justify-center h-full pt-8 w-full text-center">
+            @if (isViewingCurrent) {
             <span class="text-sm font-medium text-gray-800 tracking-wide mb-1">Period in</span>
             <span class="text-[3rem] font-bold text-black leading-none mb-10">{{ daysUntilNextPeriod }} Days</span>
+            } @else {
+            <span class="text-sm font-medium text-gray-800 tracking-wide mb-1">Past Cycle</span>
+            <span class="text-[2rem] font-bold text-black leading-none mb-10">{{ cycleLength }} Days Total</span>
+            }
 
             <div class="mt-auto pb-8 flex flex-col items-center">
               <span class="text-sm font-medium text-gray-800 mb-2">{{ pregnancyChance }}</span>
@@ -138,4 +143,4 @@
     </div>
   </div>
   }
-</div>ئ
+</div>

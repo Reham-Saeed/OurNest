@@ -101,4 +101,17 @@ export class AuthService {
     const currentUser = this.getUser();
     localStorage.setItem('current_user', JSON.stringify({ ...currentUser, ...user }));
   }
+
+  forgotPassword(payload: { email: string; recoveryEmail: string }): Observable<any> {
+    return this._HttpClient.post(`${this.apiUrl}/forgot-password`, payload);
+  }
+
+  verifyOtp(payload: { email: string; otpCode: string }): Observable<{ success: boolean; resetToken: string; error: string }> {
+    return this._HttpClient.post<any>(`${this.apiUrl}/verify-otp`, payload);
+  }
+
+  resetPassword(payload: { email: string; resetToken: string; newPassword: string; confirmNewPassword: string }): Observable<any> {
+    return this._HttpClient.post(`${this.apiUrl}/reset-password`, payload);
+  }
+  
 }

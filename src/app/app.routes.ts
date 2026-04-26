@@ -4,7 +4,6 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { VerifyOtpComponent } from './components/verify-otp/verify-otp.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { PregnancyTipsComponent } from './components/pregnancy-tips/pregnancy-tips.component';
 import { FirstTrimesterComponent } from './components/trimesters/first-trimester/first-trimester.component';
@@ -42,7 +41,6 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignUpComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
-      { path: 'verify-otp', component: VerifyOtpComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'pregnancy-health', component: PregnancyTipsComponent },
     ],

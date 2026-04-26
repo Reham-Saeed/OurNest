@@ -13,11 +13,9 @@ export interface PeriodPayload {
 }
 
 export interface PeriodPredictions {
-  nextPeriodStart: string;
-  nextPeriodEnd: string;
-  fertilityWindowStart: string;
-  fertilityWindowEnd: string;
-  ovulationDate: string;
+  nextPeriodDate: string;
+  averageCycle: number;
+  basedOnCycles: number;
 }
 
 @Injectable({
