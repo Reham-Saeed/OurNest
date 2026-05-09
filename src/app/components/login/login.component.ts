@@ -111,7 +111,13 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.error || 'Server error. Please try again later.';
+        
+        if (err.status === 400) {
+          this.errorMessage = err.error?.message || err.error?.error || (typeof err.error === 'string' ? err.error : 'Incorrect username or password. Please try again.');
+        } else {
+          this.errorMessage = 'Server error. Please try again later.';
+        }
+        
         console.error('Login error:', err);
       },
     });

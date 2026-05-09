@@ -1,1 +1,52 @@
-<p>not-found works!</p>
+<section
+  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+
+  <div
+    class="max-w-xl w-full bg-white/80 backdrop-blur-md p-10 sm:p-14 rounded-[32px] shadow-xl border border-pink-200 text-center relative z-10">
+
+    <div class="absolute -top-6 -left-6 text-pink-200 opacity-50 rotate-12 pointer-events-none">
+      <i class="fa-solid fa-star text-6xl"></i>
+    </div>
+    <div class="absolute -bottom-8 -right-8 text-pink-200 opacity-40 -rotate-12 pointer-events-none">
+      <i class="fa-solid fa-heart text-7xl"></i>
+    </div>
+
+    <div class="relative z-10">
+      <div
+        class="w-24 h-24 bg-pink-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-pink-100">
+        <i class="fa-solid fa-dove text-4xl text-[#B34962]"></i>
+      </div>
+
+      <h1 class="text-7xl sm:text-8xl font-black text-[#B34962] mb-2 tracking-tight drop-shadow-sm">
+        404
+      </h1>
+
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
+        Wandered out of the nest?
+      </h2>
+      <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-md mx-auto">
+        Don't worry, happens to the best of us.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+        <a routerLink="/home"
+          class="w-full sm:w-auto px-8 py-3.5 bg-[#B34962] text-white rounded-xl font-bold hover:brightness-110 hover:-translate-y-0.5 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-house"></i>
+          Back to Home
+        </a>
+
+        <button (click)="goBack()"
+          class="w-full sm:w-auto px-8 py-3.5 bg-white text-[#B34962] border-2 border-[#B34962] rounded-xl font-bold hover:bg-pink-50 hover:-translate-y-0.5 transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-arrow-left"></i>
+          Previous Page
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <i
+    class="fa-solid fa-baby-carriage text-pink-300/20 text-9xl absolute top-20 right-20 -rotate-12 pointer-events-none"></i>
+  <i class="fa-solid fa-moon text-pink-300/20 text-8xl absolute bottom-20 left-20 rotate-12 pointer-events-none"></i>
+</section>
