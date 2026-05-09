@@ -12,20 +12,12 @@
       <li>
         <a
           routerLink="/home"
-          routerLinkActive="text-[#B34962]"
-          class="text-[#00000059] hover:text-[#B34962]"
+          [ngClass]="isHomeActive() ? 'text-[#B34962]' : 'text-[#00000059]'"
+          class="hover:text-[#B34962]"
           >Home</a
         >
       </li>
 
-      <li>
-        <a
-          routerLink="/exercises"
-          routerLinkActive="text-[#B34962]"
-          class="text-[#00000059] hover:text-[#B34962]"
-          >Exercises</a
-        >
-      </li>
       <li>
         <a
           routerLink="/services"
@@ -34,19 +26,30 @@
           >Services</a
         >
       </li>
-      <li>
-        <a
-          routerLink="/clinic"
-          routerLinkActive="text-[#B34962]"
-          class="text-[#00000059] hover:text-[#B34962]"
-          >Clinic</a
-        >
-      </li>
+      @if (stateType === 'babycare' || stateType === 'pregnancy') {
+        <li>
+          <a
+            routerLink="/exercises"
+            routerLinkActive="text-[#B34962]"
+            class="text-[#00000059] hover:text-[#B34962]"
+            >Exercises</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/clinic"
+            routerLinkActive="text-[#B34962]"
+            class="text-[#00000059] hover:text-[#B34962]"
+            >Clinic</a
+          >
+        </li>
+      }
+
       <li>
         <a
           routerLink="/organizer/todo"
-          routerLinkActive="text-[#B34962]"
-          class="text-[#00000059] hover:text-[#B34962]"
+          [ngClass]="isListActive() ? 'text-[#B34962]' : 'text-[#00000059]'"
+          class="hover:text-[#B34962]"
           >List</a
         >
       </li>
@@ -90,13 +93,15 @@
     </ul>
 
     <div class="flex gap-1">
-      <div class="">
-        <div
-          class="h-12 w-12 rounded-full border border-black flex items-center justify-center bg-gray-100"
-        >
-          <i class="fa-regular fa-user text-2xl text-gray-800"></i>
-        </div>
-      </div>
+  <div class="flex items-center justify-center">
+  <div
+    class="h-9 w-9 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-12 lg:w-12
+           rounded-full border border-black flex items-center justify-center
+           bg-gray-100 transition-all"
+  >
+    <i class="fa-regular fa-user text-lg sm:text-xl md:text-2xl text-gray-800"></i>
+  </div>
+</div>
 
       <button class="lg:hidden text-[#B34962] mt-1" (click)="toggleMobileMenu()">
         <i class="fa-solid fa-bars text-2xl"></i>
@@ -104,61 +109,89 @@
     </div>
   </div>
 
+  <!-- Mobile  -->
+
   <div class="lg:hidden absolute top-full left-0 w-full z-[1]">
     <div
-      class="bg-white overflow-hidden transition-all duration-300 ease-in-out"
-      [ngStyle]="{ 'max-height': mobileMenuOpen ? '500px' : '0' }"
+      class="bg-white shadow-md overflow-hidden transition-all duration-300 ease-in-out"
+      [ngClass]="
+        mobileMenuOpen
+          ? 'max-h-[500px] opacity-100 translate-y-0'
+          : 'max-h-0 opacity-0 -translate-y-2'
+      "
     >
-      <div class="px-4 md:px-16 border-t border-b border-[#B34962]">
-        <ul class="flex flex-col gap-4 py-4 font-medium text-base md:text-lg">
+      <div class="px-4 md:px-16 py-4 border-t border-[#B34962]">
+        <ul class="flex flex-col gap-3 font-medium text-base md:text-lg">
           <li>
             <a
-              routerLink="/"
-              routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >Home</a
+              routerLink="/home"
+              [ngClass]="isHomeActive() ? 'text-[#B34962]' : 'text-[#00000059]'"
+              class="hover:text-[#B34962] block py-1"
             >
+              Home
+            </a>
           </li>
 
           <li>
             <a
-              routerLink="/exercises"
-              routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >Exercises</a
-            >
-          </li>
-          <li>
-            <a
               routerLink="/services"
               routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >Services</a
+              class="text-[#00000059] hover:text-[#B34962] block py-1"
             >
+              Services
+            </a>
           </li>
+
+          @if (stateType === 'babycare' || stateType === 'pregnancy') {
+            <li>
+              <a
+                routerLink="/exercises"
+                routerLinkActive="text-[#B34962]"
+                class="text-[#00000059] hover:text-[#B34962] block py-1"
+              >
+                Exercises
+              </a>
+            </li>
+
+            <li>
+              <a
+                routerLink="/clinic"
+                routerLinkActive="text-[#B34962]"
+                class="text-[#00000059] hover:text-[#B34962] block py-1"
+              >
+                Clinic
+              </a>
+            </li>
+          }
+
           <li>
             <a
-              routerLink="/clinic"
-              routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >Clinic</a
+              routerLink="/organizer/todo"
+              [ngClass]="isListActive() ? 'text-[#B34962]' : 'text-[#00000059]'"
+              class="hover:text-[#B34962] block py-1"
             >
+              List
+            </a>
           </li>
-          <li>
-            <a
-              routerLink="/list"
-              routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >List</a
-            >
-          </li>
+
           <li>
             <a
               routerLink="/community"
               routerLinkActive="text-[#B34962]"
-              class="text-[#00000059] hover:text-[#B34962]"
-              >Mothers’ community</a
+              class="text-[#00000059] hover:text-[#B34962] block py-1"
             >
+              Mothers’ community
+            </a>
+          </li>
+
+          <li>
+            <a
+              routerLink="/settings"
+              routerLinkActive="text-[#B34962]"
+              class="text-[#00000059] hover:text-[#B34962] block py-1 flex items-center gap-2"
+            >
+              Settings
+            </a>
           </li>
         </ul>
       </div>

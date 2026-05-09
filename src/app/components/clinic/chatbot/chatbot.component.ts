@@ -5,7 +5,8 @@ import { Conversation, Message } from '../../../core/interfaces/chatbot';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from '../../../core/services/auth.service';
-import { finalize } from 'rxjs';
+import { finalize, take } from 'rxjs';
+import { AppStateService } from '../../../core/services/app-state/app-state.service';
 
 @Component({
   selector: 'app-chatbot',
@@ -19,6 +20,7 @@ export class ChatbotComponent {
   constructor(
     private _AiService: AiService,
     private _AuthService: AuthService,
+    private _AppStateService: AppStateService,
   ) {}
 
   @Input() conversationId!: string | null;
@@ -47,27 +49,20 @@ export class ChatbotComponent {
     if (changes['conversationId']) {
       this.messages = [];
       this.newMessage = '';
-      this.loading = false;
-
       this.loadMessages();
     }
 
     if (changes['resetKey']) {
       this.messages = [];
       this.newMessage = '';
-      this.loading = false;
       this.conversationId = null;
     }
   }
 
   loadMessages() {
     if (!this.conversationId) {
-      this.messages = [];
-      this.loading = false;
       return;
     }
-
-    this.loading = true;
 
     this._AiService.getMessages(this.conversationId).subscribe({
       next: (res) => {
@@ -108,31 +103,40 @@ export class ChatbotComponent {
         ? this.newMessage.slice(0, maxLength) + '...'
         : this.newMessage;
 
-    const user = this._AuthService.getUser();
-    const userId = user?.id;
+    this._AppStateService
+      .getCurrentUser()
+      .pipe(take(1))
+      .subscribe((user) => {
+        const userId = user?.id;
+        console.log(user);
 
-    if (!userId) {
-      console.error('No user found');
-      return;
-    }
+        if (!userId) {
+          console.error('No user found');
+          return;
+        }
 
-    this.loading = true;
+        const maxLength = 50;
+        const title =
+          this.newMessage.length > maxLength
+            ? this.newMessage.slice(0, maxLength) + '...'
+            : this.newMessage;
 
-    this.creatingConversation = true;
+        this.loading = true;
+        this.creatingConversation = true;
 
-    this._AiService.createConversation(userId, title).subscribe({
-      next: (conv) => {
-        this.conversationId = conv.id;
-        this._AiService.notifyConversationsChanged();
+        this._AiService.createConversation(userId, title).subscribe({
+          next: (conv) => {
+            this.conversationId = conv.id;
+            this._AiService.notifyConversationsChanged();
 
-        this.creatingConversation = false;
-
-        this.sendToExistingConversation();
-      },
-      error: () => {
-        this.creatingConversation = false;
-      },
-    });
+            this.creatingConversation = false;
+            this.sendToExistingConversation();
+          },
+          error: () => {
+            this.creatingConversation = false;
+          },
+        });
+      });
   }
 
   sendToExistingConversation() {

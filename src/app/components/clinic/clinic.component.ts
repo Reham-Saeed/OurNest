@@ -19,6 +19,7 @@ export class ClinicComponent {
   conversations: Conversation[] = [];
   selectedConversationId: string | null = null;
   newChatKey = 0;
+  sidebarOpen = false;
 
   constructor(private aiService: AiService) {}
 
@@ -30,10 +31,10 @@ export class ClinicComponent {
     this.selectedConversationId = id;
   }
 
-onNewChat() {
-  this.selectedConversationId = null;
-  this.newChatKey = Date.now(); // بدل ++ عشان يضمن reset فعلي
-}
+  onNewChat() {
+    this.selectedConversationId = null;
+    this.newChatKey = Date.now(); 
+  }
   ngOnInit() {
     this.loadConversations();
     this.aiService.refreshConversations$.subscribe(() => {
@@ -48,5 +49,9 @@ onNewChat() {
       },
       error: () => console.error('Failed to load conversations'),
     });
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 }

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '../../../environments/environment.local';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -13,6 +12,10 @@ export class PregnancyService {
     return this.http.post<any>(`${baseUrl}pregnancy/start`, data);
   }
   endPregnancy() {
-    return this.http.post<any>(`${baseUrl}pregnancy/end`,{});
+    return this.http.post<any>(`${baseUrl}pregnancy/end`, {});
+  }
+
+  getPregnancyTips(week: number) {
+    return this.http.get<any>(`${baseUrl}tips/daily?week=${week}`);
   }
 }

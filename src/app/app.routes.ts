@@ -28,6 +28,7 @@ import { ExercisesComponent } from './components/exercises/exercises.component';
 import { PartnerComponent } from './components/settings/partner/partner.component';
 import { VitaminsComponent } from './components/baby-care/vitamins/vitamins.component';
 import { FeedingAdviceComponent } from './components/baby-care/feeding-advice/feeding-advice.component';
+import { PregnancyTrackerComponent } from './components/pregnancy-tracker/pregnancy-tracker.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -43,6 +44,9 @@ export const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'services', component: OurServicesComponent },
       { path: 'pregnancy-health', component: PregnancyTipsComponent },
+      { path: 'trimester/first', component: FirstTrimesterComponent },
+      { path: 'trimester/second', component: SecondTrimesterComponent },
+      { path: 'trimester/third', component: ThirdTrimesterComponent },
     ],
   },
   {
@@ -53,35 +57,35 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'questions-flow', component: QuestionsFlowComponent },
       {
-        path: 'home',
-        canActivate: [homeRedirectGuard],
-        component: HomeMainComponent,
-      },
-      { path: 'trimester/first', component: FirstTrimesterComponent },
-      { path: 'trimester/second', component: SecondTrimesterComponent },
-      { path: 'trimester/third', component: ThirdTrimesterComponent },
-      { path: 'period-tracker', component: TrackerComponent },
-      { path: 'exercises', component: ExercisesComponent },
-      { path: 'services', component: OurServicesComponent },
-      { path: 'organizer/todo', component: TodoListComponent },
-      {
-        path: 'organizer/reminder',
-        component: ReminderListComponent,
-      },
-      { path: 'clinic', component: ClinicComponent },
-      { path: 'community', component: MothersCommunityComponent },
-      {
-        path: 'baby-care',
-
+        path: '',
+        canActivateChild: [homeRedirectGuard],
         children: [
-          { path: '', component: BabyCareComponent },
-          { path: 'feeding-guid', component: FeedingAdviceComponent },
-          { path: 'vaccination', component: VaccinationComponent },
-          { path: 'vitamins', component: VitaminsComponent },
+          { path: 'home', component: HomeMainComponent },
+          { path: 'pregnancy-tracker', component: PregnancyTrackerComponent },
+          { path: 'period-tracker', component: TrackerComponent },
+          { path: 'exercises', component: ExercisesComponent },
+          { path: 'services', component: OurServicesComponent },
+          { path: 'organizer/todo', component: TodoListComponent },
+          {
+            path: 'organizer/reminder',
+            component: ReminderListComponent,
+          },
+          { path: 'clinic', component: ClinicComponent },
+          { path: 'community', component: MothersCommunityComponent },
+          {
+            path: 'baby-care',
+
+            children: [
+              { path: '', component: BabyCareComponent },
+              { path: 'feeding-guid', component: FeedingAdviceComponent },
+              { path: 'vaccination', component: VaccinationComponent },
+              { path: 'vitamins', component: VitaminsComponent },
+            ],
+          },
+          { path: 'settings', component: SettingsComponent },
+          { path: 'partner', component: PartnerComponent },
         ],
       },
-      { path: 'settings', component: SettingsComponent },
-      { path: 'partner', component: PartnerComponent },
     ],
   },
 

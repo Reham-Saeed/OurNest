@@ -69,46 +69,52 @@
         </h2>
 
         <div class="relative mt-10">
-          <div class="absolute top-0 bottom-0 left-1/2 w-px bg-gray-300 z-0"></div>
+          @if (vitamins.length > 0) {
+            <div class="absolute top-0 bottom-0 left-1/2 w-px bg-gray-300 z-0"></div>
 
-          <div
-            class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
-          >
-            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
-              >Vitamin</span
+            <div
+              class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
             >
-            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
-              >Importance</span
-            >
-          </div>
+              <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
+                >Vitamin</span
+              >
+              <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
+                >Importance</span
+              >
+            </div>
 
-          <!-- BODY -->
-          <div class="divide-y divide-gray-300">
-            @for (v of vitamins; track $index) {
-              <div class="grid grid-cols-2 py-4 px-4 hover:bg-pink-50 transition-colors">
-                <!-- NAME -->
-                <div class="flex flex-col justify-center">
-                  <span class="font-medium text-lg text-gray-800 text-center">
-                    {{ v.name }}
-                  </span>
-
-                  @if (v.note) {
-                    <span class="text-xs text-gray-500 mt-1 text-center">
-                      {{ v.note }}
+            <!-- BODY -->
+            <div class="divide-y divide-gray-300">
+              @for (v of vitamins; track $index) {
+                <div class="grid grid-cols-2 py-4 px-4 hover:bg-pink-50 transition-colors">
+                  <!-- NAME -->
+                  <div class="flex flex-col justify-center">
+                    <span class="font-medium text-lg text-gray-800 text-center">
+                      {{ v.name }}
                     </span>
-                  }
-                </div>
 
-                <!-- IMPORTANCE -->
-                <div class="flex items-center justify-center">
-                  <span class="text-[#B34962] font-medium text-center">
-                    {{ v.importance }}
-                  </span>
-                </div>
-              </div>
-            }
-          </div>
+                    @if (v.note) {
+                      <span class="text-xs text-gray-500 mt-1 text-center">
+                        {{ v.note }}
+                      </span>
+                    }
+                  </div>
 
+                  <!-- IMPORTANCE -->
+                  <div class="flex items-center justify-center">
+                    <span class="text-[#B34962] font-medium text-center">
+                      {{ v.importance }}
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="py-10 text-center text-gray-500">
+              <p class="text-lg font-medium">No vitamins for this age</p>
+              <p class="text-sm">Your baby doesn’t have any scheduled vitamins at the moment.</p>
+            </div>
+          }
           <!-- EMPTY STATE -->
           @if (vitamins.length === 0) {
             <div class="text-center text-gray-500 py-10">No vitamins data available</div>

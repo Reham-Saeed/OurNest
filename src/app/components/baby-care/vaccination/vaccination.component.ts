@@ -62,48 +62,16 @@ export class VaccinationComponent implements OnInit {
             reason: v.reason,
           }));
         } else {
-          this.applyScheduleFallback();
+          this.vaccinationSchedule = [];
         }
       },
-      error: (err) => {
-        console.warn(
-          'Backend returned 404 for vaccinations. Applying Schedule Fallback!',
-          err.message,
-        );
-        this.applyScheduleFallback();
+
+      error: () => {
+        this.vaccinationSchedule = [];
       },
     });
   }
 
-  applyScheduleFallback() {
-    this.vaccinationSchedule = [
-      {
-        name: 'Hepatitis B',
-        dose: 'Dose 2',
-        reason: 'Scheduled',
-      },
-      {
-        name: 'Rotavirus (RV)',
-        dose: 'Dose 1',
-        reason: 'Scheduled',
-      },
-      {
-        name: 'DTaP',
-        dose: 'Dose 3',
-        reason: 'Scheduled',
-      },
-      {
-        name: 'Pneumococcal',
-        dose: 'Dose 1',
-        reason: 'Scheduled',
-      },
-      {
-        name: 'Polio (IPV)',
-        dose: 'Dose 2',
-        reason: 'Scheduled',
-      },
-    ];
-  }
   dailyNeeds = [
     {
       icon: 'assets/baby-bottle.svg',

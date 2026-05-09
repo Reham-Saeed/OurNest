@@ -57,9 +57,7 @@ export class VitaminsComponent {
             note: v.note,
             importance: v.importance,
           }));
-        } else {
-          this.applyVitaminsFallback();
-        }
+        } 
       },
       error: () => {
         this.vitamins = [];
@@ -67,30 +65,6 @@ export class VitaminsComponent {
     });
   }
 
-  applyVitaminsFallback() {
-    this.vitamins = [
-      {
-        name: 'Vitamin D',
-        note: 'Supports bone growth',
-        importance: 'High',
-      },
-      {
-        name: 'Iron',
-        note: 'Prevents anemia',
-        importance: 'High',
-      },
-      {
-        name: 'Vitamin A',
-        note: 'Boosts immunity',
-        importance: 'Medium',
-      },
-      {
-        name: 'Vitamin C',
-        note: 'Antioxidant support',
-        importance: 'Medium',
-      },
-    ];
-  }
 
   dailyNeeds = [
     {

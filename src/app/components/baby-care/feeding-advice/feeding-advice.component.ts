@@ -57,7 +57,23 @@ export class FeedingAdviceComponent implements OnInit {
       next: (res) => {
         const stages = res?.ageStages || [];
         if (!stages || stages.length === 0) {
-          this.applyFeedingFallback();
+          this.allowedFoods = [
+            {
+              name: 'All Family Foods',
+              notes: 'Baby can eat normal family meals with proper texture and portions',
+              frequency: 'Daily',
+            },
+          ];
+
+          this.forbiddenFoods = res?.alwaysForbidden || [];
+
+          const maxLength = Math.max(this.allowedFoods.length, this.forbiddenFoods.length);
+
+          this.rows = Array.from({ length: maxLength }).map((_, i) => ({
+            allowed: this.allowedFoods[i] || null,
+            forbidden: this.forbiddenFoods[i] || null,
+          }));
+
           return;
         }
 
@@ -91,40 +107,6 @@ export class FeedingAdviceComponent implements OnInit {
     });
   }
 
-  applyFeedingFallback() {
-    this.allowedFoods = [
-      {
-        name: 'Banana',
-        notes: 'Soft and easy to digest',
-        frequency: '2–3 times per week',
-      },
-      {
-        name: 'Rice Cereal',
-        notes: 'Good first solid food',
-        frequency: 'Daily',
-      },
-      {
-        name: 'Mashed Potato',
-        notes: 'Rich in carbs',
-        frequency: '3–4 times per week',
-      },
-    ];
-
-    this.forbiddenFoods = [
-      {
-        name: 'Honey',
-        reason: 'Risk of botulism for infants',
-      },
-      {
-        name: 'Whole Nuts',
-        reason: 'Choking hazard',
-      },
-      {
-        name: 'Raw Eggs',
-        reason: 'Risk of infection',
-      },
-    ];
-  }
 
   dailyNeeds = [
     {

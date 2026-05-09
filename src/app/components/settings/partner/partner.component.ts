@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { PartnerService } from '../../../core/services/partner/partner.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
 import { AppStateService } from '../../../core/services/app-state/app-state.service';
 import { Router } from '@angular/router';
 
@@ -13,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './partner.component.scss',
 })
 export class PartnerComponent {
-  step: 'input' | 'code' = 'input';
+  step: 'input' | 'code' | 'success' = 'input';
   role: string = 'Mother';
 
   partnerUsername = '';
@@ -37,7 +36,7 @@ export class PartnerComponent {
 
       this.role = state.role;
       if (state.isLinked) {
-        this.step = 'code';
+        this.step = 'success';
       } else {
         this.step = 'input';
       }
@@ -50,27 +49,43 @@ export class PartnerComponent {
       this.acceptInvite();
     }
   }
+
+  isEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
   sendInvite() {
-    if (!this.partnerUsername.trim()) {
-      this.errorMsg = "Please enter your partner's username.";
+    const input = this.partnerUsername.trim().toLowerCase();
+
+    if (!input) {
+      this.errorMsg = "Please enter your partner's username or email.";
       return;
     }
 
-    this.partnerEmail = `${this.partnerUsername.trim().toLowerCase().replace(/\s+/g, '')}@test.com`;
+    if (this.isEmail(input)) {
+      this.partnerEmail = input;
+    } else {
+      this.partnerEmail = `${input.replace(/\s+/g, '')}@test.com`;
+    }
+
     this.errorMsg = '';
     this.isLoading = true;
 
-    this.partnerService.invitePartner({ partnerEmail: this.partnerEmail }).subscribe({
-      next: (res) => {
-        this.pairingToken = res.token;
-        this.step = 'code';
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMsg = 'Something went wrong. Please try again.';
-        this.isLoading = false;
-      },
-    });
+    this.partnerService
+      .invitePartner({
+        partnerEmail: this.partnerEmail,
+      })
+      .subscribe({
+        next: (res) => {
+          this.pairingToken = res.token;
+          this.step = 'code';
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMsg = 'Something went wrong. Please try again.';
+          this.isLoading = false;
+        },
+      });
   }
 
   acceptInvite() {
@@ -85,8 +100,11 @@ export class PartnerComponent {
     this.partnerService.acceptPartnerInvite(this.invitationCode.trim()).subscribe({
       next: () => {
         this.isLoading = false;
-        this._AppStateService.setAppState().subscribe();
-        this.router.navigate(['/home']);
+        this._AppStateService.setAppState().subscribe(() => {
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 2000);
+        });
       },
       error: () => {
         this.errorMsg = 'Invalid code. Please try again.';

@@ -9,18 +9,22 @@ import { AuthService } from '../../core/services/auth.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { AppStateService } from '../../core/services/app-state/app-state.service';
 import { SettingsService } from '../../core/services/settings/settings.service';
+import { SupportComponent } from './support/support.component';
+import { PolicyComponent } from './policy/policy.component';
+import { AboutComponent } from './about/about.component';
 
 @Component({
   selector: 'app-settings.component',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    DatePipe,
     CommonModule,
-    DatePickerComponent,
     FormsModule,
     PartnerComponent,
     ChangeModeComponent,
+    SupportComponent,
+    PolicyComponent,
+    AboutComponent,
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
@@ -33,42 +37,40 @@ export class SettingsComponent {
   private _SettingsService = inject(SettingsService);
   private route = inject(ActivatedRoute);
 
-  activeSection: 'partner' | 'mode' = 'mode';
+  activeSection: string = 'mode';
   stateType: 'planning' | 'pregnancy' | 'babycare' = 'planning';
   stateRole: 'Mother' | 'Father' = 'Mother';
 
   imageUrl: string | null = null;
+  sidebarOpen = false;
 
-onFileSelected(event: any) {
-  const file = event.target.files[0];
-  if (!file) return;
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  // preview
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.imageUrl = reader.result as string;
-  };
-  reader.readAsDataURL(file);
+    // preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imageUrl = reader.result as string;
+    };
+    reader.readAsDataURL(file);
 
-  // upload
-  const formData = new FormData();
-  formData.append('image', file);
+    // upload
+    const formData = new FormData();
+    formData.append('image', file);
 
-  this._SettingsService.uploadImage(formData).subscribe({
-    next: (res: any) => {
-      console.log('uploaded:', res);
-      this.imageUrl = res.url; // حسب الـ API عندك
-    },
-    error: (err) => {
-      console.error(err);
-    },
-  });
-}
+    this._SettingsService.uploadImage(formData).subscribe({
+      next: (res: any) => {
+        console.log('uploaded:', res);
+        this.imageUrl = res.url;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
   ngOnInit() {
-    const role = this.authService.getUser()?.role;
-    if (role === 'Father') {
-      this.activeSection = 'partner';
-    }
     this.route.queryParams.subscribe((params) => {
       if (params['section']) {
         this.activeSection = params['section'];
@@ -80,6 +82,10 @@ onFileSelected(event: any) {
 
       this.stateType = state?.mode;
       this.stateRole = state?.role;
+
+      if (state.role === 'Father') {
+        this.activeSection = 'partner';
+      }
     });
   }
 
@@ -90,16 +96,23 @@ onFileSelected(event: any) {
   onLogout() {
     this.authService.logout().subscribe({
       next: () => {
-        try {
-          this.socialAuthService.signOut();
-        } catch (err) {}
+        this.router.navigate(['/auth/login']);
+        localStorage.clear();
+      }
+    });
+  }
 
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        console.error('Logout failed on the backend:', err);
-        this.router.navigate(['/auth/login']);
-      },
+  showCopied = false;
+
+  copyWebsiteLink() {
+    const websiteUrl = 'https://OurNest.com';
+
+    navigator.clipboard.writeText(websiteUrl).then(() => {
+      this.showCopied = true;
+
+      setTimeout(() => {
+        this.showCopied = false;
+      }, 2000);
     });
   }
 }

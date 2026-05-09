@@ -12,7 +12,7 @@ import { PregnancyService } from '../../../core/services/pregnancy/pregnancy.ser
 
 @Component({
   selector: 'app-change-mode',
-  imports: [ReactiveFormsModule, DatePipe, CommonModule, DatePickerComponent],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './change-mode.component.html',
   styleUrl: './change-mode.component.scss',
 })

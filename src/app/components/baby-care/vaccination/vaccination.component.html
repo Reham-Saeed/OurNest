@@ -69,42 +69,50 @@
         </h2>
 
         <div class="relative mt-10">
-          <div class="absolute top-0 bottom-0 left-1/2 w-px bg-gray-300 z-0"></div>
+          @if (vaccinationSchedule.length > 0) {
+            <div class="absolute top-0 bottom-0 left-1/2 w-px bg-gray-300 z-0"></div>
 
-          <div
-            class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
-          >
-            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
-              >Vaccine name</span
+            <div
+              class="grid grid-cols-2 bg-[#FFE2E7] text-center mb-2 p-4 rounded-[20px] relative z-10"
             >
-            <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl">Dose</span>
-          </div>
-
-          <div class="divide-y divide-gray-300">
-            @for (v of vaccinationSchedule; track $index) {
-              <div
-                class="grid grid-cols-2 text-center py-4 px-4 hover:bg-pink-50 transition-colors"
+              <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
+                >Vaccine name</span
               >
-                <!-- Vaccine Name + Reason -->
-                <div class="flex flex-col items-center justify-center">
-                  <span class="font-medium text-lg">
-                    {{ v.name }}
-                  </span>
-
-                  @if (v.reason) {
-                    <span class="text-sm text-gray-500 mt-1 px-2">
-                      {{ v.reason }}
+              <span class="text-gray-700 font-extrabold uppercase tracking-wider text-xl"
+                >Dose</span
+              >
+            </div>
+            <div class="divide-y divide-gray-300">
+              @for (v of vaccinationSchedule; track $index) {
+                <div
+                  class="grid grid-cols-2 text-center py-4 px-4 hover:bg-pink-50 transition-colors"
+                >
+                  <!-- Vaccine Name + Reason -->
+                  <div class="flex flex-col items-center justify-center">
+                    <span class="font-medium text-lg">
+                      {{ v.name }}
                     </span>
-                  }
-                </div>
 
-                <!-- Dose -->
-                <span class="font-medium text-lg text-[#B34962] flex items-center justify-center">
-                  {{ v.dose }}
-                </span>
-              </div>
-            }
-          </div>
+                    @if (v.reason) {
+                      <span class="text-sm text-gray-500 mt-1 px-2">
+                        {{ v.reason }}
+                      </span>
+                    }
+                  </div>
+
+                  <!-- Dose -->
+                  <span class="font-medium text-lg text-[#B34962] flex items-center justify-center">
+                    {{ v.dose }}
+                  </span>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="py-10 text-center text-gray-500">
+              <p class="text-lg font-medium">No vaccinations for this age</p>
+              <p class="text-sm">Your baby doesn’t have any scheduled vaccines at the moment.</p>
+            </div>
+          }
         </div>
       </div>
     </div>

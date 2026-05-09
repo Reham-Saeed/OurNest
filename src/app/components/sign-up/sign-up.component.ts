@@ -50,9 +50,11 @@ export class SignUpComponent {
           user.provider === 'GOOGLE'
             ? this.authService.loginWithGoogle({ token: externalToken, role: selectedRole })
             : this.authService.loginWithFacebook({ token: externalToken, role: selectedRole });
+      
 
         authCall.subscribe({
           next: (response) => {
+             console.log('SUCCESS RESPONSE:', response);
             this.isLoading = false;
             if (response.success) {
               localStorage.removeItem('selectedRole');

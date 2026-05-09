@@ -1,0 +1,136 @@
+<div class="min-h-screen pb-20 pt-20 px-4 md:px-8 bg-[var(--color-light-pink)]">
+  <!-- Page Header -->
+  <div class="text-center mb-10">
+    <h1 class="text-[var(--color-dark-pink)] text-3xl sm:text-4xl lg:text-6xl font-semibold mb-2">
+      {{ currentTrimesterInfo.title }}
+    </h1>
+    <p class="text-gray-400 text-lg font-medium">
+      {{ currentTrimesterInfo.subtitle }}
+    </p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="max-w-[1200px] mx-auto grid grid-cols-3 gap-3 mb-6">
+    <div
+      class="bg-white border border-pink-200 rounded-2xl p-4 flex flex-col gap-1 text-center shadow-sm"
+    >
+      <span class="text-[var(--color-dark-pink)] text-3xl font-extrabold leading-none">
+        {{ week }}<span class="text-base font-semibold"> wks</span>
+      </span>
+      <span class="text-gray-400 text-sm font-semibold">Current week</span>
+    </div>
+    <div
+      class="bg-white border border-pink-200 rounded-2xl p-4 flex flex-col gap-1 text-center shadow-sm"
+    >
+      <span class="text-[var(--color-dark-pink)] text-3xl font-extrabold leading-none">
+        {{ weeksLeft }}<span class="text-base font-semibold"> wks</span>
+      </span>
+      <span class="text-gray-400 text-sm font-semibold">Remaining</span>
+    </div>
+    <div
+      class="bg-white border border-pink-200 rounded-2xl p-4 flex flex-col gap-1 text-center shadow-sm"
+    >
+      <span class="text-[var(--color-dark-pink)] text-3xl font-extrabold leading-none">
+        {{ progressPercent | number: '1.0-0' }}<span class="text-base font-semibold">%</span>
+      </span>
+      <span class="text-gray-400 text-sm font-semibold">Complete</span>
+    </div>
+  </div>
+
+  <!-- Progress Section -->
+  <div
+    class="max-w-[1200px] mx-auto bg-white border border-pink-200 rounded-3xl p-6 mb-10 shadow-sm"
+  >
+    <div class="flex justify-between items-center mb-3">
+      <span class="text-[var(--color-dark-pink)] font-bold text-base">
+        week {{ week }} of pregnancy
+      </span>
+      <span class="text-gray-400 text-sm font-semibold">{{ weeksLeft }} weeks left</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="relative bg-pink-100 rounded-full h-3.5 w-full mb-5">
+      <div
+        class="h-full rounded-full transition-all duration-700 relative"
+        style="background: linear-gradient(90deg, #f8b4cd 0%, var(--color-dark-pink) 100%)"
+        [style.width.%]="progressPercent"
+      >
+        <span
+          class="absolute top-1/2 -translate-y-1/2 right-0 translate-x-1/2 w-5 h-5 rounded-full bg-[var(--color-dark-pink)] border-2 border-white shadow ring-2 ring-[var(--color-dark-pink)]"
+        ></span>
+      </div>
+    </div>
+
+    <!-- Trimester Pills -->
+    <div class="flex flex-wrap gap-2 mb-5">
+      <span
+        *ngFor="let t of trimesterPills"
+        class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-all"
+        [ngClass]="{
+          'bg-[var(--color-dark-pink)] text-white border-[var(--color-dark-pink)]': t.active,
+          'bg-pink-50 text-gray-400 border-pink-200': !t.active,
+        }"
+      >
+        <span
+          class="w-1.5 h-1.5 rounded-full"
+          [ngClass]="t.active ? 'bg-white' : 'bg-pink-300'"
+        ></span>
+        {{ t.label }}
+      </span>
+    </div>
+
+    <!-- Due Date -->
+    <div
+      class="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-4 py-3 text-base font-semibold text-gray-500"
+    >
+      <i class="fa-regular fa-calendar"></i> Expected due date:
+      <span class="text-[var(--color-dark-pink)] font-extrabold">{{ dueDate }}</span>
+    </div>
+  </div>
+
+  <!-- Tips from API -->
+  <div class="max-w-[1200px] mx-auto">
+    <!-- Loading -->
+    <div *ngIf="tipsLoading" class="flex justify-center py-16">
+      <div
+        class="w-10 h-10 border-4 border-pink-200 border-t-[var(--color-dark-pink)] rounded-full animate-spin"
+      ></div>
+    </div>
+
+    <!-- Groups -->
+    <div *ngIf="!tipsLoading" class="flex flex-col gap-4">
+      <div
+        *ngFor="let group of groupedTips"
+        class="bg-white border border-pink-200 rounded-3xl shadow-sm overflow-hidden"
+      >
+        <!-- Group Header -->
+        <div class="flex items-center gap-2 px-6 py-4 border-b border-pink-100">
+          <i class="fa-solid {{ group.icon }} text-[var(--color-dark-pink)] text-xl"></i>
+          <h3 class="text-[var(--color-dark-pink)] text-lg font-extrabold">
+            {{ group.label }}
+          </h3>
+        </div>
+        <!-- Tips List -->
+        <div class="divide-y divide-pink-100">
+          <div *ngFor="let tip of group.items" class="px-6 py-4 flex flex-col gap-1">
+            <p class="text-[var(--color-dark-pink)] font-bold text-base">{{ tip.title }}</p>
+            <p class="text-gray-500 text-base leading-relaxed">{{ tip.content }}</p>
+            <img
+              *ngIf="tip.imageUrl"
+              [src]="tip.imageUrl"
+              class="mt-3 rounded-xl w-full object-cover max-h-48"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div
+        *ngIf="groupedTips.length === 0"
+        class="text-center py-16 text-gray-400 font-semibold text-base"
+      >
+        No tips available for this week yet.
+      </div>
+    </div>
+  </div>
+</div>

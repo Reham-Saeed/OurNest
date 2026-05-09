@@ -27,7 +27,6 @@ type Step =
   | 'mother:notPregnant:notPlanning:isHasBaby'
   | 'mother:notPregnant:notPlanning:hasBaby:birthDate'
   | 'mother:notPregnant:notPlanning:hasBaby:gender'
-  | 'mother:notPregnant:notPlanning:hasBaby:weight'
   | 'mother:notPregnant:notPlanning:hasBaby:name'
   | 'father:birthDate';
 
@@ -97,7 +96,6 @@ export class QuestionsFlowComponent implements OnInit {
 
     babyBirthDate: null,
     babyGender: null,
-    babyWeight: null,
     babyName: null,
 
     motherMode: null,
@@ -123,9 +121,6 @@ export class QuestionsFlowComponent implements OnInit {
     weight: new FormControl(null, [Validators.required, Validators.min(35), Validators.max(200)]),
   });
 
-  babyWeightForm = new FormGroup({
-    babyWeight: new FormControl(null, [Validators.required, Validators.min(2), Validators.max(18)]),
-  });
 
   babyNameForm = new FormGroup({
     babyName: new FormControl(null, [
@@ -141,8 +136,6 @@ export class QuestionsFlowComponent implements OnInit {
         return this.bodyDetails;
       case 'mother:notPregnant:planning':
         return this.periodDetails;
-      case 'mother:notPregnant:notPlanning:hasBaby:weight':
-        return this.babyWeightForm;
       case 'mother:notPregnant:notPlanning:hasBaby:name':
         return this.babyNameForm;
       default:
@@ -173,11 +166,6 @@ export class QuestionsFlowComponent implements OnInit {
         this.formData.cycleLengthDays = form.value.cycleLength;
         this.submitAll();
         return;
-
-      case 'mother:notPregnant:notPlanning:hasBaby:weight':
-        this.formData.babyWeight = form.value.babyWeight;
-        this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:name';
-        break;
 
       case 'mother:notPregnant:notPlanning:hasBaby:name':
         this.formData.babyName = form.value.babyName;
@@ -232,9 +220,6 @@ export class QuestionsFlowComponent implements OnInit {
         this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:gender';
         break;
 
-      case 'mother:notPregnant:notPlanning:hasBaby:weight':
-        this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:name';
-        break;
     }
 
     this.saveState();
@@ -346,7 +331,7 @@ export class QuestionsFlowComponent implements OnInit {
   selectBabyGender(val: string) {
     this.pushHistory();
     this.formData.babyGender = val;
-    this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:weight';
+    this.currentStep = 'mother:notPregnant:notPlanning:hasBaby:name';
     this.saveState();
   }
 

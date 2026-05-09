@@ -1,79 +1,58 @@
-<div class="flex flex-col h-full overflow-hidden">
-  <!-- Messages -->
+<div class="flex flex-col h-full overflow-hidden ">
   <div #chatContainer class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 hide-scrollbar">
-    <!-- First message -->
-    @if (!conversationId) {
-      <div class="flex gap-2 items-start">
-        <img src="assets/chat-bot.svg" alt="" />
-        <div class="border border-[#1919194D] rounded-[8px] p-4 text-sm bg-[#B349620F] max-w-md">
-          Hello! <br />
-          I'm <b>ALMA ❤️</b><br />
-          Your AI assistant. How can I help you today?
-        </div>
+    <div class="flex gap-2 items-start">
+      <img src="assets/chat-bot.svg" alt="" />
+      <div class="border border-[#1919194D] rounded-[8px] p-4 text-sm bg-[#B349620F] max-w-[85%] sm:max-w-md">
+        Hello! <br />
+        I'm <b>ALMA ❤️</b><br />
+        Your AI assistant. How can I help you today?
       </div>
-    }
+    </div>
 
-    <!-- Messages -->
     @for (msg of messages; track $index) {
       <div
         class="flex items-start gap-2"
         [ngClass]="msg.role === 'user' ? 'justify-end' : 'justify-start'"
       >
         @if (msg.role === 'ai') {
-          <ng-container>
-            <img src="assets/chat-bot.svg" alt="" />
-            <div
-              class="border border-[#1919194D] rounded-[8px] p-4 text-sm max-w-md bg-[#B349620F] leading-6 break-words"
-              [innerHTML]="formatMessage(msg.content)"
-            ></div>
-          </ng-container>
+          <img src="assets/chat-bot.svg" alt="" class="shrink-0" />
+          <div
+            class="border border-[#1919194D] rounded-[8px] p-4 text-sm max-w-[85%] sm:max-w-md bg-[#B349620F] leading-6 break-words"
+            [innerHTML]="formatMessage(msg.content)"
+          ></div>
         }
         @if (msg.role === 'user') {
-          <ng-container>
-            <div
-              class="border border-[#1919194D] rounded-[8px] px-4 py-2 text-sm max-w-md bg-[#F7F6F6] leading-6 break-words"
-            >
-              {{ msg.content }}
-            </div>
-          </ng-container>
+          <div
+            class="border border-[#1919194D] rounded-[8px] px-4 py-2 text-sm max-w-[85%] sm:max-w-md bg-[#F7F6F6] leading-6 break-words"
+          >
+            {{ msg.content }}
+          </div>
         }
       </div>
     }
 
-    <!-- Loading -->
     @if (loading) {
       <div class="flex items-start gap-2">
         <img src="assets/chat-bot.svg" alt="" />
-        <div
-          class="border border-[#1919194D] rounded-[8px] p-4 bg-[#B349620F] flex gap-1 items-center"
-        >
-          <span class="dot"></span>
-          <span class="dot delay-1"></span>
-          <span class="dot delay-2"></span>
+        <div class="border border-[#1919194D] rounded-[8px] p-4 bg-[#B349620F] flex gap-1 items-center">
+          <span class="dot"></span><span class="dot delay-1"></span><span class="dot delay-2"></span>
         </div>
       </div>
     }
   </div>
 
-  <!-- Input -->
   <div class="shrink-0 pt-3 px-1 pb-1 relative">
     <textarea
       [(ngModel)]="newMessage"
       (keydown)="onEnter($event)"
-      class="w-full bg-[#F7F6F6] shadow-md rounded-[20px] p-4 pr-32 text-base resize-none placeholder:text-[#8E8E8E] focus:outline-none"
+      class="w-full bg-[#F7F6F6] shadow-md rounded-[20px] p-4 pr-24 sm:pr-32 text-sm sm:text-base resize-none placeholder:text-[#8E8E8E] focus:outline-none"
       rows="2"
       placeholder="Ask your questions.."
-    >
-    </textarea>
-
+    ></textarea>
     <button
       (click)="sendMessage()"
-      [ngClass]="
-        newMessage?.trim()
-          ? 'bg-[#B34962] text-white border-[#B34962]'
-          : 'bg-[#FBEAEE] text-[#8E8E8E] border-[#B34962]'
-      "
-      class="absolute right-5 top-1/2 -translate-y-1/2 py-2 px-4 rounded-[20px] border font-medium flex items-center justify-center gap-1 transition-colors duration-200"
+      [ngClass]="newMessage?.trim() ? 'bg-[#B34962] text-white border-[#B34962]' : 'bg-[#FBEAEE] text-[#8E8E8E] border-[#B34962]'"
+      class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 py-2 px-3 sm:px-4 rounded-[20px] border font-medium flex items-center justify-center gap-1 transition-colors duration-200 text-sm"
     >
       Send
       <i class="fa-regular fa-paper-plane rotate-45"></i>

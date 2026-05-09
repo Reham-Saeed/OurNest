@@ -78,9 +78,7 @@ export class MedicineComponent implements OnInit, AfterViewChecked {
     this._AiService.analyzeMedicine(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-
         const parsed = this.parseMedicine(res.formatted_text);
-
         this.messages.push({
           type: 'bot',
           data: parsed,
@@ -90,6 +88,13 @@ export class MedicineComponent implements OnInit, AfterViewChecked {
       },
       error: () => {
         this.loading = false;
+        this.messages.push({
+          type: 'bot',
+          data: null,
+          errorMessage: 'Something went wrong. Please try again later.',
+        });
+         this.saveMessages();
+        this.shouldScroll = true;
       },
     });
   }

@@ -77,17 +77,22 @@ export class FeedingComponent implements OnInit, AfterViewChecked {
     this._AiService.analyzeFood(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-
         this.messages.push({
           type: 'bot',
           data: res,
         });
-
         this.saveMessages();
         this.shouldScroll = true;
       },
       error: () => {
         this.loading = false;
+        this.messages.push({
+          type: 'bot',
+          data: null,
+          errorMessage: 'Something went wrong. Please try again later.',
+        });
+        this.saveMessages();
+        this.shouldScroll = true;
       },
     });
   }

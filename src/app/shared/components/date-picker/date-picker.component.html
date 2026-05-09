@@ -1,7 +1,7 @@
 <div class="date-picker-wrapper">
   <div class="date-picker-container">
     <!-- Date Picker -->
-    <ng-container *ngIf="pickerType === 'lastPeriodDate' || pickerType === 'expectedDate'">
+    <ng-container *ngIf="pickerType === 'lastPeriodPlanning' || pickerType === 'lastPeriodPregnancy' || pickerType === 'expectedDate'">
       <div class="column" #dayScroll (scroll)="onScroll('day', dayScroll, days, 'selectedDay')">
         <div class="spacer"></div>
         <div *ngFor="let d of days" class="item" [class.selected]="isSelected('day', d)">

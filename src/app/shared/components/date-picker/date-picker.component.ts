@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class DatePickerComponent {
   @Input() pickerType!:
-    | 'lastPeriodDate'
+    | 'lastPeriodPregnancy'
+    | 'lastPeriodPlanning'
     | 'expectedDate'
     | 'pregnancy'
     | 'age'
@@ -101,12 +102,67 @@ export class DatePickerComponent {
     this.updateDateBoundaries();
   }
 
+  minDate: Date | null = null;
+
+  private allMonths = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
   private initPregnancyPicker() {
     this.weeks = Array.from({ length: 42 }, (_, i) => i);
     this.days = Array.from({ length: 7 }, (_, i) => i);
 
     this.selectedWeek = this.weeks[0];
     this.selectedDay = this.days[0];
+  }
+  private initLastPeriodPlanning() {
+    const now = new Date();
+    const twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate());
+
+    this.restrictPastDates = false;
+    this.restrictFutureDates = true;
+    this.minDate = twoMonthsAgo;
+
+    const startYear = twoMonthsAgo.getFullYear();
+    const endYear = now.getFullYear();
+    this.years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+
+    this.selectedYear = now.getFullYear();
+    this.selectedMonth = this.allMonths[now.getMonth()];
+    this.selectedDay = now.getDate();
+
+    this.updateDateBoundaries();
+  }
+
+  private initLastPeriodPregnancy() {
+    const now = new Date();
+    // 40 weeks ago
+    const fortyWeeksAgo = new Date(now.getTime() - 40 * 7 * 24 * 60 * 60 * 1000);
+
+    this.restrictPastDates = false;
+    this.restrictFutureDates = true;
+
+    const startYear = fortyWeeksAgo.getFullYear();
+    const endYear = now.getFullYear();
+    this.years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+
+    this.selectedYear = now.getFullYear();
+    this.selectedMonth = this.allMonths[now.getMonth()];
+    this.selectedDay = now.getDate();
+
+    this.minDate = fortyWeeksAgo;
+    this.updateDateBoundaries();
   }
 
   private initAgePicker() {
@@ -132,18 +188,23 @@ export class DatePickerComponent {
     this.restrictPastDates = false;
     this.restrictFutureDates = true;
 
+    const now = new Date();
+    const twoYearsAgo = new Date(now.getFullYear() - 2, now.getMonth(), now.getDate());
+
+    this.minDate = twoYearsAgo;
+
     this.days = Array.from({ length: 31 }, (_, i) => i + 1);
     this.months = Array.from({ length: 12 }, (_, i) =>
       new Date(0, i).toLocaleString('en', { month: 'long' }),
     );
 
-    const maxBabyAge = 2;
-    const currentYear = new Date().getFullYear();
-    const minYear = currentYear - maxBabyAge;
+    const startYear = twoYearsAgo.getFullYear();
+    const endYear = now.getFullYear();
+    this.years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
 
-    this.years = Array.from({ length: maxBabyAge + 1 }, (_, i) => minYear + i);
-
-    this.selectedYear = currentYear;
+    this.selectedYear = now.getFullYear();
+    this.selectedMonth = this.allMonths[now.getMonth()];
+    this.selectedDay = now.getDate();
 
     this.updateDateBoundaries();
   }
@@ -193,7 +254,9 @@ export class DatePickerComponent {
 
   getCurrentValue() {
     switch (this.pickerType) {
-      case 'lastPeriodDate':
+      case 'lastPeriodPregnancy':
+        return { day: this.selectedDay, month: this.selectedMonth, year: this.selectedYear };
+      case 'lastPeriodPlanning':
         return { day: this.selectedDay, month: this.selectedMonth, year: this.selectedYear };
       case 'expectedDate':
         return { day: this.selectedDay, month: this.selectedMonth, year: this.selectedYear };
@@ -234,9 +297,12 @@ export class DatePickerComponent {
 
   ngOnInit() {
     switch (this.pickerType) {
-      case 'lastPeriodDate':
-        this.initDatePicker(this.currentYear - 1, 2, false);
-        this.restrictFutureDates = true;
+      case 'lastPeriodPlanning':
+        this.initLastPeriodPlanning();
+        break;
+
+      case 'lastPeriodPregnancy':
+        this.initLastPeriodPregnancy();
         break;
 
       case 'expectedDate':
@@ -262,30 +328,22 @@ export class DatePickerComponent {
   }
 
   updateDateBoundaries() {
-    if (!this.restrictPastDates && !this.restrictFutureDates) return;
+    if (!this.restrictPastDates && !this.restrictFutureDates && !this.minDate) return;
 
     const now = new Date();
-    const allMonths = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
 
-    if (this.restrictPastDates && this.selectedYear === now.getFullYear()) {
-      this.months = allMonths.slice(now.getMonth());
+    if (
+      this.minDate &&
+      this.selectedYear === this.minDate.getFullYear() &&
+      this.selectedYear === now.getFullYear()
+    ) {
+      this.months = this.allMonths.slice(this.minDate.getMonth(), now.getMonth() + 1);
+    } else if (this.minDate && this.selectedYear === this.minDate.getFullYear()) {
+      this.months = this.allMonths.slice(this.minDate.getMonth());
     } else if (this.restrictFutureDates && this.selectedYear === now.getFullYear()) {
-      this.months = allMonths.slice(0, now.getMonth() + 1);
+      this.months = this.allMonths.slice(0, now.getMonth() + 1);
     } else {
-      this.months = allMonths;
+      this.months = [...this.allMonths];
     }
 
     if (!this.months.includes(this.selectedMonth)) {
@@ -294,22 +352,20 @@ export class DatePickerComponent {
         : this.months[0];
     }
 
-    const monthIndex = allMonths.indexOf(this.selectedMonth);
+    const monthIndex = this.allMonths.indexOf(this.selectedMonth);
     const totalDaysInMonth = new Date(this.selectedYear, monthIndex + 1, 0).getDate();
 
     let startDay = 1;
     let endDay = totalDaysInMonth;
 
-    // Block past days (Pregnancy expected date)
     if (
-      this.restrictPastDates &&
-      this.selectedYear === now.getFullYear() &&
-      monthIndex === now.getMonth()
+      this.minDate &&
+      this.selectedYear === this.minDate.getFullYear() &&
+      monthIndex === this.minDate.getMonth()
     ) {
-      startDay = now.getDate();
+      startDay = this.minDate.getDate();
     }
 
-    // Block future days (Baby birth date)
     if (
       this.restrictFutureDates &&
       this.selectedYear === now.getFullYear() &&
@@ -320,7 +376,6 @@ export class DatePickerComponent {
 
     this.days = Array.from({ length: endDay - startDay + 1 }, (_, i) => startDay + i);
 
-    // Ensure selected day isn't out of bounds
     if (!this.days.includes(this.selectedDay)) {
       this.selectedDay = this.restrictFutureDates ? this.days[this.days.length - 1] : this.days[0];
     }
