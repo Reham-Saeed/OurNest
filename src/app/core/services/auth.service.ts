@@ -61,6 +61,7 @@ export class AuthService {
       .post<AuthResponse>(`${this.apiUrl}/facebook`, data)
       .pipe(tap((res) => this.handleAuthResponse(res)));
   }
+  
 
   private handleAuthResponse(response: AuthResponse): void {
     if (response.success && response.token) {

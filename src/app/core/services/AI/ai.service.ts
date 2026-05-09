@@ -31,12 +31,13 @@ export class AiService {
 
     return this.http.post(`${baseUrl}ai/skin/analyze`, formData);
   }
+
   analyzeMedicine(file: File) {
     const formData = new FormData();
 
-    formData.append('file', file);
+    formData.append('image', file);
 
-    return this.http.post(`http://127.0.0.1:8000/predict`, formData);
+    return this.http.post(`${baseUrl}medicine/scan`, formData);
   }
 
   createConversation(userId: string, title: string): Observable<Conversation> {

@@ -57,6 +57,29 @@
       </div>
     }
 
+    <!-- HAS BABY -->
+    @if (currentStep === 'mother:notPregnant:notPlanning:isHasBaby') {
+      <div class="flex flex-col justify-center items-center w-full max-w-sm">
+        <h2 class="text-xl sm:text-3xl pb-5 text-[#B34962] text-center">
+          Do you already have a newborn baby?
+        </h2>
+        <button
+          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mb-3"
+          (click)="selectHasBaby(true)"
+        >
+          Yes
+        </button>
+        <span class="text-sm sm:text-base text-[#B34962]">Or</span>
+        <button
+          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mt-3"
+          (click)="selectHasBaby(false)"
+        >
+          No
+        </button>
+      </div>
+    }
+    
+
     <!-- BODY DETAILS -->
     @if (currentStep === 'mother:pregnant:bodyDetails') {
       <div class="w-full max-w-xl">
@@ -256,147 +279,6 @@
       </div>
     }
 
-    <!-- IS PLANNING -->
-    @if (currentStep === 'mother:notPregnant:isPlanning') {
-      <div class="flex flex-col justify-center items-center w-full max-w-sm">
-        <h2 class="text-xl sm:text-3xl pb-5 text-[#B34962] text-center">
-          Do you want to get pregnant?
-        </h2>
-        <button
-          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mb-3"
-          (click)="selectPlanning(true)"
-        >
-          Yes
-        </button>
-        <span class="text-sm sm:text-base text-[#B34962]">Or</span>
-        <button
-          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mt-3"
-          (click)="selectPlanning(false)"
-        >
-          No
-        </button>
-      </div>
-    }
-
-    <!-- PLANNING FORM -->
-    @if (currentStep === 'mother:notPregnant:planning') {
-      @if (currentView === 'planningForm') {
-        <form
-          [formGroup]="periodDetails"
-          class="text-base sm:text-xl flex flex-col gap-4 sm:gap-6 w-full max-w-lg"
-        >
-          <div>
-            <label class="text-[#B34962]">Your last period</label>
-            <div class="relative mt-1">
-              <input
-                formControlName="lastPeriodDate"
-                type="text"
-                readonly
-                class="px-2 py-2 sm:py-3 border border-[#B34962] rounded-md w-full"
-              />
-              <span
-                class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                (click)="openLastPeriodSelect()"
-              >
-                <img src="assets/calendar-date.svg" alt="" />
-              </span>
-            </div>
-            @if (
-              periodDetails.get('lastPeriodDate')?.touched &&
-              periodDetails.get('lastPeriodDate')?.invalid
-            ) {
-              <small class="text-red-700">Please select your last period date</small>
-            }
-          </div>
-          <div>
-            <label class="text-[#B34962]">Your period length</label>
-            <div class="relative mt-1">
-              <input
-                formControlName="periodLength"
-                type="number"
-                class="px-2 py-2 sm:py-3 border border-[#B34962] rounded-md w-full pr-12"
-              />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
-                <img src="assets/blood-drops.svg" alt="" />
-              </span>
-            </div>
-            @if (
-              periodDetails.get('periodLength')?.touched &&
-              periodDetails.get('periodLength')?.invalid
-            ) {
-              <small class="text-red-700">Please enter a valid period length (2 - 10 days)</small>
-            }
-          </div>
-          <div>
-            <label class="text-[#B34962]">Your cycle length</label>
-            <div class="relative mt-1">
-              <input
-                formControlName="cycleLength"
-                type="number"
-                class="px-2 py-2 sm:py-3 border border-[#B34962] rounded-md w-full pr-12"
-              />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
-                <img src="assets/cycle.svg" alt="" />
-              </span>
-            </div>
-            @if (
-              periodDetails.get('cycleLength')?.touched && periodDetails.get('cycleLength')?.invalid
-            ) {
-              <small class="text-red-700">Please enter a valid cycle length (15 - 60 days)</small>
-            }
-          </div>
-          <div class="flex justify-center mt-6 sm:mt-10">
-            <button
-              class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6"
-              (click)="saveCurrentForm()"
-              [disabled]="periodDetails.invalid"
-            >
-              Save
-            </button>
-          </div>
-        </form>
-      }
-      @if (currentView === 'lastPeriodSelect') {
-        <div class="flex flex-col justify-center items-center w-full max-w-md">
-          <h2 class="text-lg sm:text-2xl lg:text-3xl mb-5 text-[#B34962] text-center">
-            Select the date of your last period.
-          </h2>
-          <app-date-picker
-            pickerType="lastPeriodPlanning"
-            (dateSelected)="onLastPeriodPicked($event)"
-          ></app-date-picker>
-          <button
-            class="btn-dark-pink w-full py-4 sm:py-5 mt-6 sm:mt-10 text-base sm:text-lg"
-            (click)="closeLastPeriodSelect()"
-          >
-            Continue
-          </button>
-        </div>
-      }
-    }
-
-    <!-- HAS BABY -->
-    @if (currentStep === 'mother:notPregnant:notPlanning:isHasBaby') {
-      <div class="flex flex-col justify-center items-center w-full max-w-sm">
-        <h2 class="text-xl sm:text-3xl pb-5 text-[#B34962] text-center">
-          Do you already have a newborn baby?
-        </h2>
-        <button
-          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mb-3"
-          (click)="selectHasBaby(true)"
-        >
-          Yes
-        </button>
-        <span class="text-sm sm:text-base text-[#B34962]">Or</span>
-        <button
-          class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mt-3"
-          (click)="selectHasBaby(false)"
-        >
-          No
-        </button>
-      </div>
-    }
-
     <!-- BABY BIRTH DATE -->
     @if (currentStep === 'mother:notPregnant:notPlanning:hasBaby:birthDate') {
       <div class="flex flex-col justify-center items-center w-full max-w-md">
@@ -422,7 +304,9 @@
     <!-- BABY GENDER -->
     @if (currentStep === 'mother:notPregnant:notPlanning:hasBaby:gender') {
       <div class="flex flex-col justify-center items-center w-full max-w-sm">
-        <h2 class="text-xl sm:text-3xl pb-5 text-[#B34962] text-center">What is the baby's gender?</h2>
+        <h2 class="text-xl sm:text-3xl pb-5 text-[#B34962] text-center">
+          What is the baby's gender?
+        </h2>
         <button
           class="btn-dark-pink text-base sm:text-xl w-full py-4 sm:py-6 mb-3"
           (click)="selectBabyGender('female')"

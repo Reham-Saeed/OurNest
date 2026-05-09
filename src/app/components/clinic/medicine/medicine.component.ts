@@ -78,7 +78,7 @@ export class MedicineComponent implements OnInit, AfterViewChecked {
     this._AiService.analyzeMedicine(this.selectedFile).subscribe({
       next: (res: any) => {
         this.loading = false;
-        const parsed = this.parseMedicine(res.formatted_text);
+        const parsed = this.parseMedicine(res.formattedText);
         this.messages.push({
           type: 'bot',
           data: parsed,
