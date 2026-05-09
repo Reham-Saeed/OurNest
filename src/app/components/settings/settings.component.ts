@@ -92,16 +92,35 @@ export class SettingsComponent {
   get showPartner(): boolean {
     return this.stateType !== 'planning';
   }
-
-  onLogout() {
+  async onLogout() {
     this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/auth/login']);
+      next: async () => {
+        try {
+          await this.socialAuthService.signOut();
+        } catch (e) {}
+
         localStorage.clear();
-      }
+        this._AppStateService.clearState();
+
+        this.router.navigateByUrl('/auth/login', {
+          replaceUrl: true,
+        });
+      },
+
+      error: async () => {
+        try {
+          await this.socialAuthService.signOut();
+        } catch (e) {}
+
+        localStorage.clear();
+        this._AppStateService.clearState();
+
+        this.router.navigateByUrl('/auth/login', {
+          replaceUrl: true,
+        });
+      },
     });
   }
-
   showCopied = false;
 
   copyWebsiteLink() {

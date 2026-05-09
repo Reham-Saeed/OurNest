@@ -107,6 +107,11 @@ export class AppStateService {
     return state ? JSON.parse(state) : null;
   }
 
+  clearState() {
+    localStorage.removeItem('app-state');
+    this.stateSubject.next(null);
+  }
+  
   updateState(patch: Partial<AppState>) {
     const current = this.stateSubject.value || {};
 
