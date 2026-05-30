@@ -1,172 +1,129 @@
-<section
-  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] min-h-screen mx-auto py-16 px-4 sm:px-6 lg:px-20"
->
+<section class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] min-h-screen mx-auto py-16 px-4 sm:px-6 lg:px-20">
   <div class="flex flex-col items-center">
     <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#B34962] mb-4 text-center">
       Mothers' Community
     </h2>
 
     <p
-      class="font-medium text-base sm:text-lg md:text-xl text-center text-[#00000099] mb-6 max-w-xl md:max-w-2xl lg:max-w-3xl"
-    >
+      class="font-medium text-base sm:text-lg md:text-xl text-center text-[#00000099] mb-6 max-w-xl md:max-w-2xl lg:max-w-3xl">
       Connect, share, and support each other on this beautiful journey
     </p>
 
     <section class="w-full max-w-[1200px] mx-auto">
-      <div
-        class="w-full sm:w-4/5 mx-auto bg-white rounded-[20px] p-4 shadow-lg mb-12 border border-[#B34962]"
-      >
+      <div class="w-full sm:w-4/5 mx-auto bg-white rounded-[20px] p-4 shadow-lg mb-12 border border-[#B34962]">
         <div class="flex items-center">
           <i class="fa-solid fa-magnifying-glass text-gray-400 text-2xl mr-2"></i>
-          <input
-            type="text"
-            [(ngModel)]="searchTitle"
-            placeholder="Search for Post or Person"
-            class="flex-1 outline-none text-gray-500 text-md"
-          />
+          <input type="text" [(ngModel)]="searchTitle" placeholder="Search for Post or Person"
+            class="flex-1 outline-none text-gray-500 text-md" />
           <i class="fa-solid fa-sliders text-gray-400 text-2xl mr-3"></i>
         </div>
       </div>
 
       <div class="bg-white rounded-[20px] p-4 sm:p-6 shadow-lg mb-6 border border-[#B34962]">
-        <textarea
-          placeholder="Share your thoughts with the community..."
-          [(ngModel)]="newPostContent"
-          class="w-full px-2 resize-none placeholder-gray-400 focus:outline-none"
-          rows="2"
-          (input)="onInputChange()"
-        ></textarea>
+        <textarea placeholder="Share your thoughts with the community..." [(ngModel)]="newPostContent"
+          class="w-full px-2 resize-none placeholder-gray-400 focus:outline-none" rows="2"
+          (input)="onInputChange()"></textarea>
         <hr class="text-gray-300" />
         <div class="flex justify-end pt-3 px-3">
           <button (click)="addPost()">
-            <i
-              class="fa-solid fa-paper-plane fa-xl rotate-45"
-              [ngClass]="{ 'text-[#B34962]': hasText, 'text-gray-400': !hasText }"
-            ></i>
+            <i class="fa-solid fa-paper-plane fa-xl rotate-45"
+              [ngClass]="{ 'text-[#B34962]': hasText, 'text-gray-400': !hasText }"></i>
           </button>
         </div>
       </div>
 
       @for (post of posts | search: searchTitle; track post.id) {
-        <div
-          class="bg-white border border-[#B34962] rounded-[20px] p-4 sm:p-8 shadow-lg hover:shadow-xl transition-shadow mb-6"
-        >
-          <div class="flex items-center space-x-4 mb-4">
-            <div
-              class="h-12 w-12 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100"
-            >
-              <i class="fa-regular fa-user text-2xl text-gray-800"></i>
-            </div>
-            <h3 class="font-semibold text-gray-800 text-lg">{{ post.authorName | titlecase }}</h3>
+      <div
+        class="bg-white border border-[#B34962] rounded-[20px] p-4 sm:p-8 shadow-lg hover:shadow-xl transition-shadow mb-6">
+        <div class="flex items-center space-x-4 mb-4">
+          <div class="h-12 w-12 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100">
+            <i class="fa-regular fa-user text-2xl text-gray-800"></i>
           </div>
+          <h3 class="font-semibold text-gray-800 text-lg">{{ post.authorName | titlecase }}</h3>
+        </div>
 
-          <p class="text-gray-700 mb-6 text-lg">
-            {{ post.content }}
-          </p>
+        <p class="text-gray-700 mb-6 text-lg">
+          {{ post.content }}
+        </p>
 
-          <div class="flex items-center space-x-6 pt-4 border-t border-gray-300">
-            <button
-              (click)="addLike(post)"
-              class="flex items-center space-x-2 text-[#B34962] transition-colors"
-            >
-              <i
-                [ngClass]="
+        <div class="flex items-center space-x-6 pt-4 border-t border-gray-300">
+          <button (click)="addLike(post)" class="flex items-center space-x-2 text-[#B34962] transition-colors">
+            <i [ngClass]="
                   post.isLikedByCurrentUser
                     ? 'fa-solid fa-heart fa-xl'
                     : 'fa-regular fa-heart fa-xl'
-                "
-              ></i>
-              <span>{{ post.likesCount }}</span>
-            </button>
+                "></i>
+            <span>{{ post.likesCount }}</span>
+          </button>
 
-            <button
-              class="flex items-center space-x-2 text-[#B34962] transition-colors"
-              (click)="toggleComments(post.id)"
-            >
-              <i class="fa-regular fa-message fa-xl"></i>
-              <span>{{ post.commentsCount }}</span>
-            </button>
+          <button class="flex items-center space-x-2 text-[#B34962] transition-colors"
+            (click)="toggleComments(post.id)">
+            <i class="fa-regular fa-message fa-xl"></i>
+            <span>{{ post.commentsCount }}</span>
+          </button>
 
-            <button class="flex items-center space-x-2 text-[#B34962] transition-colors ml-auto">
-              <i class="fa-solid fa-share-nodes fa-xl"></i>
-            </button>
-          </div>
+          <button class="flex items-center space-x-2 text-[#B34962] transition-colors ml-auto">
+            <i class="fa-solid fa-share-nodes fa-xl"></i>
+          </button>
+        </div>
 
-          @if (commentsVisible[post.id]) {
-            <div class="mt-6 border-t border-gray-200 pt-4">
-              @for (comment of comments[post.id]; track $index) {
-                <div class="mb-4 text-xl">
-                  <div class="flex flex-col sm:flex-row sm:items-center justify-between">
-                    <div>
-                      <div class="flex items-center space-x-2">
-                        <div
-                          class="h-10 w-10 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100"
-                        >
-                          <i class="fa-regular fa-user text-xl text-gray-800"></i>
-                        </div>
-                        <p class="font-medium text-lg">{{ comment.authorName | titlecase }}</p>
-                        <span class="text-gray-500 text-sm"
-                          >· {{ comment.createdAt | timeAgo }}</span
-                        >
-                      </div>
-                      <p class="ml-12 text-lg">{{ comment.content }}</p>
-                    </div>
+        @if (commentsVisible[post.id]) {
+        <div class="mt-6 border-t border-gray-200 pt-4">
+          @for (comment of comments[post.id]; track $index) {
+          <div class="mb-4 text-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <div
+                    class="h-10 w-10 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100">
+                    <i class="fa-regular fa-user text-xl text-gray-800"></i>
                   </div>
-
-                  <button class="ml-12 text-lg text-[#B34962]" (click)="startReply(comment.id)">
-                    Reply
-                  </button>
-
-                  @if (repliesVisible[comment.id]) {
-                    @for (reply of replies[comment.id]; track $index) {
-                      <div class="ml-12 mt-3">
-                        <div class="flex items-center space-x-2">
-                          <div
-                            class="h-8 w-8 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100"
-                          >
-                            <i class="fa-regular fa-user text-lg text-gray-800"></i>
-                          </div>
-                          <p class="font-medium text-lg">{{ reply.authorName | titlecase }}</p>
-                          <span class="text-gray-500 text-sm"
-                            >· {{ comment.createdAt | timeAgo }}</span
-                          >
-                        </div>
-                        <p class="ml-12 text-lg">{{ reply.content }}</p>
-                      </div>
-                    }
-                    <div class="ml-12 mt-2 flex gap-2">
-                      <input
-                        [(ngModel)]="newReplyContent[comment.id]"
-                        placeholder="Write a reply..."
-                        class="flex-1 px-4 py-2 border rounded-2xl text-lg focus:outline-none focus:border-[#B34962]"
-                      />
-                      <button
-                        class="px-4 py-2 bg-[#B34962] text-white rounded-full"
-                        (click)="addReply(comment.id)"
-                      >
-                        <i class="fa-solid fa-paper-plane rotate-45"></i>
-                      </button>
-                    </div>
-                  }
+                  <p class="font-medium text-lg">{{ comment.authorName | titlecase }}</p>
+                  <span class="text-gray-500 text-sm">· {{ comment.createdAt | timeAgo }}</span>
                 </div>
-              }
-
-              <div class="mt-4 flex gap-2 text-xl">
-                <input
-                  [(ngModel)]="newCommentContent[post.id]"
-                  placeholder="Write a comment..."
-                  class="flex-1 px-4 py-2 border rounded-2xl focus:outline-none focus:border-[#B34962] text-lg"
-                />
-                <button
-                  class="px-4 py-2 bg-[#B34962] text-white rounded-full"
-                  (click)="addComment(post.id)"
-                >
-                  <i class="fa-solid fa-paper-plane rotate-45"></i>
-                </button>
+                <p class="ml-12 text-lg">{{ comment.content }}</p>
               </div>
             </div>
+
+            <button class="ml-12 text-lg text-[#B34962]" (click)="startReply(comment.id)">
+              Reply
+            </button>
+
+            @if (repliesVisible[comment.id]) {
+            @for (reply of replies[comment.id]; track $index) {
+            <div class="ml-12 mt-3">
+              <div class="flex items-center space-x-2">
+                <div
+                  class="h-8 w-8 shrink-0 rounded-full border border-black flex items-center justify-center bg-gray-100">
+                  <i class="fa-regular fa-user text-lg text-gray-800"></i>
+                </div>
+                <p class="font-medium text-lg">{{ reply.authorName | titlecase }}</p>
+                <span class="text-gray-500 text-sm">· {{ comment.createdAt | timeAgo }}</span>
+              </div>
+              <p class="ml-12 text-lg">{{ reply.content }}</p>
+            </div>
+            }
+            <div class="ml-12 mt-2 flex gap-2">
+              <input [(ngModel)]="newReplyContent[comment.id]" placeholder="Write a reply..."
+                class="flex-1 px-4 py-2 border rounded-2xl text-lg focus:outline-none focus:border-[#B34962]" />
+              <button class="px-4 py-2 bg-[#B34962] text-white rounded-full" (click)="addReply(comment.id)">
+                <i class="fa-solid fa-paper-plane rotate-45"></i>
+              </button>
+            </div>
+            }
+          </div>
           }
+
+          <div class="mt-4 flex gap-2 text-xl">
+            <input [(ngModel)]="newCommentContent[post.id]" placeholder="Write a comment..."
+              class="flex-1 px-4 py-2 border rounded-2xl focus:outline-none focus:border-[#B34962] text-lg" />
+            <button class="px-4 py-2 bg-[#B34962] text-white rounded-full" (click)="addComment(post.id)">
+              <i class="fa-solid fa-paper-plane rotate-45"></i>
+            </button>
+          </div>
         </div>
+        }
+      </div>
       }
     </section>
   </div>

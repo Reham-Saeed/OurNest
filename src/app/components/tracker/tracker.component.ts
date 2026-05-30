@@ -62,43 +62,42 @@ export class TrackerComponent implements OnInit {
 
   updateUIForSelectedCycle() {
     const activePeriod = this.allPeriods[this.viewIndex];
-    
     this.isViewingCurrent = (this.viewIndex === this.allPeriods.length - 1);
-
-    this.cycleLength = this.predictions?.averageCycle || activePeriod.cycleLengthDays || 28;
-
+  
     const cycleStart = new Date(activePeriod.startDate);
-    this.currentMonth = cycleStart.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  
+    const daysInMonth = new Date(cycleStart.getFullYear(), cycleStart.getMonth() + 1, 0).getDate();
+    this.cycleLength = daysInMonth;
+  
+    this.currentMonth = cycleStart.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  
     if (this.isViewingCurrent) {
-      const todayTime = new Date().setHours(0, 0, 0, 0);
-      const cycleStartTime = new Date(activePeriod.startDate).setHours(0, 0, 0, 0);
-      const diffDays = Math.round((todayTime - cycleStartTime) / (1000 * 60 * 60 * 24)) + 1;
-      this.currentDayIndex = Math.max(1, Math.min(diffDays, this.cycleLength));
+      this.currentDayIndex = new Date().getDate();
     } else {
-      this.currentDayIndex = 0; 
+      this.currentDayIndex = 0;
     }
-
+  
     const nextPeriodStart = new Date(cycleStart);
-    nextPeriodStart.setDate(nextPeriodStart.getDate() + this.cycleLength);
-
+    nextPeriodStart.setDate(nextPeriodStart.getDate() + (this.predictions?.averageCycle || activePeriod.cycleLengthDays || 28));
+  
     if (this.isViewingCurrent) {
       const timeToNext = nextPeriodStart.getTime() - new Date().getTime();
       this.daysUntilNextPeriod = Math.max(0, Math.ceil(timeToNext / (1000 * 60 * 60 * 24)));
       this.pregnancyChance = 'Low chance of getting pregnant';
     } else {
-      this.daysUntilNextPeriod = 0; 
+      this.daysUntilNextPeriod = 0;
       this.pregnancyChance = 'Cycle Completed';
     }
-
+  
     const ovulationDate = new Date(nextPeriodStart);
     ovulationDate.setDate(ovulationDate.getDate() - 14);
-
+  
     const fertStart = new Date(ovulationDate);
     fertStart.setDate(fertStart.getDate() - 5);
-
+  
     const fertEnd = new Date(ovulationDate);
     fertEnd.setDate(fertEnd.getDate() + 1);
-
+  
     this.generateCircleDays(cycleStart, ovulationDate, fertStart, fertEnd, activePeriod);
   }
 
@@ -119,46 +118,50 @@ export class TrackerComponent implements OnInit {
   generateCircleDays(cycleStart: Date, ovulationDate: Date, fertStart: Date, fertEnd: Date, latestPeriod: any) {
     this.days = [];
     const radius = 175;
-
+  
+    // ✅ Start from day 1 of the month, not the cycle start date
+    const monthStart = new Date(cycleStart.getFullYear(), cycleStart.getMonth(), 1);
+  
     const currentPeriodStart = new Date(latestPeriod.startDate).setHours(0, 0, 0, 0);
-    
-    const pLength = latestPeriod.periodLengthDays > 0 ? latestPeriod.periodLengthDays : 5; 
+    const pLength = latestPeriod.periodLengthDays > 0 ? latestPeriod.periodLengthDays : 5;
     const calculatedEnd = new Date(latestPeriod.startDate);
     calculatedEnd.setDate(calculatedEnd.getDate() + (pLength - 1));
     const currentPeriodEnd = calculatedEnd.setHours(0, 0, 0, 0);
-
+  
     const fStart = fertStart.setHours(0, 0, 0, 0);
     const fEnd = fertEnd.setHours(0, 0, 0, 0);
     const ov = ovulationDate.setHours(0, 0, 0, 0);
-
+  
     const medFertStart = new Date(fertStart);
     medFertStart.setDate(medFertStart.getDate() - 2);
     const mStart = medFertStart.setHours(0, 0, 0, 0);
-
+  
     for (let i = 1; i <= this.cycleLength; i++) {
       const angle = ((i - 1) / this.cycleLength) * 360 - 90;
-
-      let textClass = 'text-gray-400 font-medium text-lg'; 
+  
+      let textClass = 'text-gray-400 font-medium text-lg';
       let wrapperClass = 'w-10 h-10 flex items-center justify-center rounded-full';
-
-      const dayDate = new Date(cycleStart);
-      dayDate.setDate(cycleStart.getDate() + (i - 1));
+  
+      // ✅ dayDate now comes from monthStart so i == calendar day
+      const dayDate = new Date(monthStart);
+      dayDate.setDate(i);
       const dayTime = dayDate.setHours(0, 0, 0, 0);
-
+  
       if (dayTime >= currentPeriodStart && dayTime <= currentPeriodEnd) {
-        textClass = 'text-[#c06b7a] font-bold text-xl'; 
+        textClass = 'text-[#c06b7a] font-bold text-xl';
       } else if (dayTime === ov) {
-        textClass = 'text-green-500 font-bold text-xl'; 
+        textClass = 'text-green-500 font-bold text-xl';
         wrapperClass += ' border-2 border-dashed border-green-500';
         if (i === this.currentDayIndex) this.pregnancyChance = 'Peak chance of getting pregnant!';
       } else if (dayTime >= fStart && dayTime <= fEnd) {
-        textClass = 'text-teal-400 font-bold text-xl'; 
+        textClass = 'text-teal-400 font-bold text-xl';
         if (i === this.currentDayIndex) this.pregnancyChance = 'High chance of getting pregnant';
       } else if (dayTime >= mStart && dayTime < fStart) {
-        textClass = 'text-gray-700 font-bold text-lg'; 
+        textClass = 'text-gray-700 font-bold text-lg';
         if (i === this.currentDayIndex) this.pregnancyChance = 'Medium chance of getting pregnant';
       }
-
+  
+      // ✅ value: i is now the calendar date (1–30/31)
       this.days.push({
         value: i,
         transform: `rotate(${angle}deg) translate(${radius}px) rotate(${-angle}deg)`,
