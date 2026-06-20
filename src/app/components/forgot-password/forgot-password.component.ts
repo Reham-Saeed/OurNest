@@ -60,7 +60,7 @@ export class ForgotPasswordComponent {
     this.apiError = '';
 
     const rawUsername = this.step1Form.value.username?.trim() || '';
-    this.systemEmail = `${rawUsername.toLowerCase()}@test.com`;
+    this.systemEmail = `${rawUsername.replace(/\s+/g, '')}@test.com`;
     const recoveryEmail = this.step1Form.value.recoveryEmail?.trim() || '';
 
     this.authService.forgotPassword({ email: this.systemEmail, recoveryEmail }).subscribe({

@@ -120,8 +120,8 @@ export class DatePickerComponent {
   ];
 
   private initPregnancyPicker() {
-    this.weeks = Array.from({ length: 42 }, (_, i) => i);
-    this.days = Array.from({ length: 7 }, (_, i) => i);
+    this.weeks = Array.from({ length: 42 }, (_, i) => i + 1);
+    this.days = Array.from({ length: 7 }, (_, i) => i + 1);
 
     this.selectedWeek = this.weeks[0];
     this.selectedDay = this.days[0];

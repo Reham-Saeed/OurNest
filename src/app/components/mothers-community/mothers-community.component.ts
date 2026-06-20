@@ -36,6 +36,7 @@ export class MothersCommunityComponent {
   onInputChange() {
     this.hasText = this.newPostContent.trim().length > 0;
   }
+
   ngOnInit(): void {
     this.loadPosts();
   }
@@ -88,6 +89,7 @@ export class MothersCommunityComponent {
       if (!this.comments[postId]) this.comments[postId] = [];
       this.comments[postId].push(newComment);
       this.newCommentContent[postId] = '';
+      this.loadPosts();
     });
   }
 
@@ -106,6 +108,7 @@ export class MothersCommunityComponent {
       if (!this.replies[commentId]) this.replies[commentId] = [];
       this.replies[commentId].push(newReply);
       this.newReplyContent[commentId] = '';
+      this.loadPosts();
     });
   }
 

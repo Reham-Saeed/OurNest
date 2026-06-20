@@ -79,6 +79,123 @@
       </div>
     }
     
+     <!-- IS PLANNING -->
+    @if (currentStep === 'mother:notPregnant:isPlanning') {
+      <div class="flex flex-col justify-center items-center">
+        <h2 class="text-3xl pb-5 text-[#B34962]">Do you want to get pregnant?</h2>
+        <button class="btn-dark-pink px-40 py-6 mb-3" (click)="selectPlanning(true)">Yes</button>
+        <span class="text-base text-[#B34962]">Or</span>
+        <button class="btn-dark-pink px-40 py-6 mt-3" (click)="selectPlanning(false)">No</button>
+      </div>
+    }
+
+    <!-- PLANNING FORM -->
+    @if (currentStep === 'mother:notPregnant:planning') {
+      @if (currentView === 'planningForm') {
+        <form [formGroup]="periodDetails" class="text-xl flex flex-col gap-6 min-w-lg">
+          <!-- LAST PERIOD -->
+          <div>
+            <label class="text-[#B34962]">Your last period</label>
+
+            <div class="relative mt-1">
+              <input
+                formControlName="lastPeriodDate"
+                type="text"
+                readonly
+                class="px-2 py-3 border border-[#B34962] rounded-md w-full"
+              />
+
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                (click)="openLastPeriodSelect()"
+              >
+                <img src="assets/calendar-date.svg" alt="" />
+              </span>
+            </div>
+
+            @if (
+              periodDetails.get('lastPeriodDate')?.touched &&
+              periodDetails.get('lastPeriodDate')?.invalid
+            ) {
+              <small class="text-red-700"> Please select your last period date </small>
+            }
+          </div>
+
+          <!-- PERIOD LENGTH -->
+          <div>
+            <label class="text-[#B34962]">Your period length</label>
+
+            <div class="relative mt-1">
+              <input
+                formControlName="periodLength"
+                type="number"
+                class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
+              />
+
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
+                <img src="assets/blood-drops.svg" alt="" />
+              </span>
+            </div>
+
+            @if (
+              periodDetails.get('periodLength')?.touched &&
+              periodDetails.get('periodLength')?.invalid
+            ) {
+              <small class="text-red-700"> Please enter a valid period length (2 - 10 days) </small>
+            }
+          </div>
+
+          <!-- CYCLE LENGTH -->
+          <div>
+            <label class="text-[#B34962]">Your cycle length</label>
+
+            <div class="relative mt-1">
+              <input
+                formControlName="cycleLength"
+                type="number"
+                class="px-2 py-3 border border-[#B34962] rounded-md w-full pr-12"
+              />
+
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[#00000066] text-sm">
+                <img src="assets/cycle.svg" alt="" />
+              </span>
+            </div>
+
+            @if (
+              periodDetails.get('cycleLength')?.touched && periodDetails.get('cycleLength')?.invalid
+            ) {
+              <small class="text-red-700"> Please enter a valid cycle length (15 - 60 days) </small>
+            }
+          </div>
+
+          <!-- SAVE BUTTON -->
+          <div class="flex justify-center mt-10">
+            <button
+              class="btn-dark-pink md:text-xl px-40 py-6"
+              (click)="saveCurrentForm()"
+              [disabled]="periodDetails.invalid"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      }
+      @if (currentView === 'lastPeriodSelect') {
+        <div class="flex flex-col justify-center items-center">
+          <h2 class="text-3xl mb-5 text-[#B34962] max-w-md text-center">
+            Select the date of your last period.
+          </h2>
+          <app-date-picker
+            pickerType="lastPeriodPlanning"
+            (dateSelected)="onLastPeriodPicked($event)"
+          ></app-date-picker>
+          <button class="btn-dark-pink px-40 py-5 mt-10 text-lg" (click)="closeLastPeriodSelect()">
+            Continue
+          </button>
+        </div>
+      }
+    }
+
 
     <!-- BODY DETAILS -->
     @if (currentStep === 'mother:pregnant:bodyDetails') {

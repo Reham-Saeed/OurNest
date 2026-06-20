@@ -1,50 +1,81 @@
-<section class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] mx-auto py-8 px-4 sm:px-6 lg:px-20 min-h-screen">
+<section
+  class="bg-[linear-gradient(180deg,#FFFFFF_0%,#FFC5D0_100%)] mx-auto py-8 px-4 sm:px-6 lg:px-20 min-h-screen"
+>
   <button
     class="lg:hidden flex items-center gap-2 mb-4 bg-white px-4 py-2 rounded-full shadow text-[#B34962] font-semibold"
-    (click)="sidebarOpen = !sidebarOpen">
+    (click)="sidebarOpen = !sidebarOpen"
+  >
     <i class="fa-solid fa-bars"></i>
     {{ sidebarOpen ? 'Close' : 'Settings' }}
   </button>
 
   <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-10">
-    <div class="lg:hidden fixed inset-0 z-40 bg-black/30" [class.hidden]="!sidebarOpen" (click)="sidebarOpen = false">
-    </div>
+    <div
+      class="lg:hidden fixed inset-0 z-40 bg-black/30"
+      [class.hidden]="!sidebarOpen"
+      (click)="sidebarOpen = false"
+    ></div>
 
     <div
       class="fixed top-0 left-0 z-50 h-full w-[300px] px-5 py-9 bg-white overflow-y-auto transition-transform duration-300 lg:static lg:translate-x-0 lg:h-auto lg:w-auto lg:col-span-4 lg:rounded-[20px] lg:border lg:border-[#B34962] lg:z-auto lg:overflow-visible lg:py-9 lg:px-9"
-      [class.-translate-x-full]="!sidebarOpen" [class.translate-x-0]="sidebarOpen">
-      <button class="lg:hidden self-end mb-6 float-right text-gray-400" (click)="sidebarOpen = false">
+      [class.-translate-x-full]="!sidebarOpen"
+      [class.translate-x-0]="sidebarOpen"
+    >
+      <button
+        class="lg:hidden self-end mb-6 float-right text-gray-400"
+        (click)="sidebarOpen = false"
+      >
         <i class="fa-solid fa-xmark fa-xl"></i>
       </button>
 
-      <div class="flex flex-col justify-center items-center mb-8 mt-8 lg:mt-0 relative group cursor-pointer"
-        (click)="activeSection = 'profile'; sidebarOpen = false">
+      <div
+        class="flex flex-col justify-center items-center mb-8 mt-8 lg:mt-0 relative group cursor-pointer"
+        (click)="activeSection = 'profile'; sidebarOpen = false"
+      >
         <div
-          class="h-20 w-20 lg:h-[123px] lg:w-[123px] rounded-full border border-[#B34962] flex items-center justify-center bg-pink-50 overflow-hidden relative shadow-sm transition-transform group-hover:scale-105">
-          <img *ngIf="imageUrl" [src]="imageUrl" class="w-full h-full object-cover">
+          class="h-20 w-20 lg:h-[123px] lg:w-[123px] rounded-full border border-[#B34962] flex items-center justify-center bg-pink-50 overflow-hidden relative shadow-sm transition-transform group-hover:scale-105"
+        >
+          <img *ngIf="imageUrl" [src]="imageUrl" class="w-full h-full object-cover" />
           <i *ngIf="!imageUrl" class="fa-regular fa-user text-3xl lg:text-5xl text-[#B34962]"></i>
           <div
-            class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          >
             <i class="fa-solid fa-camera text-white fa-xl"></i>
           </div>
         </div>
 
         <div class="mt-3 text-center">
-          <h3 class="font-bold text-lg text-gray-800">{{ profileForm.get('fullName')?.value || 'My Profile' }}</h3>
+          <h3 class="font-bold text-lg text-gray-800">
+            {{ profileForm.get('fullName')?.value || 'My Profile' }}
+          </h3>
           <span class="text-sm text-[#B34962] font-medium group-hover:underline">Edit Details</span>
         </div>
       </div>
 
       <div class="flex flex-col gap-5">
-        <div *ngIf="stateRole !== 'Father'" class="rounded-xl border border-[#B34962] divide-y-[0.3px] divide-pink-200">
-          <button (click)="activeSection = 'mode'; sidebarOpen = false"
+        <div
+          *ngIf="stateRole !== 'Father'"
+          class="rounded-xl border border-[#B34962] divide-y-[0.3px] divide-pink-200"
+        >
+          <button
+            (click)="activeSection = 'mode'; sidebarOpen = false"
             [ngClass]="{ 'bg-pink-50': activeSection === 'mode' }"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-xl transition-colors">
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-xl transition-colors"
+          >
             <span class="flex items-center gap-2 font-medium">
-              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="23"
+                viewBox="0 0 23 23"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
                   d="M11.2005 22.4013C5.01446 22.4013 0 17.3868 0 11.2006C0 5.01453 5.01446 0 11.2005 0C17.3865 0 22.401 5.01453 22.401 11.2006C22.401 17.3868 17.3865 22.4013 11.2005 22.4013ZM11.2005 20.1612C13.5769 20.1612 15.856 19.2171 17.5364 17.5367C19.2168 15.8563 20.1609 13.5771 20.1609 11.2006C20.1609 8.82417 19.2168 6.54503 17.5364 4.8646C15.856 3.18418 13.5769 2.24013 11.2005 2.24013C8.82405 2.24013 6.54494 3.18418 4.86454 4.8646C3.18414 6.54503 2.2401 8.82417 2.2401 11.2006C2.2401 13.5771 3.18414 15.8563 4.86454 17.5367C6.54494 19.2171 8.82405 20.1612 11.2005 20.1612ZM5.60024 12.3207H15.6807V14.5608H11.2005V17.921L5.60024 12.3207ZM11.2005 7.84045V4.48026L16.8007 10.0806H6.72029V7.84045H11.2005Z"
-                  fill="#B34962" />
+                  fill="#B34962"
+                />
               </svg>
               Change mode
             </span>
@@ -53,9 +84,12 @@
         </div>
 
         <div class="rounded-xl border border-[#B34962] divide-y-[0.3px] divide-pink-200">
-          <button *ngIf="showPartner" (click)="activeSection = 'partner'; sidebarOpen = false"
+          <button
+            *ngIf="showPartner"
+            (click)="activeSection = 'partner'; sidebarOpen = false"
             [ngClass]="{ 'bg-pink-50': activeSection === 'partner' }"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-t-xl transition-colors">
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-t-xl transition-colors"
+          >
             <span class="flex items-center gap-2 font-medium">
               <img src="assets/partner.svg" alt="" />
               Share with partner
@@ -63,60 +97,103 @@
             <i class="fa-solid fa-chevron-right text-[#B34962]"></i>
           </button>
           <div class="relative">
-            <button (click)="copyWebsiteLink()"
-              class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-b-xl transition-colors">
+            <button
+              (click)="copyWebsiteLink()"
+              class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-b-xl transition-colors"
+            >
               <span class="flex items-center gap-2 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18" fill="none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="18"
+                  viewBox="0 0 20 18"
+                  fill="none"
+                >
                   <path
                     d="M18.921 8.84036L11.7526 1V4.92018C8.1684 4.92018 1 7.27229 1 16.6807C1 15.3736 3.15052 12.7605 11.7526 12.7605V16.6807L18.921 8.84036Z"
-                    stroke="#B34962" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    stroke="#B34962"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
                 Share with friends
               </span>
               <i class="fa-solid fa-chevron-right text-[#B34962]"></i>
             </button>
-            <span *ngIf="showCopied"
-              class="absolute right-4 -top-3 bg-[#B34962] text-white text-xs px-3 py-1 rounded-full shadow transition-all duration-300">
+            <span
+              *ngIf="showCopied"
+              class="absolute right-4 -top-3 bg-[#B34962] text-white text-xs px-3 py-1 rounded-full shadow transition-all duration-300"
+            >
               OurNest link copied ✓
             </span>
           </div>
         </div>
 
         <div class="rounded-xl border border-[#B34962] divide-y-[0.3px] divide-pink-200">
-          <button (click)="activeSection = 'support'; sidebarOpen = false"
+          <button
+            (click)="activeSection = 'support'; sidebarOpen = false"
             [ngClass]="{ 'bg-pink-50': activeSection === 'support' }"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-t-xl transition-colors">
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-t-xl transition-colors"
+          >
             <span class="flex items-center gap-2 font-medium">
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                viewBox="0 0 25 25"
+                fill="none"
+              >
                 <path
                   d="M16.1703 2.31011C12.759 2.31011 10.01 5.05915 10.01 8.47042C10.01 8.65138 10.0385 8.89625 10.0585 9.12034L3.46468 15.7134C3.1045 16.0713 2.81866 16.4968 2.6236 16.9656C2.42854 17.4343 2.32812 17.937 2.32812 18.4447C2.32812 18.9525 2.42854 19.4552 2.6236 19.9239C2.81866 20.3927 3.1045 20.8182 3.46468 21.1761C3.82252 21.5362 4.24807 21.8221 4.71683 22.0171C5.18558 22.2122 5.68829 22.3126 6.19601 22.3126C6.70373 22.3126 7.20643 22.2122 7.67519 22.0171C8.14394 21.8221 8.56949 21.5362 8.92733 21.1761L15.5204 14.5822C15.7437 14.6022 15.9901 14.6307 16.1703 14.6307C19.5816 14.6307 22.3306 11.8817 22.3306 8.47042C22.3346 7.47785 22.086 6.50058 21.6083 5.63052L21.1271 4.74035L20.4055 5.46265L17.0844 8.75842L15.8816 7.55562L19.1773 4.23521L19.9012 3.51291L19.0102 3.03164C18.1401 2.55421 17.1628 2.30591 16.1703 2.31011ZM16.1703 3.85019C16.5446 3.85019 16.8233 4.0119 17.156 4.09121L14.2452 7.00196L13.6908 7.55639L14.2452 8.0854L16.5553 10.3955L17.0851 10.9499L17.638 10.3955L20.5503 7.48477C20.6296 7.81743 20.7906 8.09618 20.7906 8.47042C20.7906 11.0655 18.7654 13.0907 16.1703 13.0907C15.8623 13.0907 15.6159 13.0907 15.4234 13.0421L15.0153 12.922L14.7026 13.2354L7.84389 20.0942C6.89674 21.0413 5.49527 21.0413 4.54812 20.0942L4.52348 20.0695C3.59944 19.1224 3.60714 17.7363 4.54658 16.7969L11.4053 9.93889L11.7187 9.62625L11.5971 9.21813C11.5509 9.02562 11.5493 8.77921 11.5493 8.47119C11.5493 5.87616 13.5745 3.85096 16.1696 3.85096L16.1703 3.85019Z"
-                  fill="#B34962" />
+                  fill="#B34962"
+                />
               </svg>
               Support
             </span>
             <i class="fa-solid fa-chevron-right text-[#B34962]"></i>
           </button>
-          <button (click)="activeSection = 'policy'; sidebarOpen = false"
+          <button
+            (click)="activeSection = 'policy'; sidebarOpen = false"
             [ngClass]="{ 'bg-pink-50': activeSection === 'policy' }"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 transition-colors">
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 transition-colors"
+          >
             <span class="flex items-center gap-2 font-medium">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="26"
+                height="24"
+                viewBox="0 0 26 24"
+                fill="none"
+              >
                 <path
-                  d="M10.6138 15.8115C10.9872 15.8115 11.3029 15.692 11.5611 15.4528C11.8192 15.2137 11.9479 14.9215 11.9472 14.5763C11.9465 14.231 11.8178 13.9385 11.5611 13.6987C11.3043 13.4589 10.9886 13.3397 10.6138 13.341C10.2391 13.3423 9.92366 13.4619 9.66765 13.6997C9.41164 13.9375 9.28257 14.2297 9.28043 14.5763C9.2783 14.9228 9.40737 15.2153 9.66765 15.4538C9.92793 15.6923 10.2433 15.8115 10.6138 15.8115ZM9.65378 12.0069H11.6272C11.6272 11.4634 11.6941 11.0351 11.8278 10.7222C11.9614 10.4093 12.3391 9.98104 12.9606 9.43751C13.4228 9.00928 13.7873 8.60148 14.054 8.2141C14.3207 7.82671 14.454 7.36159 14.454 6.81873C14.454 5.89639 14.0895 5.18816 13.3606 4.69405C12.6317 4.19994 11.7694 3.95289 10.7738 3.95289C9.76045 3.95289 8.93837 4.19994 8.30759 4.69405C7.6768 5.18816 7.2366 5.7811 6.98699 6.47285L8.74707 7.1152C8.83597 6.81873 9.03615 6.49756 9.34763 6.15168C9.65912 5.8058 10.1345 5.63286 10.7738 5.63286C11.3428 5.63286 11.7694 5.77714 12.0539 6.0657C12.3384 6.35426 12.4806 6.67116 12.4806 7.01637C12.4806 7.34578 12.3739 7.65476 12.1606 7.94332C11.9472 8.23188 11.6805 8.49936 11.3605 8.74576C10.5783 9.3881 10.0982 9.87398 9.92046 10.2034C9.74268 10.5328 9.65378 11.134 9.65378 12.0069ZM10.6672 19.7644C9.19154 19.7644 7.80481 19.5052 6.50697 18.9867C5.20913 18.4682 4.08019 17.7639 3.12015 16.8739C2.1601 15.9838 1.40024 14.938 0.840574 13.7363C0.280903 12.5346 0.000712494 1.35027e-06 9.88221C-0.000709794 8.51452 0.279481 7.22983 0.840574 6.02815C1.40167 4.82648 2.16152 3.78061 3.12015 2.89055C4.07877 2.00049 5.20771 1.29655 6.50697 0.778723C7.80623 0.260895 9.19296 0.00132262 10.6672 4.99101e-06C12.1414 -0.00131264 13.5281 0.25826 14.8274 0.778723C16.1266 1.29919 17.2556 2.00313 18.2142 2.89055C19.1728 3.77797 19.933 4.82384 20.4948 6.02815C21.0566 7.23246 21.3365 8.51715 21.3343 9.88221C21.3322 11.2473 21.052 12.532 20.4938 13.7363C19.9355 14.9406 19.1756 15.9865 18.2142 16.8739C17.2527 17.7613 16.1238 18.4656 14.8274 18.9867C13.5309 19.5078 12.1442 19.7671 10.6672 19.7644ZM10.6672 17.788C13.0495 17.788 15.0674 17.0221 16.7208 15.4904C18.3742 13.9586 19.2009 12.0892 19.2009 9.88221C19.2009 7.67519 18.3742 5.8058 16.7208 4.27406C15.0674 2.74232 13.0495 1.97645 10.6672 1.97645C8.28483 1.97645 6.26696 2.74232 4.61355 4.27406C2.96014 5.8058 2.13343 7.67519 2.13343 9.88221C2.13343 12.0892 2.96014 13.9586 4.61355 15.4904C6.26696 17.0221 8.28483 17.788 10.6672 17.788Z"
-                  fill="#B34962" />
+                  d="M12.7466 17.788C13.12 17.788 13.4357 17.6684 13.6939 17.4293C13.952 17.1901 14.0807 16.8979 14.08 16.5527C14.0793 16.2075 13.9506 15.915 13.6939 15.6752C13.4372 15.4354 13.1214 15.3161 12.7466 15.3174C12.3719 15.3187 12.0565 15.4383 11.8005 15.6762C11.5444 15.914 11.4154 16.2062 11.4132 16.5527C11.4111 16.8992 11.5402 17.1918 11.8005 17.4302C12.0607 17.6687 12.3761 17.788 12.7466 17.788ZM11.7866 13.9833H13.76C13.76 13.4398 13.8269 13.0116 13.9606 12.6986C14.0943 12.3857 14.4719 11.9575 15.0934 11.414C15.5557 10.9857 15.9201 10.5779 16.1868 10.1905C16.4535 9.80315 16.5868 9.33803 16.5868 8.79517C16.5868 7.87283 16.2224 7.16461 15.4934 6.67049C14.7645 6.17638 13.9022 5.92933 12.9066 5.92933C11.8933 5.92933 11.0712 6.17638 10.4404 6.67049C9.80962 7.16461 9.36942 7.75754 9.11981 8.44929L10.8799 9.09164C10.9688 8.79517 11.169 8.474 11.4804 8.12812C11.7919 7.78224 12.2673 7.6093 12.9066 7.6093C13.4756 7.6093 13.9022 7.75358 14.1867 8.04214C14.4712 8.33071 14.6134 8.6476 14.6134 8.99281C14.6134 9.32222 14.5067 9.6312 14.2934 9.91976C14.08 10.2083 13.8134 10.4758 13.4933 10.7222C12.7111 11.3645 12.2311 11.8504 12.0533 12.1798C11.8755 12.5092 11.7866 13.1104 11.7866 13.9833ZM12.8 21.7409C11.3244 21.7409 9.93762 21.4816 8.63978 20.9631C7.34195 20.4446 6.213 19.7404 5.25296 18.8503C4.29291 17.9603 3.53306 16.9144 2.97339 15.7127C2.41372 14.511 2.13352 13.2264 2.13281 11.8587C2.1321 10.491 2.41229 9.20627 2.97339 8.00459C3.53448 6.80292 4.29434 5.75705 5.25296 4.86699C6.21158 3.97693 7.34052 3.27299 8.63978 2.75516C9.93904 2.23734 11.3258 1.97776 12.8 1.97645C14.2742 1.97513 15.6609 2.2347 16.9602 2.75516C18.2594 3.27563 19.3884 3.97957 20.347 4.86699C21.3056 5.75441 22.0658 6.80028 22.6276 8.00459C23.1894 9.20891 23.4693 10.4936 23.4671 11.8587C23.465 13.2237 23.1848 14.5084 22.6266 15.7127C22.0683 16.917 21.3085 17.9629 20.347 18.8503C19.3855 19.7377 18.2566 20.442 16.9602 20.9631C15.6638 21.4843 14.277 21.7435 12.8 21.7409ZM12.8 19.7644C15.1823 19.7644 17.2002 18.9985 18.8536 17.4668C20.507 15.9351 21.3337 14.0657 21.3337 11.8587C21.3337 9.65163 20.507 7.78224 18.8536 6.2505C17.2002 4.71876 15.1823 3.95289 12.8 3.95289C10.4176 3.95289 8.39977 4.71876 6.74636 6.2505C5.09295 7.78224 4.26625 9.65163 4.26625 11.8587C4.26625 14.0657 5.09295 15.9351 6.74636 17.4668C8.39977 18.9985 10.4176 19.7644 12.8 19.7644Z"
+                  fill="#B34962"
+                />
               </svg>
               Privacy policy
             </span>
             <i class="fa-solid fa-chevron-right text-[#B34962]"></i>
           </button>
-          <button (click)="activeSection = 'about'; sidebarOpen = false"
+          <button
+            (click)="activeSection = 'about'; sidebarOpen = false"
             [ngClass]="{ 'bg-pink-50': activeSection === 'about' }"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-b-xl transition-colors">
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-b-xl transition-colors"
+          >
             <span class="flex items-center gap-2 font-medium">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="21"
+                height="21"
+                viewBox="0 0 21 21"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
                   d="M10.2674 0C4.59689 0 0 4.59665 0 10.267C0 15.9372 4.59689 20.534 10.2674 20.534C15.938 20.534 20.5348 15.9373 20.5348 10.267C20.5348 4.59665 15.938 0 10.2674 0ZM10.2674 18.4805C5.73826 18.4805 2.0535 14.7959 2.0535 10.267C2.0535 5.73797 5.73821 2.05341 10.2674 2.05341C14.7966 2.05341 18.4813 5.73797 18.4813 10.267C18.4813 14.7959 14.7966 18.4805 10.2674 18.4805ZM11.5531 6.16018C11.5531 6.9046 11.0111 7.44357 10.2778 7.44357C9.51495 7.44357 8.98621 6.90455 8.98621 6.14594C8.98621 5.41682 9.52924 4.87684 10.2778 4.87684C11.0111 4.87684 11.5531 5.41682 11.5531 6.16018ZM9.24293 9.24027H11.2964V15.4005H9.24293V9.24027Z"
-                  fill="#B34962" />
+                  fill="#B34962"
+                />
               </svg>
               About
             </span>
@@ -125,13 +202,22 @@
         </div>
 
         <div class="rounded-xl border border-[#B34962] divide-y-[0.3px] divide-pink-200">
-          <button (click)="onLogout()"
-            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer">
+          <button
+            (click)="onLogout()"
+            class="flex items-center justify-between w-full p-4 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
+          >
             <span class="flex items-center gap-2 font-medium text-[#D82626]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="20"
+                viewBox="0 0 16 20"
+                fill="none"
+              >
                 <path
                   d="M0 10C0 10.2652 0.105357 10.5196 0.292893 10.7071C0.48043 10.8946 0.734784 11 1 11H8.59L6.29 13.29C6.19627 13.383 6.12188 13.4936 6.07111 13.6154C6.02034 13.7373 5.9942 13.868 5.9942 14C5.9942 14.132 6.02034 14.2627 6.07111 14.3846C6.12188 14.5064 6.19627 14.617 6.29 14.71C6.38296 14.8037 6.49356 14.8781 6.61542 14.9289C6.73728 14.9797 6.86799 15.0058 7 15.0058C7.13201 15.0058 7.26272 14.9797 7.38458 14.9289C7.50644 14.8781 7.61704 14.8037 7.71 14.71L11.71 10.71C11.801 10.6149 11.8724 10.5028 11.92 10.38C12.02 10.1365 12.02 9.86346 11.92 9.62C11.8724 9.49725 11.801 9.3851 11.71 9.29L7.71 5.29C7.61676 5.19676 7.50607 5.1228 7.38425 5.07234C7.26243 5.02188 7.13186 4.99591 7 4.99591C6.86814 4.99591 6.73757 5.02188 6.61575 5.07234C6.49393 5.1228 6.38324 5.19676 6.29 5.29C6.19676 5.38324 6.1228 5.49393 6.07234 5.61575C6.02188 5.73757 5.99591 5.86814 5.99591 6C5.99591 6.13186 6.02188 6.26243 6.07234 6.38425C6.1228 6.50607 6.19676 6.61676 6.29 6.71L8.59 9H1C0.734784 9 0.48043 9.10536 0.292893 9.29289C0.105357 9.48043 0 9.73478 0 10ZM13 0H3C2.20435 0 1.44129 0.316071 0.87868 0.87868C0.316071 1.44129 0 2.20435 0 3V6C0 6.26522 0.105357 6.51957 0.292893 6.70711C0.48043 6.89464 0.734784 7 1 7C1.26522 7 1.51957 6.89464 1.70711 6.70711C1.89464 6.51957 2 6.26522 2 6V3C2 2.73478 2.10536 2.48043 2.29289 2.29289C2.48043 2.10536 2.73478 2 3 2H13C13.2652 2 13.5196 2.10536 13.7071 2.29289C13.8946 2.48043 14 2.73478 14 3V17C14 17.2652 13.8946 17.5196 13.7071 17.7071C13.5196 17.8946 13.2652 18 13 18H3C2.73478 18 2.48043 17.8946 2.29289 17.7071C2.10536 17.5196 2 17.2652 2 17V14C2 13.7348 1.89464 13.4804 1.70711 13.2929C1.51957 13.1054 1.26522 13 1 13C0.734784 13 0.48043 13.1054 0.292893 13.2929C0.105357 13.4804 0 13.7348 0 14V17C0 17.7956 0.316071 18.5587 0.87868 19.1213C1.44129 19.6839 2.20435 20 3 20H13C13.7956 20 14.5587 19.6839 15.1213 19.1213C15.6839 18.5587 16 17.7956 16 17V3C16 2.20435 15.6839 1.44129 15.1213 0.87868C14.5587 0.316071 13.7956 0 13 0Z"
-                  fill="#D82626" />
+                  fill="#D82626"
+                />
               </svg>
               Log out
             </span>
@@ -141,11 +227,10 @@
       </div>
     </div>
 
-    <div class="rounded-[24px] bg-white lg:col-span-8 border border-[#B34962] p-6 sm:p-10 lg:p-14 min-h-[400px]">
-
-
+    <div
+      class="rounded-[24px] bg-white lg:col-span-8 border border-[#B34962] p-6 sm:p-10 lg:p-14 min-h-[400px]"
+    >
       <div *ngIf="activeSection === 'profile'" class="animate-in fade-in slide-in-from-right-4">
-
         <div *ngIf="isLoadingProfile" class="flex justify-center items-center py-20">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B34962]"></div>
         </div>
@@ -155,57 +240,98 @@
             <h2 class="text-3xl font-bold text-[#B34962] mb-2">Account Profile</h2>
             <p class="text-gray-500 mb-8">Update your photo and personal details.</p>
 
-            <div *ngIf="profileMessage"
-              class="mb-6 p-4 bg-green-50 text-green-700 border border-green-200 rounded-xl flex items-center gap-2">
+            <div
+              *ngIf="profileMessage"
+              class="mb-6 p-4 bg-green-50 text-green-700 border border-green-200 rounded-xl flex items-center gap-2"
+            >
               <i class="fa-solid fa-check-circle"></i>
               {{ profileMessage }}
             </div>
 
             <div
-              class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-10 pb-8 border-b border-pink-100">
+              class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-10 pb-8 border-b border-pink-100"
+            >
               <div
-                class="h-28 w-28 rounded-full border-2 border-dashed border-[#B34962] flex items-center justify-center overflow-hidden bg-pink-50 relative shrink-0 shadow-sm">
-                <img *ngIf="imageUrl" [src]="imageUrl" class="w-full h-full object-cover">
+                class="h-28 w-28 rounded-full border-2 border-dashed border-[#B34962] flex items-center justify-center overflow-hidden bg-pink-50 relative shrink-0 shadow-sm"
+              >
+                <img *ngIf="imageUrl" [src]="imageUrl" class="w-full h-full object-cover" />
                 <i *ngIf="!imageUrl" class="fa-regular fa-image text-4xl text-pink-300"></i>
               </div>
 
               <div class="text-center sm:text-left pt-2">
-                <input type="file" #fileInput (change)="onFileSelected($event)" class="hidden" accept="image/*">
-                <button type="button" (click)="fileInput.click()"
-                  class="bg-white border border-[#B34962] text-[#B34962] px-6 py-2.5 rounded-xl font-medium hover:bg-pink-50 transition-colors shadow-sm cursor-pointer">
+                <input
+                  type="file"
+                  #fileInput
+                  (change)="onFileSelected($event)"
+                  class="hidden"
+                  accept="image/*"
+                />
+                <button
+                  type="button"
+                  (click)="fileInput.click()"
+                  class="bg-white border border-[#B34962] text-[#B34962] px-6 py-2.5 rounded-xl font-medium hover:bg-pink-50 transition-colors shadow-sm cursor-pointer"
+                >
                   Upload New Picture
                 </button>
-                <p class="text-xs text-gray-400 mt-3">Allowed formats: JPG, PNG, GIF.<br>Maximum size: 5MB.</p>
+                <p class="text-xs text-gray-400 mt-3">
+                  Allowed formats: JPG, PNG, GIF.<br />Maximum size: 5MB.
+                </p>
               </div>
             </div>
 
-            <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()" class="flex flex-col gap-6 max-w-lg">
-
+            <form
+              [formGroup]="profileForm"
+              (ngSubmit)="onProfileSubmit()"
+              class="flex flex-col gap-6 max-w-lg"
+            >
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
-                <input formControlName="fullName" type="text" placeholder="Enter your full name"
+                <input
+                  formControlName="fullName"
+                  type="text"
+                  placeholder="Enter your full name"
                   class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50"
-                  [class.border-red-500]="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched">
-                <p *ngIf="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched"
-                  class="text-red-500 text-xs mt-1 ml-1">Name is required.</p>
+                  [class.border-red-500]="
+                    profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched
+                  "
+                />
+                <p
+                  *ngIf="
+                    profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched
+                  "
+                  class="text-red-500 text-xs mt-1 ml-1"
+                >
+                  Name is required.
+                </p>
               </div>
 
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Date of Birth</label>
-                <input formControlName="dateOfBirth" type="date"
-                  class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50">
+                <input
+                  formControlName="dateOfBirth"
+                  type="date"
+                  class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50"
+                />
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Bio <span
-                    class="text-gray-400 font-normal">(Optional)</span></label>
-                <textarea formControlName="bio" rows="4" placeholder="Tell us a little about yourself..."
-                  class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors resize-none bg-gray-50/50"></textarea>
+                <label class="block text-sm font-bold text-gray-700 mb-2"
+                  >Bio <span class="text-gray-400 font-normal">(Optional)</span></label
+                >
+                <textarea
+                  formControlName="bio"
+                  rows="4"
+                  placeholder="Tell us a little about yourself..."
+                  class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors resize-none bg-gray-50/50"
+                ></textarea>
               </div>
 
               <div class="mt-2">
-                <button type="submit" [disabled]="profileForm.invalid || isSavingProfile"
-                  class="bg-[#B34962] text-white px-8 py-3.5 rounded-xl font-bold hover:brightness-110 transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none hover:-translate-y-0.5 cursor-pointer">
+                <button
+                  type="submit"
+                  [disabled]="profileForm.invalid || isSavingProfile"
+                  class="bg-[#B34962] text-white px-8 py-3.5 rounded-xl font-bold hover:brightness-110 transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none hover:-translate-y-0.5 cursor-pointer"
+                >
                   {{ isSavingProfile ? 'Saving...' : 'Save Profile Details' }}
                 </button>
               </div>
@@ -216,42 +342,95 @@
             <h2 class="text-2xl font-bold text-[#B34962] mb-2">Security</h2>
             <p class="text-gray-500 mb-8">Update your password to keep your account secure.</p>
 
-            <div *ngIf="passwordMessage" class="mb-6 p-4 rounded-xl flex items-center gap-2 max-w-lg"
-              [ngClass]="passwordMessage.includes('Error') ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'">
+            <div
+              *ngIf="passwordMessage"
+              class="mb-6 p-4 rounded-xl flex items-center gap-2 max-w-lg"
+              [ngClass]="
+                passwordMessage.includes('Error')
+                  ? 'bg-red-50 text-red-700 border border-red-200'
+                  : 'bg-green-50 text-green-700 border border-green-200'
+              "
+            >
               <i
-                [class]="passwordMessage.includes('Error') ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-check-circle'"></i>
+                [class]="
+                  passwordMessage.includes('Error')
+                    ? 'fa-solid fa-circle-exclamation'
+                    : 'fa-solid fa-check-circle'
+                "
+              ></i>
               {{ passwordMessage }}
             </div>
 
-            <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()" class="flex flex-col gap-5 max-w-lg">
+            <form
+              [formGroup]="passwordForm"
+              (ngSubmit)="onPasswordSubmit()"
+              class="flex flex-col gap-5 max-w-lg"
+            >
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Current Password</label>
-                <input formControlName="currentPassword" type="password" placeholder="Enter current password"
+                <input
+                  formControlName="currentPassword"
+                  type="password"
+                  placeholder="Enter current password"
                   class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50"
-                  [class.border-red-500]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+                  [class.border-red-500]="
+                    passwordForm.get('currentPassword')?.invalid &&
+                    passwordForm.get('currentPassword')?.touched
+                  "
+                />
               </div>
 
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">New Password</label>
-                <input formControlName="newPassword" type="password" placeholder="Enter new password"
+                <input
+                  formControlName="newPassword"
+                  type="password"
+                  placeholder="Enter new password"
                   class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50"
-                  [class.border-red-500]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
-                <p *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']"
-                  class="text-red-500 text-xs mt-1 ml-1">Must be at least 6 characters.</p>
+                  [class.border-red-500]="
+                    passwordForm.get('newPassword')?.invalid &&
+                    passwordForm.get('newPassword')?.touched
+                  "
+                />
+                <p
+                  *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']"
+                  class="text-red-500 text-xs mt-1 ml-1"
+                >
+                  Must be at least 6 characters.
+                </p>
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Confirm New Password</label>
-                <input formControlName="confirmNewPassword" type="password" placeholder="Confirm new password"
+                <label class="block text-sm font-bold text-gray-700 mb-2"
+                  >Confirm New Password</label
+                >
+                <input
+                  formControlName="confirmNewPassword"
+                  type="password"
+                  placeholder="Confirm new password"
                   class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#B34962] text-gray-700 transition-colors bg-gray-50/50"
-                  [class.border-red-500]="passwordForm.hasError('mismatch') && passwordForm.get('confirmNewPassword')?.touched">
-                <p *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmNewPassword')?.touched"
-                  class="text-red-500 text-xs mt-1 ml-1">Passwords do not match.</p>
+                  [class.border-red-500]="
+                    passwordForm.hasError('mismatch') &&
+                    passwordForm.get('confirmNewPassword')?.touched
+                  "
+                />
+                <p
+                  *ngIf="
+                    passwordForm.hasError('mismatch') &&
+                    passwordForm.get('confirmNewPassword')?.touched
+                  "
+                  class="text-red-500 text-xs mt-1 ml-1"
+                >
+                  Passwords do not match.
+                </p>
               </div>
 
               <div class="mt-2">
-                <button type="submit" [disabled]="passwordForm.invalid || isSavingPassword"
-                  class="bg-gray-800 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-gray-700 transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none hover:-translate-y-0.5 cursor-pointer">
+                <button
+                  type="submit"
+                  [disabled]="passwordForm.invalid || isSavingPassword"
+                  class="bg-gray-800 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-gray-700 transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none hover:-translate-y-0.5 cursor-pointer"
+                >
                   {{ isSavingPassword ? 'Updating...' : 'Update Password' }}
                 </button>
               </div>
@@ -265,7 +444,6 @@
       <app-support *ngIf="activeSection === 'support'"></app-support>
       <app-about *ngIf="activeSection === 'about'"></app-about>
       <app-policy *ngIf="activeSection === 'policy'"></app-policy>
-
     </div>
   </div>
 </section>
